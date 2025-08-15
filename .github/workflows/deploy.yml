@@ -66,9 +66,5 @@ jobs:
             # Install dependencies
             npm install
 
-            # Start or restart the app using PM2
-            if pm2 list | grep -q "in-process-token-indexer"; then
-              pm2 restart in-process-token-indexer --update-env --cwd ~/in-process-token-indexer
-            else
-              pm2 start npm --name "in-process-token-indexer" --cwd ~/in-process-token-indexer -- run start
-            fi
+            # Restart the application
+            pm2 restart ecosystem.config.cjs --update-env
