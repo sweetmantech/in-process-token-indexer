@@ -1,5 +1,5 @@
 import indexEventsForNetwork from "./lib/indexEventsForNetwork.js";
-import indexPayments from "./lib/indexPayments.js";
+import indexPayments from "./lib/payments/indexPayments.js";
 import { NETWORKS } from "./lib/rpc.js";
 
 async function indexAllNetworks() {
