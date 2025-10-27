@@ -4,9 +4,10 @@ import indexMoments from "./lib/moment/indexMoments.js";
 async function indexAllNetworks() {
   // Start both the blockchain event indexer and the payments indexer
   const momentsIndexer = indexMoments();
-  const paymentsIndexer = indexPayments();
+  // const paymentsIndexer = indexPayments();
 
-  await Promise.all([momentsIndexer, paymentsIndexer]);
+  // await Promise.all([momentsIndexer, paymentsIndexer]);
+  await Promise.all([momentsIndexer, ]);
 }
 
 indexAllNetworks().catch(console.error);
