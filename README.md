@@ -50,7 +50,6 @@ To run the indexer:
 2. The indexer will start processing reward events from the specified network (Base or Base Sepolia).
 
 3. To switch between networks or customize the indexing process, you can modify the following environment variables in your `.env` file:
-
    - `NETWORK`: Set to either `mainnet` for Base or `sepolia` for Base Sepolia
    - `START_BLOCK`: The block number to start indexing from (optional)
    - `END_BLOCK`: The block number to end indexing at (optional)
