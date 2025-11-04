@@ -1,8 +1,8 @@
 {
   "name": "base-indexer",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Node.js-based indexer for In Process protocol SetupNewToken events on Base and Base Sepolia networks",
+  "main": "indexer.mjs",
   "type": "module",
   "scripts": {
     "start": "node --no-warnings indexer.mjs",
@@ -10,8 +10,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["blockchain", "indexer", "base", "zora", "events", "ethereum"],
+  "author": "sweetmantech",
   "license": "ISC",
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",
