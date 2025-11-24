@@ -5,3 +5,4 @@ package-lock.json
 yarn.lock
 instructions.md
 ROADMAP.md
+dist/
