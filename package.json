@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node --no-warnings indexer.mjs",
+    "start": "tsx indexer.ts",
+    "prod": "pnpm exec node dist/indexer.js",
+    "build": "tsc",
     "test": "echo \"No tests specified\" && exit 0",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -24,5 +26,11 @@
     "node-fetch": "^2.7.0",
     "prettier": "^3.6.2",
     "viem": "^2.21.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/node-fetch": "^2.6.13",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
   }
 }

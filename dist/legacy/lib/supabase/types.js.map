@@ -1,0 +1,1 @@
+{"version":3,"file":"types.js","sourceRoot":"","sources":["../../../../legacy/lib/supabase/types.ts"],"names":[],"mappings":"AAktBA,MAAM,CAAC,MAAM,SAAS,GAAG;IACvB,cAAc,EAAE;QACd,KAAK,EAAE,EAAE;KACV;IACD,MAAM,EAAE;QACN,KAAK,EAAE,EAAE;KACV;CACO,CAAC"}

@@ -1,0 +1,1 @@
+{"version":3,"file":"logForBaseOnly.js","sourceRoot":"","sources":["../../../legacy/lib/logForBaseOnly.ts"],"names":[],"mappings":"AAAA,iEAAiE;AACjE,MAAM,CAAC,MAAM,cAAc,GAAG,CAAC,OAAe,EAAE,GAAG,IAAe,EAAQ,EAAE;IAC1E,IAAI,OAAO,KAAK,MAAM,EAAE,CAAC;QACvB,OAAO,CAAC,GAAG,CAAC,GAAG,IAAI,CAAC,CAAC;IACvB,CAAC;AACH,CAAC,CAAC"}

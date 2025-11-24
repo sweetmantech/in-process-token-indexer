@@ -1,0 +1,1 @@
+{"version":3,"file":"queryAllEvents.d.ts","sourceRoot":"","sources":["../../../../legacy/lib/grpc/queryAllEvents.ts"],"names":[],"mappings":"AAEA;;;;;;;;GAQG;AACH,wBAAsB,cAAc,CAClC,QAAQ,EAAE,MAAM,EAChB,KAAK,EAAE,MAAM,EACb,QAAQ,EAAE,MAAM,EAChB,SAAS,SAAO,EAChB,cAAc,GAAE,MAAM,CAAC,MAAM,EAAE,OAAO,CAAM,GAC3C,OAAO,CAAC,OAAO,EAAE,CAAC,CA8BpB"}
