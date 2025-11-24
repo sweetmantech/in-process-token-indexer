@@ -1,5 +1,5 @@
 import { createPublicClient, http, type PublicClient } from 'viem';
-import { getChain } from './getChain.js';
+import { getChain } from './getChain';
 
 const getPublicClient = (chainId: number): PublicClient =>
   createPublicClient({
