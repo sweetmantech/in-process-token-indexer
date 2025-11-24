@@ -4,13 +4,7 @@ import { getSplitRecipients } from '../splits/getSplitRecipients.js';
 import isSplitContract from '../splits/isSplitContract.js';
 import { upsertTokenFeeRecipients } from '../supabase/in_process_token_fee_recipients/upsertTokenFeeRecipients.js';
 import type { TokenFeeRecipientData } from '../supabase/in_process_token_fee_recipients/upsertTokenFeeRecipients.js';
-
-interface TokenWithRecipient {
-  id: string;
-  payoutRecipient?: string;
-  chainId: number;
-  [key: string]: unknown;
-}
+import type { UpsertedToken } from '../supabase/in_process_tokens/upsertTokens.js';
 
 /**
  * Processes token fee recipients for tokens with payout recipients (split or non-split).
@@ -19,7 +13,7 @@ interface TokenWithRecipient {
  */
 export async function processTokenFeeRecipients(
   network: string,
-  upsertedTokens: TokenWithRecipient[]
+  upsertedTokens: UpsertedToken[]
 ): Promise<void> {
   const recipientsInserts: TokenFeeRecipientData[] = [];
   const recipientAddresses: string[] = [];

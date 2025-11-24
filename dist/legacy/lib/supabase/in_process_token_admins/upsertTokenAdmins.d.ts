@@ -1,6 +1,7 @@
 export interface TokenAdminData {
     token: string;
     artist_address: string;
+    createdAt: string;
     [key: string]: unknown;
 }
 /**

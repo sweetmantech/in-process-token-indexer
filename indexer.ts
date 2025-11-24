@@ -2,8 +2,19 @@ import indexLegacyPayments from './legacy/lib/payments/indexPayments.js';
 import indexLegacyMoments from './legacy/lib/moment/indexMoments.js';
 import indexLegacyAdmins from './legacy/lib/moment/indexAdmins.js';
 
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully...');
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('SIGINT received, shutting down gracefully...');
+  process.exit(0);
+});
+
 async function indexAllNetworks(): Promise<void> {
-  // Start both the blockchain event indexer and the payments indexer
+  // Start all indexers: payments, moments, and admins
   const legacyPaymentsIndexer = indexLegacyPayments();
   const legacyMomentsIndexer = indexLegacyMoments();
   const legacyAdminsIndexer = indexLegacyAdmins();
@@ -15,4 +26,7 @@ async function indexAllNetworks(): Promise<void> {
   ]);
 }
 
-indexAllNetworks().catch(console.error);
+indexAllNetworks().catch(error => {
+  console.error('Fatal error in indexer:', error);
+  process.exit(1);
+});

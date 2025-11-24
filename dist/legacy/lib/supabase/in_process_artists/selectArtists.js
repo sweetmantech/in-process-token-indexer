@@ -1,10 +1,4 @@
 import { supabase } from '../client.js';
-/**
- * Selects artists from the in_process_artists table by their addresses.
- * @param addresses - Array of artist addresses to select.
- * @param fields - Fields to select (default: "*" for all fields).
- * @returns Array of artist objects with their data.
- */
 export async function selectArtists(addresses, fields = '*') {
     if (!addresses || addresses.length === 0) {
         return [];
@@ -19,6 +13,10 @@ export async function selectArtists(addresses, fields = '*') {
         .in('address', uniqueAddresses);
     if (error) {
         throw new Error(`Failed to select artists: ${error.message}`);
+    }
+    // Type assertion for 'address' field case
+    if (fields === 'address') {
+        return (data || []);
     }
     return data || [];
 }

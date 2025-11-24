@@ -1,4 +1,4 @@
-import { networks } from '../const.js';
+import { networks } from '../consts.js';
 import { selectTokens } from '../supabase/in_process_tokens/selectTokens.js';
 
 interface MaxTimestampResult {

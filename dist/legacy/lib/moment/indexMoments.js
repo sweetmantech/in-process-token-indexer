@@ -1,5 +1,5 @@
 import { IndexerFactory } from '../IndexerFactory.js';
-import { GRPC_ENDPOINT } from '../const.js';
+import { GRPC_ENDPOINT } from '../consts.js';
 import { getMaxBlockTimestamp } from './getMaxBlockTimestamp.js';
 /**
  * Indexes moment events from the GRPC endpoint using the factory pattern

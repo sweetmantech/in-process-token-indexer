@@ -8,8 +8,16 @@ import { supabase } from '../client.js';
  */
 export async function selectArtists(
   addresses: string[],
-  fields = '*'
-): Promise<unknown[]> {
+  fields: 'address'
+): Promise<Array<{ address: string }>>;
+export async function selectArtists(
+  addresses: string[],
+  fields?: string
+): Promise<unknown[]>;
+export async function selectArtists(
+  addresses: string[],
+  fields: string | undefined = '*'
+): Promise<unknown[] | Array<{ address: string }>> {
   if (!addresses || addresses.length === 0) {
     return [];
   }
@@ -26,6 +34,11 @@ export async function selectArtists(
 
   if (error) {
     throw new Error(`Failed to select artists: ${error.message}`);
+  }
+
+  // Type assertion for 'address' field case
+  if (fields === 'address') {
+    return (data || []) as unknown as Array<{ address: string }>;
   }
 
   return data || [];

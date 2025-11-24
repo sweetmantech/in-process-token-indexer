@@ -27,9 +27,14 @@ export async function processMomentsInBatches(network, momentEvents) {
             if (validMoments.length > 0) {
                 const adminAddresses = validMoments.map(moment => moment.defaultAdmin);
                 await ensureArtists(adminAddresses);
-                const upsertedTokens = (await upsertTokens(validMoments));
+                const upsertedTokens = await upsertTokens(validMoments);
                 // Process token fee recipients for tokens with split contract payout recipients
-                await processTokenFeeRecipients(network, upsertedTokens);
+                // Convert null to undefined for payoutRecipient to match expected type
+                const tokensForFeeRecipients = upsertedTokens.map(token => ({
+                    ...token,
+                    payoutRecipient: token.payoutRecipient ?? undefined,
+                }));
+                await processTokenFeeRecipients(network, tokensForFeeRecipients);
                 totalProcessed += validMoments.length;
             }
             else {

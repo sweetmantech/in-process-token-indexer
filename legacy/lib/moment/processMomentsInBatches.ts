@@ -3,7 +3,6 @@ import { upsertTokens } from '../supabase/in_process_tokens/upsertTokens.js';
 import { ensureArtists } from '../artists/ensureArtists.js';
 import { logForBaseOnly } from '../logForBaseOnly.js';
 import { processTokenFeeRecipients } from './processTokenFeeRecipients.js';
-import type { TokenData } from '../supabase/in_process_tokens/upsertTokens.js';
 
 const BATCH_SIZE = 100; // Process moments in batches of 100
 
@@ -14,13 +13,6 @@ interface MomentEvent {
   contractURI?: string;
   blockTimestamp?: string | number;
   payoutRecipient?: string;
-  [key: string]: unknown;
-}
-
-interface UpsertedToken {
-  id: string;
-  payoutRecipient?: string;
-  chainId: number;
   [key: string]: unknown;
 }
 
@@ -63,15 +55,20 @@ export async function processMomentsInBatches(
 
       // Filter out moments which can include 0xSplit -> payout
       if (validMoments.length > 0) {
-        const adminAddresses = validMoments.map(moment => moment.defaultAdmin);
+        const adminAddresses: string[] = validMoments.map(
+          moment => moment.defaultAdmin as string
+        );
         await ensureArtists(adminAddresses);
 
-        const upsertedTokens = (await upsertTokens(
-          validMoments as unknown as TokenData[]
-        )) as UpsertedToken[];
+        const upsertedTokens = await upsertTokens(validMoments);
 
         // Process token fee recipients for tokens with split contract payout recipients
-        await processTokenFeeRecipients(network, upsertedTokens);
+        // Convert null to undefined for payoutRecipient to match expected type
+        const tokensForFeeRecipients = upsertedTokens.map(token => ({
+          ...token,
+          payoutRecipient: token.payoutRecipient ?? undefined,
+        }));
+        await processTokenFeeRecipients(network, tokensForFeeRecipients);
 
         totalProcessed += validMoments.length;
       } else {

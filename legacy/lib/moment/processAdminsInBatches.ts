@@ -1,10 +1,12 @@
-import { upsertTokenAdmins } from '../supabase/in_process_token_admins/upsertTokenAdmins.js';
+import {
+  upsertTokenAdmins,
+  type TokenAdminData,
+} from '../supabase/in_process_token_admins/upsertTokenAdmins.js';
 import { mapAdminsToSupabase } from '../admins/mapAdminsToSupabase.js';
 import { extractTokenPairs } from '../supabase/in_process_token_admins/extractTokenPairs.js';
 import { ensureArtists } from '../artists/ensureArtists.js';
 import { getTokenIdsByAddressAndChainId } from './getTokenIdsByAddressAndChainId.js';
 import { logForBaseOnly } from '../logForBaseOnly.js';
-import type { TokenAdminData } from '../supabase/in_process_token_admins/upsertTokenAdmins.js';
 
 const BATCH_SIZE = 100; // Process admins in batches of 100
 

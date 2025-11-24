@@ -1,15 +1,9 @@
 import { selectTokens } from '../supabase/in_process_tokens/selectTokens.js';
+import { validateTokenRecords } from './validateTokenRecords.js';
 
 interface TokenPair {
   address: string;
   chainId: number;
-}
-
-interface TokenRecord {
-  id: string;
-  address: string;
-  chainId: number;
-  [key: string]: unknown;
 }
 
 /**
@@ -38,10 +32,13 @@ export async function getTokenIdsByAddressAndChainId(
   }
 
   // Query tokens by addresses
-  const data = (await selectTokens({
+  const rawData = await selectTokens({
     addresses: uniqueAddresses,
     fields: 'id, address, chainId',
-  })) as TokenRecord[];
+  });
+
+  // Validate and filter the returned data
+  const data = validateTokenRecords(rawData);
 
   // Create a map of address-chainId -> id
   const tokenIdMap = new Map<string, string>();

@@ -1,4 +1,4 @@
-import { networks } from '../const.js';
+import { networks } from '../consts.js';
 import { selectTokens } from '../supabase/in_process_tokens/selectTokens.js';
 /**
  * Gets the maximum createdAt timestamp from the in_process_tokens table grouped by chainId.

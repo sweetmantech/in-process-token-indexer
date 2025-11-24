@@ -1,5 +1,5 @@
 import { IndexerFactory } from '../IndexerFactory.js';
-import { GRPC_ENDPOINT, networks } from '../const.js';
+import { GRPC_ENDPOINT, networks } from '../consts.js';
 /**
  * Indexes payment events from the GRPC endpoint using the factory pattern
  */

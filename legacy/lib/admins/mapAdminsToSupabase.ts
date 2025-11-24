@@ -1,15 +1,12 @@
+import type { TokenAdminData } from '../supabase/in_process_token_admins/upsertTokenAdmins.js';
+import { safeTimestampToISO } from '../supabase/safeTimestampToISO.js';
+
 interface AdminEvent {
   tokenContract?: string;
   chainId: number;
   user?: string;
   blockTimestamp?: string | number;
   [key: string]: unknown;
-}
-
-interface SupabaseAdminData {
-  token: string;
-  artist_address: string;
-  createdAt: string;
 }
 
 /**
@@ -21,24 +18,24 @@ interface SupabaseAdminData {
 export function mapAdminsToSupabase(
   adminEvents: AdminEvent[],
   tokenIdMap: Map<string, string>
-): SupabaseAdminData[] {
-  return adminEvents
-    .map(event => {
-      const address = event.tokenContract?.toLowerCase();
-      const chainId = event.chainId;
-      const key = `${address}-${chainId}`;
-      const tokenId = tokenIdMap.get(key);
+): TokenAdminData[] {
+  const result: TokenAdminData[] = [];
 
-      // Only include admins where token exists
-      if (!tokenId) {
-        return null;
-      }
+  for (const event of adminEvents) {
+    const address = event.tokenContract?.toLowerCase();
+    const chainId = event.chainId;
+    const key = `${address}-${chainId}`;
+    const tokenId = tokenIdMap.get(key);
 
-      return {
+    // Only include admins where token exists
+    if (tokenId) {
+      result.push({
         token: tokenId,
         artist_address: event.user?.toLowerCase() || '',
-        createdAt: new Date(Number(event.blockTimestamp) * 1000).toISOString(),
-      };
-    })
-    .filter((admin): admin is SupabaseAdminData => admin !== null); // Filter out null entries where token doesn't exist
+        createdAt: safeTimestampToISO(event.blockTimestamp),
+      });
+    }
+  }
+
+  return result;
 }
