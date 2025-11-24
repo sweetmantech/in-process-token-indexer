@@ -1,4 +1,7 @@
-export const Constants = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Constants = void 0;
+exports.Constants = {
     graphql_public: {
         Enums: {},
     },
@@ -6,4 +9,3 @@ export const Constants = {
         Enums: {},
     },
 };
-//# sourceMappingURL=types.js.map

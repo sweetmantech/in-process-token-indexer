@@ -1,11 +1,14 @@
-import { supabase } from '../client.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.upsertTokenAdmins = upsertTokenAdmins;
+const client_1 = require("../client");
 /**
  * Upserts multiple token admin records into the in_process_token_admins table.
  * @param tokenAdmins - Array of token admin data objects to upsert.
  * Each object should have: { token: string, artist_address: string }
  * @returns The upserted records or error.
  */
-export async function upsertTokenAdmins(tokenAdmins) {
+async function upsertTokenAdmins(tokenAdmins) {
     if (!tokenAdmins || tokenAdmins.length === 0) {
         return [];
     }
@@ -17,7 +20,7 @@ export async function upsertTokenAdmins(tokenAdmins) {
     if (uniqueTokenAdmins.length < tokenAdmins.length) {
         console.log(`Deduplicated token admins: ${tokenAdmins.length} -> ${uniqueTokenAdmins.length} (removed ${tokenAdmins.length - uniqueTokenAdmins.length} duplicates)`);
     }
-    const { data, error } = await supabase
+    const { data, error } = await client_1.supabase
         .from('in_process_token_admins')
         .upsert(uniqueTokenAdmins, {
         onConflict: 'token, artist_address',
@@ -28,4 +31,3 @@ export async function upsertTokenAdmins(tokenAdmins) {
     }
     return data || [];
 }
-//# sourceMappingURL=upsertTokenAdmins.js.map

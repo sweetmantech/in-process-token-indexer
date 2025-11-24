@@ -1,17 +1,20 @@
-import { selectTokens } from '../supabase/in_process_tokens/selectTokens.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.resolveTokensForPayments = resolveTokensForPayments;
+const selectTokens_1 = require("../supabase/in_process_tokens/selectTokens");
 /**
  * Resolves token IDs for payments based on collection or currency
  * @param payments - Array of payment objects with collection/currency info
  * @returns Payments with resolved token IDs
  */
-export async function resolveTokensForPayments(payments) {
+async function resolveTokensForPayments(payments) {
     const paymentsWithTokens = [];
     for (const payment of payments) {
         let tokenId = null;
         // Try to find matching token by collection or currency
         if (payment.collection || payment.currency) {
             const addresses = [payment.collection, payment.currency].filter(Boolean);
-            const tokens = (await selectTokens({
+            const tokens = (await (0, selectTokens_1.selectTokens)({
                 addresses,
                 fields: 'id, address',
             }));
@@ -29,4 +32,3 @@ export async function resolveTokensForPayments(payments) {
     }
     return paymentsWithTokens;
 }
-//# sourceMappingURL=resolveTokens.js.map

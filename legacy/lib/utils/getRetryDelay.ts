@@ -1,4 +1,4 @@
-import { isRateLimitError } from './isRateLimitError.js';
+import { isRateLimitError } from './isRateLimitError';
 
 /**
  * Extracts Retry-After header value or calculates delay

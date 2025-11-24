@@ -1,4 +1,4 @@
-import { supabase } from '../client.js';
+import { supabase } from '../client';
 
 export interface PaymentData {
   hash: string;

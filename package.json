@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "dev": "tsx indexer.ts",
-    "start": "pnpm exec node dist/indexer.js",
+    "start": "pnpm exec tsc && nodemon --experimental-specifier-resolution=node --no-warnings ./dist/indexer.js",
     "build": "tsc",
     "test": "echo \"No tests specified\" && exit 0",
     "format": "prettier --write .",
@@ -24,6 +24,7 @@
     "dotenv": "^16.4.5",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.7.0",
+    "nodemon": "^3.1.11",
     "prettier": "^3.6.2",
     "viem": "^2.21.1"
   },

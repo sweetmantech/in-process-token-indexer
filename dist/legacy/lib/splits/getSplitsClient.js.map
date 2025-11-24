@@ -1,1 +1,0 @@
-{"version":3,"file":"getSplitsClient.js","sourceRoot":"","sources":["../../../../legacy/lib/splits/getSplitsClient.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,aAAa,EAAE,MAAM,sBAAsB,CAAC;AAQrD,MAAM,CAAC,MAAM,eAAe,GAAG,CAAC,EAC9B,OAAO,EACP,YAAY,GACU,EAAiB,EAAE;IACzC,OAAO,IAAI,aAAa,CAAC;QACvB,OAAO;QACP,YAAY;KACb,CAAC,CAAC;AACL,CAAC,CAAC"}

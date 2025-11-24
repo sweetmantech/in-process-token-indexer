@@ -1,5 +1,5 @@
-import { IndexerFactory } from '../IndexerFactory.js';
-import { GRPC_ENDPOINT, networks } from '../consts.js';
+import { IndexerFactory } from '../IndexerFactory';
+import { GRPC_ENDPOINT, networks } from '../consts';
 
 interface PaymentEvent {
   transactionHash?: string;

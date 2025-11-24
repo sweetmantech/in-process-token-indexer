@@ -1,9 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mapPaymentsToSupabase = mapPaymentsToSupabase;
 /**
  * Maps payment events from GRPC to Supabase format for in_process_payments table.
  * @param payments - Array of payment events from GRPC.
  * @returns The mapped objects for Supabase upsert.
  */
-export function mapPaymentsToSupabase(payments) {
+function mapPaymentsToSupabase(payments) {
     return payments.map(payment => ({
         hash: payment.transactionHash || '',
         buyer: payment.spender?.toLowerCase() || '', // Normalize to lowercase
@@ -17,4 +20,3 @@ export function mapPaymentsToSupabase(payments) {
         token: null, // This needs to be resolved based on collection or currency
     }));
 }
-//# sourceMappingURL=mapPaymentsToSupabase.js.map

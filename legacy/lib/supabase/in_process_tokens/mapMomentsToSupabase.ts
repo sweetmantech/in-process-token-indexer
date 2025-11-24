@@ -1,5 +1,5 @@
-import type { TokenData } from './upsertTokens.js';
-import { safeTimestampToISO } from '../safeTimestampToISO.js';
+import type { TokenData } from './upsertTokens';
+import { safeTimestampToISO } from '../safeTimestampToISO';
 
 interface MomentEvent {
   address?: string;

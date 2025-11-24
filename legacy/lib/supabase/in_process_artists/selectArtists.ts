@@ -1,4 +1,4 @@
-import { supabase } from '../client.js';
+import { supabase } from '../client';
 
 /**
  * Selects artists from the in_process_artists table by their addresses.

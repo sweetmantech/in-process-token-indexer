@@ -1,8 +1,11 @@
-import { SplitV2Client } from '@0xsplits/splits-sdk';
-export const getSplitsClient = ({ chainId, publicClient, }) => {
-    return new SplitV2Client({
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getSplitsClient = void 0;
+const splits_sdk_1 = require("@0xsplits/splits-sdk");
+const getSplitsClient = ({ chainId, publicClient, }) => {
+    return new splits_sdk_1.SplitV2Client({
         chainId,
         publicClient,
     });
 };
-//# sourceMappingURL=getSplitsClient.js.map
+exports.getSplitsClient = getSplitsClient;

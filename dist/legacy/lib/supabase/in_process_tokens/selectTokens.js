@@ -1,4 +1,7 @@
-import { supabase } from '../client.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.selectTokens = selectTokens;
+const client_1 = require("../client");
 /**
  * Selects tokens from the in_process_tokens table.
  * @param options - Query options.
@@ -9,8 +12,8 @@ import { supabase } from '../client.js';
  * @param options.orderBy - Ordering options with field and ascending properties.
  * @returns Array of token objects with their data.
  */
-export async function selectTokens({ addresses, chainId, fields = '*', limit, orderBy, } = {}) {
-    let query = supabase.from('in_process_tokens').select(fields);
+async function selectTokens({ addresses, chainId, fields = '*', limit, orderBy, } = {}) {
+    let query = client_1.supabase.from('in_process_tokens').select(fields);
     // Filter by addresses if provided
     if (addresses && addresses.length > 0) {
         const uniqueAddresses = [
@@ -38,4 +41,3 @@ export async function selectTokens({ addresses, chainId, fields = '*', limit, or
     }
     return data || [];
 }
-//# sourceMappingURL=selectTokens.js.map

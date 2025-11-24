@@ -1,6 +1,6 @@
-import { IndexerFactory } from '../IndexerFactory.js';
-import { GRPC_ENDPOINT } from '../consts.js';
-import { getMaxBlockTimestamp } from '../admins/getMaxBlockTimestamp.js';
+import { IndexerFactory } from '../IndexerFactory';
+import { GRPC_ENDPOINT } from '../consts';
+import { getMaxBlockTimestamp } from '../admins/getMaxBlockTimestamp';
 
 interface AdminEvent {
   tokenContract?: string;

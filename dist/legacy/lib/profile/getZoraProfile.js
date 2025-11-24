@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 async function getZoraProfile(address) {
     if (!address)
         return null;
@@ -7,5 +9,4 @@ async function getZoraProfile(address) {
     const data = (await response.json());
     return data.result?.data?.json || null;
 }
-export default getZoraProfile;
-//# sourceMappingURL=getZoraProfile.js.map
+exports.default = getZoraProfile;

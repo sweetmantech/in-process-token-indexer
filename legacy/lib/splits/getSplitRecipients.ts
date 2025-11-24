@@ -1,7 +1,7 @@
-import getPublicClient from '../viem/getPublicClient.js';
-import { getSplitsClient } from './getSplitsClient.js';
-import { isRateLimitError } from '../utils/isRateLimitError.js';
-import { getRetryDelay } from '../utils/getRetryDelay.js';
+import getPublicClient from '../viem/getPublicClient';
+import { getSplitsClient } from './getSplitsClient';
+import { isRateLimitError } from '../utils/isRateLimitError';
+import { getRetryDelay } from '../utils/getRetryDelay';
 
 interface SplitRecipient {
   address: string;

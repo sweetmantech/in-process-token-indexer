@@ -1,4 +1,7 @@
-import { isRateLimitError } from './isRateLimitError.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getRetryDelay = void 0;
+const isRateLimitError_1 = require("./isRateLimitError");
 /**
  * Extracts Retry-After header value or calculates delay
  * @param error - The error object
@@ -6,7 +9,7 @@ import { isRateLimitError } from './isRateLimitError.js';
  * @param baseDelay - The base delay in milliseconds
  * @returns The delay in milliseconds
  */
-export const getRetryDelay = (error, attempt, baseDelay) => {
+const getRetryDelay = (error, attempt, baseDelay) => {
     if (!error || typeof error !== 'object') {
         return baseDelay * Math.pow(2, attempt);
     }
@@ -35,10 +38,10 @@ export const getRetryDelay = (error, attempt, baseDelay) => {
         }
     }
     // For 429 errors, use longer delays: 5s, 10s, 20s
-    if (isRateLimitError(error)) {
+    if ((0, isRateLimitError_1.isRateLimitError)(error)) {
         return 5000 * Math.pow(2, attempt); // 5s, 10s, 20s
     }
     // For other errors, use exponential backoff with base delay
     return baseDelay * Math.pow(2, attempt);
 };
-//# sourceMappingURL=getRetryDelay.js.map
+exports.getRetryDelay = getRetryDelay;

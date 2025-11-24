@@ -1,12 +1,18 @@
-import getArtistProfile from '../profile/getArtistProfile.js';
-import { upsertArtists } from '../supabase/in_process_artists/upsertArtists.js';
-import { selectArtists } from '../supabase/in_process_artists/selectArtists.js';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ensureArtists = ensureArtists;
+const getArtistProfile_1 = __importDefault(require("../profile/getArtistProfile"));
+const upsertArtists_1 = require("../supabase/in_process_artists/upsertArtists");
+const selectArtists_1 = require("../supabase/in_process_artists/selectArtists");
 /**
  * Ensures that all provided artist addresses exist in the in_process_artists table.
  * Creates new artist records with profiles if they don't exist.
  * @param addresses - Array of artist addresses to ensure exist
  */
-export async function ensureArtists(addresses) {
+async function ensureArtists(addresses) {
     if (!addresses || addresses.length === 0) {
         return;
     }
@@ -15,7 +21,7 @@ export async function ensureArtists(addresses) {
         ...new Set(addresses.map(addr => addr.toLowerCase())),
     ];
     // Check which addresses already exist in the database
-    const existingArtists = await selectArtists(uniqueAddresses, 'address');
+    const existingArtists = await (0, selectArtists_1.selectArtists)(uniqueAddresses, 'address');
     const existingAddresses = new Set(existingArtists.map(artist => artist.address.toLowerCase()));
     // Find addresses that need to be created
     const addressesToCreate = uniqueAddresses.filter(address => !existingAddresses.has(address.toLowerCase()));
@@ -27,7 +33,7 @@ export async function ensureArtists(addresses) {
     // Create artist profiles for new addresses
     const newArtists = await Promise.all(addressesToCreate.map(async (address) => {
         try {
-            const profile = await getArtistProfile(address);
+            const profile = await (0, getArtistProfile_1.default)(address);
             return {
                 address: address.toLowerCase(),
                 username: profile.username || '',
@@ -52,7 +58,6 @@ export async function ensureArtists(addresses) {
         }
     }));
     // Upsert the new artists
-    await upsertArtists(newArtists);
+    await (0, upsertArtists_1.upsertArtists)(newArtists);
     console.log(`Successfully created ${newArtists.length} new artists`);
 }
-//# sourceMappingURL=ensureArtists.js.map

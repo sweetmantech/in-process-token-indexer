@@ -1,5 +1,10 @@
-import getEnsName from '../viem/getEnsName.js';
-import getZoraProfile from './getZoraProfile.js';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const getEnsName_1 = __importDefault(require("../viem/getEnsName"));
+const getZoraProfile_1 = __importDefault(require("./getZoraProfile"));
 const getArtistProfile = async (walletAddress) => {
     try {
         let profile = {
@@ -11,7 +16,7 @@ const getArtistProfile = async (walletAddress) => {
                 telegram: '',
             },
         };
-        const zora = await getZoraProfile(walletAddress);
+        const zora = await (0, getZoraProfile_1.default)(walletAddress);
         if (zora) {
             profile = {
                 ...profile,
@@ -25,7 +30,7 @@ const getArtistProfile = async (walletAddress) => {
             };
         }
         else {
-            const ensName = await getEnsName(walletAddress);
+            const ensName = await (0, getEnsName_1.default)(walletAddress);
             if (ensName)
                 profile = {
                     ...profile,
@@ -42,5 +47,4 @@ const getArtistProfile = async (walletAddress) => {
         };
     }
 };
-export default getArtistProfile;
-//# sourceMappingURL=getArtistProfile.js.map
+exports.default = getArtistProfile;

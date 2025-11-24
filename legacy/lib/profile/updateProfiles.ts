@@ -1,4 +1,4 @@
-import { ensureArtists } from '../artists/ensureArtists.js';
+import { ensureArtists } from '../artists/ensureArtists';
 
 interface DecodedLog {
   args: {

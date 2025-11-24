@@ -1,4 +1,4 @@
-import { selectTokens } from '../supabase/in_process_tokens/selectTokens.js';
+import { selectTokens } from '../supabase/in_process_tokens/selectTokens';
 
 interface PaymentWithCollection {
   collection?: string;

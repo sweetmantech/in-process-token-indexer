@@ -1,5 +1,5 @@
-import { selectTokens } from '../supabase/in_process_tokens/selectTokens.js';
-import { validateTokenRecords } from './validateTokenRecords.js';
+import { selectTokens } from '../supabase/in_process_tokens/selectTokens';
+import { validateTokenRecords } from './validateTokenRecords';
 
 interface TokenPair {
   address: string;

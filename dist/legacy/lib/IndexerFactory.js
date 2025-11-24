@@ -1,12 +1,14 @@
-import { logForBaseOnly } from './logForBaseOnly.js';
-import { queryAllEvents } from './grpc/queryAllEvents.js';
-import { getNetwork } from './viem/getNetwork.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.IndexerFactory = void 0;
+const logForBaseOnly_1 = require("./logForBaseOnly");
+const queryAllEvents_1 = require("./grpc/queryAllEvents");
+const getNetwork_1 = require("./viem/getNetwork");
 /**
  * Factory class for creating indexers with common functionality
  * Abstracts the polling, error handling, and logging patterns used by both payments and moments indexers
  */
-export class IndexerFactory {
-    config;
+class IndexerFactory {
     constructor(config) {
         this.config = {
             name: config.name,
@@ -26,7 +28,7 @@ export class IndexerFactory {
      */
     _log(message) {
         const { network } = this.config;
-        logForBaseOnly(network, message);
+        (0, logForBaseOnly_1.logForBaseOnly)(network, message);
     }
     /**
      * Utility method for sleep/delay functionality
@@ -39,14 +41,14 @@ export class IndexerFactory {
      */
     async _processEvents(events, chainId = null) {
         const { name, processFunction } = this.config;
-        const network = getNetwork(chainId);
+        const network = (0, getNetwork_1.getNetwork)(chainId);
         this._log(`${network} - Querying ${name} from GRPC endpoint...`);
         this._log(`Starting ${name} indexer for ${network}...`);
         if (events.length > 0) {
             const chainText = chainId ? ` for chainId ${chainId}` : '';
             const totalText = chainId ? ' total' : '';
             this._log(`${network} - Found ${events.length}${totalText} ${name} events${chainText}`);
-            await processFunction(getNetwork(chainId), events);
+            await processFunction((0, getNetwork_1.getNetwork)(chainId), events);
         }
         else {
             this._log(`${network} - No new ${name} events found`);
@@ -83,7 +85,7 @@ export class IndexerFactory {
         const { name, network, grpcEndpoint, batchSize, query, dataPath } = this.config;
         for (const chainVariables of queryVariables) {
             this._log(`${network} - Querying ${name} for chainId ${chainVariables.chainId}...`);
-            const chainEvents = await queryAllEvents(grpcEndpoint, query, dataPath, batchSize, chainVariables);
+            const chainEvents = await (0, queryAllEvents_1.queryAllEvents)(grpcEndpoint, query, dataPath, batchSize, chainVariables);
             await this._processEvents(chainEvents, chainVariables.chainId);
         }
     }
@@ -99,4 +101,4 @@ export class IndexerFactory {
         await this._sleep(errorRetryDelay);
     }
 }
-//# sourceMappingURL=IndexerFactory.js.map
+exports.IndexerFactory = IndexerFactory;

@@ -1,6 +1,6 @@
-import { logForBaseOnly } from './logForBaseOnly.js';
-import { queryAllEvents } from './grpc/queryAllEvents.js';
-import { getNetwork } from './viem/getNetwork.js';
+import { logForBaseOnly } from './logForBaseOnly';
+import { queryAllEvents } from './grpc/queryAllEvents';
+import { getNetwork } from './viem/getNetwork';
 
 interface QueryVariables {
   chainId: number;

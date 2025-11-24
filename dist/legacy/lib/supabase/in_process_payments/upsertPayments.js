@@ -1,10 +1,13 @@
-import { supabase } from '../client.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.upsertPayments = upsertPayments;
+const client_1 = require("../client");
 /**
  * Upserts multiple payment records into the in_process_payments table.
  * @param payments - Array of payment data objects to upsert.
  * @returns The upserted records or error.
  */
-export async function upsertPayments(payments) {
+async function upsertPayments(payments) {
     // Remove duplicates based on conflict columns (hash, buyer, token)
     const uniquePayments = payments.filter((payment, index, self) => index ===
         self.findIndex(p => p.hash === payment.hash &&
@@ -14,7 +17,7 @@ export async function upsertPayments(payments) {
     if (uniquePayments.length < payments.length) {
         console.log(`Deduplicated payments: ${payments.length} -> ${uniquePayments.length} (removed ${payments.length - uniquePayments.length} duplicates)`);
     }
-    const { data, error } = await supabase
+    const { data, error } = await client_1.supabase
         .from('in_process_payments')
         .upsert(uniquePayments, { onConflict: 'hash, buyer, token' })
         .select();
@@ -23,4 +26,3 @@ export async function upsertPayments(payments) {
     }
     return data || [];
 }
-//# sourceMappingURL=upsertPayments.js.map

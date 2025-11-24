@@ -1,4 +1,10 @@
-import fetch from 'node-fetch';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.queryGraphQL = queryGraphQL;
+const node_fetch_1 = __importDefault(require("node-fetch"));
 /**
  * Generic function to query GraphQL endpoints with pagination
  * @param endpoint - The GraphQL endpoint URL
@@ -9,9 +15,9 @@ import fetch from 'node-fetch';
  * @param queryVariables - Dynamic variables to pass to the query (default: {})
  * @returns Object containing events and pagination info
  */
-export async function queryGraphQL(endpoint, query, dataPath, limit = 1000, offset = 0, queryVariables = {}) {
+async function queryGraphQL(endpoint, query, dataPath, limit = 1000, offset = 0, queryVariables = {}) {
     try {
-        const response = await fetch(endpoint, {
+        const response = await (0, node_fetch_1.default)(endpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -43,4 +49,3 @@ export async function queryGraphQL(endpoint, query, dataPath, limit = 1000, offs
         throw error;
     }
 }
-//# sourceMappingURL=queryGraphQL.js.map

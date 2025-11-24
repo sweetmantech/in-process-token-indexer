@@ -1,8 +1,8 @@
-import { mapMomentsToSupabase } from '../supabase/in_process_tokens/mapMomentsToSupabase.js';
-import { upsertTokens } from '../supabase/in_process_tokens/upsertTokens.js';
-import { ensureArtists } from '../artists/ensureArtists.js';
-import { logForBaseOnly } from '../logForBaseOnly.js';
-import { processTokenFeeRecipients } from './processTokenFeeRecipients.js';
+import { mapMomentsToSupabase } from '../supabase/in_process_tokens/mapMomentsToSupabase';
+import { upsertTokens } from '../supabase/in_process_tokens/upsertTokens';
+import { ensureArtists } from '../artists/ensureArtists';
+import { logForBaseOnly } from '../logForBaseOnly';
+import { processTokenFeeRecipients } from './processTokenFeeRecipients';
 
 const BATCH_SIZE = 100; // Process moments in batches of 100
 

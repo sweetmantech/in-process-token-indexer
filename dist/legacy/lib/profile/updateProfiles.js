@@ -1,10 +1,12 @@
-import { ensureArtists } from '../artists/ensureArtists.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = updateProfiles;
+const ensureArtists_1 = require("../artists/ensureArtists");
 /**
  * Updates artist profiles in the in_process_artists table based on decoded logs.
  * @param decodedLogs - Array of decoded log objects.
  */
-export default async function updateProfiles(decodedLogs) {
+async function updateProfiles(decodedLogs) {
     const artistAddresses = decodedLogs.map(log => log.args.defaultAdmin.toLowerCase());
-    await ensureArtists(artistAddresses);
+    await (0, ensureArtists_1.ensureArtists)(artistAddresses);
 }
-//# sourceMappingURL=updateProfiles.js.map

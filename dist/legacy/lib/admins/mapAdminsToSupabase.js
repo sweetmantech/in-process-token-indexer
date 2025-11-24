@@ -1,11 +1,14 @@
-import { safeTimestampToISO } from '../supabase/safeTimestampToISO.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mapAdminsToSupabase = mapAdminsToSupabase;
+const safeTimestampToISO_1 = require("../supabase/safeTimestampToISO");
 /**
  * Maps admin permission events from GRPC to Supabase format for in_process_token_admins table.
  * @param adminEvents - Array of admin permission events from GRPC.
  * @param tokenIdMap - Map with key "address-chainId" and value as token id (uuid).
  * @returns The mapped objects for Supabase upsert with token, artist_address, and createdAt.
  */
-export function mapAdminsToSupabase(adminEvents, tokenIdMap) {
+function mapAdminsToSupabase(adminEvents, tokenIdMap) {
     const result = [];
     for (const event of adminEvents) {
         const address = event.tokenContract?.toLowerCase();
@@ -17,10 +20,9 @@ export function mapAdminsToSupabase(adminEvents, tokenIdMap) {
             result.push({
                 token: tokenId,
                 artist_address: event.user?.toLowerCase() || '',
-                createdAt: safeTimestampToISO(event.blockTimestamp),
+                createdAt: (0, safeTimestampToISO_1.safeTimestampToISO)(event.blockTimestamp),
             });
         }
     }
     return result;
 }
-//# sourceMappingURL=mapAdminsToSupabase.js.map

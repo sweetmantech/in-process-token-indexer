@@ -1,10 +1,10 @@
-import { logForBaseOnly } from '../logForBaseOnly.js';
-import { ensureArtists } from '../artists/ensureArtists.js';
-import { getSplitRecipients } from '../splits/getSplitRecipients.js';
-import isSplitContract from '../splits/isSplitContract.js';
-import { upsertTokenFeeRecipients } from '../supabase/in_process_token_fee_recipients/upsertTokenFeeRecipients.js';
-import type { TokenFeeRecipientData } from '../supabase/in_process_token_fee_recipients/upsertTokenFeeRecipients.js';
-import type { UpsertedToken } from '../supabase/in_process_tokens/upsertTokens.js';
+import { logForBaseOnly } from '../logForBaseOnly';
+import { ensureArtists } from '../artists/ensureArtists';
+import { getSplitRecipients } from '../splits/getSplitRecipients';
+import isSplitContract from '../splits/isSplitContract';
+import { upsertTokenFeeRecipients } from '../supabase/in_process_token_fee_recipients/upsertTokenFeeRecipients';
+import type { TokenFeeRecipientData } from '../supabase/in_process_token_fee_recipients/upsertTokenFeeRecipients';
+import type { UpsertedToken } from '../supabase/in_process_tokens/upsertTokens';
 
 /**
  * Processes token fee recipients for tokens with payout recipients (split or non-split).

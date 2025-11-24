@@ -1,5 +1,5 @@
-import type { TokenAdminData } from '../supabase/in_process_token_admins/upsertTokenAdmins.js';
-import { safeTimestampToISO } from '../supabase/safeTimestampToISO.js';
+import type { TokenAdminData } from '../supabase/in_process_token_admins/upsertTokenAdmins';
+import { safeTimestampToISO } from '../supabase/safeTimestampToISO';
 
 interface AdminEvent {
   tokenContract?: string;

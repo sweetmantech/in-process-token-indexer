@@ -1,7 +1,13 @@
-import getPublicClient from '../viem/getPublicClient.js';
-import { getSplitsClient } from './getSplitsClient.js';
-import { isRateLimitError } from '../utils/isRateLimitError.js';
-import { getRetryDelay } from '../utils/getRetryDelay.js';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getSplitRecipients = void 0;
+const getPublicClient_1 = __importDefault(require("../viem/getPublicClient"));
+const getSplitsClient_1 = require("./getSplitsClient");
+const isRateLimitError_1 = require("../utils/isRateLimitError");
+const getRetryDelay_1 = require("../utils/getRetryDelay");
 /**
  * Gets the recipient addresses (recipients) from a split contract address.
  * Uses the 0xSplits SDK to fetch split metadata which includes recipients.
@@ -12,10 +18,10 @@ import { getRetryDelay } from '../utils/getRetryDelay.js';
  * @param options.retryDelay - Initial retry delay in milliseconds (default: 100)
  * @returns Array of recipients or null if failed/not a split
  */
-export const getSplitRecipients = async (splitAddress, chainId, options = {}) => {
+const getSplitRecipients = async (splitAddress, chainId, options = {}) => {
     const { maxRetries = 3, retryDelay = 100 } = options;
-    const publicClient = getPublicClient(chainId);
-    const splitsClient = getSplitsClient({
+    const publicClient = (0, getPublicClient_1.default)(chainId);
+    const splitsClient = (0, getSplitsClient_1.getSplitsClient)({
         chainId,
         publicClient,
     });
@@ -38,10 +44,10 @@ export const getSplitRecipients = async (splitAddress, chainId, options = {}) =>
         }
         catch (error) {
             lastError = error;
-            const isRateLimit = isRateLimitError(error);
+            const isRateLimit = (0, isRateLimitError_1.isRateLimitError)(error);
             // If this is not the last attempt, wait and retry
             if (attempt < maxRetries) {
-                const delay = getRetryDelay(error, attempt, retryDelay);
+                const delay = (0, getRetryDelay_1.getRetryDelay)(error, attempt, retryDelay);
                 const errorType = isRateLimit ? 'rate limit (429)' : 'error';
                 const errorMessage = error instanceof Error ? error.message : String(error);
                 console.warn(`${errorType} getting split recipients from address ${splitAddress} (attempt ${attempt + 1}/${maxRetries + 1}), retrying in ${delay}ms...`, errorMessage);
@@ -58,4 +64,4 @@ export const getSplitRecipients = async (splitAddress, chainId, options = {}) =>
     console.error(`Failed to get split recipients from address ${splitAddress} after all retries:`, lastError);
     return null;
 };
-//# sourceMappingURL=getSplitRecipients.js.map
+exports.getSplitRecipients = getSplitRecipients;

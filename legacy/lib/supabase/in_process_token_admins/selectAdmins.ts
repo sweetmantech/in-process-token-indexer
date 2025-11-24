@@ -1,4 +1,4 @@
-import { supabase } from '../client.js';
+import { supabase } from '../client';
 
 /**
  * Selects the most recent admin from the in_process_token_admins table for a given chainId.

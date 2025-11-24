@@ -1,6 +1,6 @@
-import getArtistProfile from '../profile/getArtistProfile.js';
-import { upsertArtists } from '../supabase/in_process_artists/upsertArtists.js';
-import { selectArtists } from '../supabase/in_process_artists/selectArtists.js';
+import getArtistProfile from '../profile/getArtistProfile';
+import { upsertArtists } from '../supabase/in_process_artists/upsertArtists';
+import { selectArtists } from '../supabase/in_process_artists/selectArtists';
 
 /**
  * Ensures that all provided artist addresses exist in the in_process_artists table.

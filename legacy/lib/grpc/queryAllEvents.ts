@@ -1,4 +1,4 @@
-import { queryGraphQL } from './queryGraphQL.js';
+import { queryGraphQL } from './queryGraphQL';
 
 /**
  * Query ALL events using GraphQL with pagination

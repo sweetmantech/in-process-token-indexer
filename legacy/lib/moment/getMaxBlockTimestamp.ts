@@ -1,5 +1,5 @@
-import { networks } from '../consts.js';
-import { selectTokens } from '../supabase/in_process_tokens/selectTokens.js';
+import { networks } from '../consts';
+import { selectTokens } from '../supabase/in_process_tokens/selectTokens';
 
 interface MaxTimestampResult {
   maxTimestamp: number;

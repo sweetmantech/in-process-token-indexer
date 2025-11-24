@@ -1,6 +1,6 @@
-import { IndexerFactory } from '../IndexerFactory.js';
-import { GRPC_ENDPOINT } from '../consts.js';
-import { getMaxBlockTimestamp } from './getMaxBlockTimestamp.js';
+import { IndexerFactory } from '../IndexerFactory';
+import { GRPC_ENDPOINT } from '../consts';
+import { getMaxBlockTimestamp } from './getMaxBlockTimestamp';
 
 interface MomentEvent {
   address?: string;

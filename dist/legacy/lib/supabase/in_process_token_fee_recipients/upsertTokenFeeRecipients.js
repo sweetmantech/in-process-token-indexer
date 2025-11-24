@@ -1,11 +1,14 @@
-import { supabase } from '../client.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.upsertTokenFeeRecipients = upsertTokenFeeRecipients;
+const client_1 = require("../client");
 /**
  * Upserts multiple token fee recipient records into the in_process_token_fee_recipients table.
  * @param tokenFeeRecipients - Array of token fee recipient data objects to upsert.
  * Each object should have: { token: string, artist_address: string, percentAllocation?: number }
  * @returns The upserted records or error.
  */
-export async function upsertTokenFeeRecipients(tokenFeeRecipients) {
+async function upsertTokenFeeRecipients(tokenFeeRecipients) {
     if (!tokenFeeRecipients || tokenFeeRecipients.length === 0) {
         return [];
     }
@@ -17,7 +20,7 @@ export async function upsertTokenFeeRecipients(tokenFeeRecipients) {
     if (uniqueTokenFeeRecipients.length < tokenFeeRecipients.length) {
         console.log(`Deduplicated token fee recipients: ${tokenFeeRecipients.length} -> ${uniqueTokenFeeRecipients.length} (removed ${tokenFeeRecipients.length - uniqueTokenFeeRecipients.length} duplicates)`);
     }
-    const { data, error } = await supabase
+    const { data, error } = await client_1.supabase
         .from('in_process_token_fee_recipients')
         .upsert(uniqueTokenFeeRecipients, {
         onConflict: 'token,artist_address',
@@ -28,4 +31,3 @@ export async function upsertTokenFeeRecipients(tokenFeeRecipients) {
     }
     return data || [];
 }
-//# sourceMappingURL=upsertTokenFeeRecipients.js.map

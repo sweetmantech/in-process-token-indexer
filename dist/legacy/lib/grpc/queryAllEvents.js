@@ -1,4 +1,7 @@
-import { queryGraphQL } from './queryGraphQL.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.queryAllEvents = queryAllEvents;
+const queryGraphQL_1 = require("./queryGraphQL");
 /**
  * Query ALL events using GraphQL with pagination
  * @param endpoint - The GraphQL endpoint URL
@@ -8,12 +11,12 @@ import { queryGraphQL } from './queryGraphQL.js';
  * @param queryVariables - Dynamic variables to pass to the query (default: {})
  * @returns Array of all events
  */
-export async function queryAllEvents(endpoint, query, dataPath, batchSize = 1000, queryVariables = {}) {
+async function queryAllEvents(endpoint, query, dataPath, batchSize = 1000, queryVariables = {}) {
     const allEvents = [];
     let offset = 0;
     let hasNextPage = true;
     while (hasNextPage) {
-        const result = await queryGraphQL(endpoint, query, dataPath, batchSize, offset, queryVariables);
+        const result = await (0, queryGraphQL_1.queryGraphQL)(endpoint, query, dataPath, batchSize, offset, queryVariables);
         allEvents.push(...result.events);
         hasNextPage = result.pageInfo.hasNextPage;
         offset = result.pageInfo.nextOffset;
@@ -25,4 +28,3 @@ export async function queryAllEvents(endpoint, query, dataPath, batchSize = 1000
     }
     return allEvents;
 }
-//# sourceMappingURL=queryAllEvents.js.map

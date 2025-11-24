@@ -1,17 +1,19 @@
-import { base, baseSepolia } from 'viem/chains';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getChain = getChain;
+const chains_1 = require("viem/chains");
 /**
  * Gets the chain from a chainId
  * @param chainId - The chain ID
  * @returns The chain object
  * @throws Error if chainId is not supported
  */
-export function getChain(chainId) {
-    if (chainId === base.id) {
-        return base;
+function getChain(chainId) {
+    if (chainId === chains_1.base.id) {
+        return chains_1.base;
     }
-    if (chainId === baseSepolia.id) {
-        return baseSepolia;
+    if (chainId === chains_1.baseSepolia.id) {
+        return chains_1.baseSepolia;
     }
     throw new Error(`Unsupported chainId: ${chainId}`);
 }
-//# sourceMappingURL=getChain.js.map

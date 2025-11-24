@@ -1,6 +1,11 @@
-import indexLegacyPayments from './legacy/lib/payments/indexPayments.js';
-import indexLegacyMoments from './legacy/lib/moment/indexMoments.js';
-import indexLegacyAdmins from './legacy/lib/moment/indexAdmins.js';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const indexPayments_js_1 = __importDefault(require("./legacy/lib/payments/indexPayments.js"));
+const indexMoments_js_1 = __importDefault(require("./legacy/lib/moment/indexMoments.js"));
+const indexAdmins_js_1 = __importDefault(require("./legacy/lib/moment/indexAdmins.js"));
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
     console.log('SIGTERM received, shutting down gracefully...');
@@ -12,9 +17,9 @@ process.on('SIGINT', () => {
 });
 async function indexAllNetworks() {
     // Start all indexers: payments, moments, and admins
-    const legacyPaymentsIndexer = indexLegacyPayments();
-    const legacyMomentsIndexer = indexLegacyMoments();
-    const legacyAdminsIndexer = indexLegacyAdmins();
+    const legacyPaymentsIndexer = (0, indexPayments_js_1.default)();
+    const legacyMomentsIndexer = (0, indexMoments_js_1.default)();
+    const legacyAdminsIndexer = (0, indexAdmins_js_1.default)();
     await Promise.all([
         legacyPaymentsIndexer,
         legacyMomentsIndexer,
@@ -25,4 +30,3 @@ indexAllNetworks().catch(error => {
     console.error('Fatal error in indexer:', error);
     process.exit(1);
 });
-//# sourceMappingURL=indexer.js.map

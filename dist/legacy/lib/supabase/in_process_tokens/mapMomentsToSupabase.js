@@ -1,11 +1,14 @@
-import { safeTimestampToISO } from '../safeTimestampToISO.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.mapMomentsToSupabase = mapMomentsToSupabase;
+const safeTimestampToISO_1 = require("../safeTimestampToISO");
 /**
  * Maps moment events from GRPC to Supabase format for in_process_tokens table.
  * Filters out moments with missing or invalid address/defaultAdmin to prevent invalid blockchain addresses.
  * @param moments - Array of moment events from GRPC.
  * @returns The mapped objects for Supabase upsert (only valid moments with required fields).
  */
-export function mapMomentsToSupabase(moments) {
+function mapMomentsToSupabase(moments) {
     return moments
         .filter(moment => {
         // Validate required fields: address and defaultAdmin must be present and non-empty
@@ -32,9 +35,8 @@ export function mapMomentsToSupabase(moments) {
             chainId: moment.chainId,
             tokenId: 0,
             uri: moment.contractURI,
-            createdAt: safeTimestampToISO(moment.blockTimestamp),
+            createdAt: (0, safeTimestampToISO_1.safeTimestampToISO)(moment.blockTimestamp),
             payoutRecipient: moment.payoutRecipient,
         };
     });
 }
-//# sourceMappingURL=mapMomentsToSupabase.js.map

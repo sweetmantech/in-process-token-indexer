@@ -1,5 +1,5 @@
-import getEnsName from '../viem/getEnsName.js';
-import getZoraProfile from './getZoraProfile.js';
+import getEnsName from '../viem/getEnsName';
+import getZoraProfile from './getZoraProfile';
 
 interface ArtistProfile {
   username: string;

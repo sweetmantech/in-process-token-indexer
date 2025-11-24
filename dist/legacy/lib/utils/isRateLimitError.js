@@ -1,9 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isRateLimitError = void 0;
 /**
  * Checks if error is a 429 rate limit error
  * @param error - The error object to check
  * @returns True if the error is a rate limit error
  */
-export const isRateLimitError = (error) => {
+const isRateLimitError = (error) => {
     if (!error || typeof error !== 'object') {
         return false;
     }
@@ -18,4 +21,4 @@ export const isRateLimitError = (error) => {
             typeof err.response === 'object' &&
             err.response.status === 429));
 };
-//# sourceMappingURL=isRateLimitError.js.map
+exports.isRateLimitError = isRateLimitError;

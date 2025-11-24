@@ -1,8 +1,9 @@
-import { createPublicClient, http } from 'viem';
-import { getChain } from './getChain.js';
-const getPublicClient = (chainId) => createPublicClient({
-    chain: getChain(chainId),
-    transport: http(),
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const viem_1 = require("viem");
+const getChain_js_1 = require("./getChain.js");
+const getPublicClient = (chainId) => (0, viem_1.createPublicClient)({
+    chain: (0, getChain_js_1.getChain)(chainId),
+    transport: (0, viem_1.http)(),
 });
-export default getPublicClient;
-//# sourceMappingURL=getPublicClient.js.map
+exports.default = getPublicClient;

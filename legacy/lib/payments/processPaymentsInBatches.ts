@@ -1,9 +1,9 @@
-import { mapPaymentsToSupabase } from '../supabase/in_process_payments/mapPaymentsToSupabase.js';
-import { resolveTokensForPayments } from './resolveTokens.js';
-import { upsertPayments } from '../supabase/in_process_payments/upsertPayments.js';
-import { ensureArtists } from '../artists/ensureArtists.js';
-import { logForBaseOnly } from '../logForBaseOnly.js';
-import type { PaymentData } from '../supabase/in_process_payments/upsertPayments.js';
+import { mapPaymentsToSupabase } from '../supabase/in_process_payments/mapPaymentsToSupabase';
+import { resolveTokensForPayments } from './resolveTokens';
+import { upsertPayments } from '../supabase/in_process_payments/upsertPayments';
+import { ensureArtists } from '../artists/ensureArtists';
+import { logForBaseOnly } from '../logForBaseOnly';
+import type { PaymentData } from '../supabase/in_process_payments/upsertPayments';
 
 interface PaymentWithCollection {
   collection?: string;

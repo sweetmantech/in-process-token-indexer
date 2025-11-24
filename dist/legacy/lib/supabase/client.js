@@ -1,7 +1,9 @@
-import { createClient } from '@supabase/supabase-js';
-import { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from '../consts.js';
-if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.supabase = void 0;
+const supabase_js_1 = require("@supabase/supabase-js");
+const consts_js_1 = require("../consts.js");
+if (!consts_js_1.SUPABASE_URL || !consts_js_1.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variable');
 }
-export const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
-//# sourceMappingURL=client.js.map
+exports.supabase = (0, supabase_js_1.createClient)(consts_js_1.SUPABASE_URL, consts_js_1.SUPABASE_SERVICE_ROLE_KEY);

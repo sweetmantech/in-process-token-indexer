@@ -1,12 +1,15 @@
-import { networks } from '../consts.js';
-import { selectTokens } from '../supabase/in_process_tokens/selectTokens.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getMaxBlockTimestamp = getMaxBlockTimestamp;
+const consts_1 = require("../consts");
+const selectTokens_1 = require("../supabase/in_process_tokens/selectTokens");
 /**
  * Gets the maximum createdAt timestamp from the in_process_tokens table grouped by chainId.
  * @returns Array of objects with chainId and maxTimestamp properties.
  */
-export async function getMaxBlockTimestamp() {
-    const promises = networks.map(async (network) => {
-        const tokens = (await selectTokens({
+async function getMaxBlockTimestamp() {
+    const promises = consts_1.networks.map(async (network) => {
+        const tokens = (await (0, selectTokens_1.selectTokens)({
             chainId: network.id,
             limit: 1,
             orderBy: { field: 'createdAt', ascending: false },
@@ -25,4 +28,3 @@ export async function getMaxBlockTimestamp() {
     const maxTimestamps = await Promise.all(promises);
     return maxTimestamps;
 }
-//# sourceMappingURL=getMaxBlockTimestamp.js.map
