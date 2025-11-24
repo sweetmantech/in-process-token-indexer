@@ -1,6 +1,6 @@
-import { Database } from '@/legacy/lib/supabase/types';
-import toSupabaseTimestamp from '@/lib/utils/toSupabaseTimestamp';
-import { InProcess_Collections_t } from '@/types/envio';
+import toSupabaseTimestamp from '../../utils/toSupabaseTimestamp';
+import { InProcess_Collections_t } from '../../../types/envio';
+import { Database } from '../types';
 
 /**
  * Maps Envio InProcess_Collections_t entities from GraphQL
