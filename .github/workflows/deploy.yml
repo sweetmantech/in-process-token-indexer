@@ -11,15 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
       - name: Install dependencies
         run: npm install
+
+      - name: Build TypeScript
+        run: npm run build
 
       - name: Run tests
         run: npm test
@@ -37,6 +40,7 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
+            set -e  # Exit on any error
             echo "Connected to Droplet"
             # Create app directory if it doesn't exist
             mkdir -p ~/in-process-token-indexer
@@ -61,6 +65,11 @@ jobs:
 
             # Install dependencies
             npm install
+
+            # Build TypeScript (fail on errors)
+            echo "Building TypeScript..."
+            npm run build 2>&1
+            echo "Build completed successfully"
 
             # Restart the application
             pm2 restart ecosystem.config.cjs --update-env
