@@ -21,7 +21,7 @@ export async function processCollectionsInBatches(
 
       const upsertedCollections = await upsertCollections(mappedCollections);
 
-      totalProcessed = upsertedCollections.length;
+      totalProcessed += upsertedCollections.length;
       console.log(
         `📚 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} collections`
       );
