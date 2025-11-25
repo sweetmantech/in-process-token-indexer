@@ -4,6 +4,7 @@ import indexLegacyAdmins from './legacy/lib/moment/indexAdmins';
 import { executeMomentsIndexing } from './lib/moments/executeMomentsIndexing';
 import { executeCollectionsIndexing } from './lib/collections/executeCollectionsIndexing';
 import { executeMomentAdminsIndexing } from './lib/momentAdmins/executeMomentAdminsIndexing';
+import { executeCollectionAdminsIndexing } from './lib/collectionAdmins/executeCollectionAdminsIndexing';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -33,6 +34,7 @@ async function index(): Promise<void> {
     executeCollectionsIndexing(),
     executeMomentsIndexing(),
     executeMomentAdminsIndexing(),
+    executeCollectionAdminsIndexing(),
   ]);
 }
 

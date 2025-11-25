@@ -140,57 +140,50 @@ Key principles to follow:
 
 ---
 
-# Current Task: Moment Admins Indexing ✅ COMPLETED
+# Current Task: Collection Admins Indexing ✅ COMPLETED
 
 ## Task Overview
-Built new architecture to index `InProcess_Moment_Admins` from Envio GraphQL to Supabase. This follows the same pattern as Collections and Moments indexing and is part of migrating from legacy indexer to new architecture.
+Built new architecture to index `InProcess_Collection_Admins` from Envio GraphQL to Supabase. This follows the same pattern as Moment Admins indexing but maps to collection IDs instead of moment IDs (collection-level permissions, no token_id).
 
-**Status**: ✅ **COMPLETED** - Ready for push
-**Branch**: `techengme/myc-3526-indexadmins-use-in_process_moment_admins`
+**Status**: ✅ **COMPLETED**
+**Last Updated**: Implementation complete
 
 ## Progress
 
 ### Completed ✅
-- [X] Added `InProcess_Moment_Admins_t` type to `types/envio.ts`
-- [X] Created GraphQL query function (`lib/grpc/InProcess_Moment_Admins/queryMomentAdmins.ts`)
-- [X] Created moment admins indexing function (`lib/grpc/InProcess_Moment_Admins/indexMomentAdmins.ts`)
-- [X] Created batch processing function (`lib/momentAdmins/processMomentAdminsInBatches.ts`)
-- [X] Created multi-chain indexing function (`lib/momentAdmins/executeMomentAdminsIndexing.ts`)
-- [X] Created Supabase mapping function (`lib/momentAdmins/mapMomentAdminsToSupabase.ts`)
-- [X] Created Supabase upsert function (`lib/supabase/in_process_moment_admins/upsertMomentAdmins.ts`)
-- [X] Created getMomentIdMap utility (`lib/momentAdmins/getMomentIdMap.ts`)
-- [X] Created selectMaxGrantedAt function for incremental indexing (`lib/supabase/in_process_moment_admins/selectMaxGrantedAt.ts`)
-- [X] Created selectMoments function for moment lookup (`lib/supabase/in_process_moments/selectMoments.ts`)
-- [X] Integrated moment admins indexing into main indexer (`indexer.ts`)
+- [X] Added `InProcess_Collection_Admins_t` type to `types/envio.ts`
+- [X] Created GraphQL query function (`lib/grpc/InProcess_Collection_Admins/queryCollectionAdmins.ts`)
+- [X] Created collection admins indexing function (`lib/grpc/InProcess_Collection_Admins/indexCollectionAdmins.ts`)
+- [X] Created batch processing function (`lib/collectionAdmins/processCollectionAdminsInBatches.ts`)
+- [X] Created multi-chain indexing function (`lib/collectionAdmins/executeCollectionAdminsIndexing.ts`)
+- [X] Created Supabase mapping function (`lib/collectionAdmins/mapCollectionAdminsToSupabase.ts`)
+- [X] Created Supabase upsert function (`lib/supabase/in_process_collection_admins/upsertCollectionAdmins.ts`)
+- [X] Created selectMaxGrantedAt function (`lib/supabase/in_process_collection_admins/selectMaxGrantedAt.ts`)
+- [X] Added `in_process_collection_admins` table to Supabase types (`lib/supabase/types.ts`)
+- [X] Integrated collection admins indexing into main indexer (`indexer.ts`)
 - [X] All files follow TypeScript coding principles (one function per file, <100 lines, emojis in logs)
 
 ### Key Implementation Details
-- **Moment ID Resolution**: Moment admins reference moments by ID, so we resolve collection address+chain_id+token_id → moment ID using `getMomentIdMap()`
-  - Uses `selectMoments()` to query moments with collection join
-  - Creates map key: `${collectionAddress}:${chainId}:${tokenId}` → moment ID
-- **Token ID Filtering**: `InProcess_Moment_Admins` entity's `token_id` is never 0
-  - Collection-level admins (token_id = 0) are stored in `InProcess_Collection_Admins` entity
-  - Query filters using `where: { granted_at: { _gt: $minGrantedAt } }` (no explicit token_id filter needed as Envio schema ensures token_id > 0)
-- **Incremental Indexing**: Moment Admins doesn't have `updated_at`, so we use `granted_at` for incremental indexing
+- **Collection ID Resolution**: Collection admins reference collections by ID, so we resolve collection address+chain_id → collection ID using `getCollectionIdMap()` from `lib/collections/`
+- **No Token ID**: Collection admins are collection-level (no `token_id` field in Envio entity)
+- **Incremental Indexing**: Uses `granted_at` for incremental indexing (same as moment admins)
   - Pattern: Supabase ISO timestamp → milliseconds → chain timestamp (seconds) → GraphQL filter
-  - Uses `selectMaxGrantedAt()` instead of `selectMaxUpdatedAt()`
+  - Uses `selectMaxGrantedAt()` function
 - **Mapping**: 
   - `admin` (from Envio) → `artist_address` (in Supabase, lowercased)
-  - `collection` (address) + `token_id` + `chain_id` → `moment` (UUID in Supabase)
+  - `collection` (address) + `chain_id` → `collection` (UUID in Supabase)
   - `granted_at` (chain timestamp) → ISO timestamp
   - `hidden` defaults to `false`
-- **Conflict Resolution**: Uses `moment, artist_address` as unique constraint
-- **File Organization**: 
-  - `getMomentIdMap` moved to `lib/momentAdmins/` (not in supabase folder, as it's a business logic utility)
-  - `selectMoments` created in `lib/supabase/in_process_moments/` for reusable moment queries
+- **Conflict Resolution**: Uses `collection, artist_address` as unique constraint
+- **Supabase Table**: Added `in_process_collection_admins` table definition to types with:
+  - `collection` (FK to `in_process_collections.id`)
+  - `artist_address` (FK to `in_process_artists.address`)
+  - `granted_at`, `hidden`, `id`
 
 ## Architecture Notes
 - New code is in `lib/` directory (not `legacy/`)
 - Using Envio GraphQL endpoint directly (not gRPC)
 - Following single responsibility principle (one function per file)
 - All files kept under 100 lines
-- Moment admins indexing runs in parallel with Collections and Moments indexing (currently only moment admins enabled in indexer.ts)
-
-## Next Steps
-- Ready to push changes
-- Future: Enable Collections and Moments indexing in parallel with Moment Admins
+- Reuses `getCollectionIdMap` utility from `lib/collections/`
+- Collection admins indexing runs in parallel with other indexers (currently enabled in indexer.ts)
