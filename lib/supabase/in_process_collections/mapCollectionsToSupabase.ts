@@ -5,9 +5,9 @@ import { Database } from '../types';
 /**
  * Maps Envio InProcess_Collections_t entities from GraphQL
  * to the Supabase schema for upserting.
- * - Ensures correct null handling for optional fields.
  * - Serializes all values to primitive types for Supabase.
- *
+ * - All required fields are present (validated upstream).
+ * 
  * @param collections - Array of InProcess_Collections_t from Envio.
  * @returns Array of objects formatted for Supabase upsert.
  */

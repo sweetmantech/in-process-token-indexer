@@ -18,7 +18,7 @@ export async function indexCollections(
   const limit = 1000;
   let hasNextPage = true;
 
-  // Get the latest created_at from in_process_collections for incremental indexing
+  // Get the latest updated_at from in_process_collections for incremental indexing
   const maxUpdatedAtSupabase = await selectMaxUpdatedAt(chainId);
   const minUpdatedAtEnvio = toChainTimestamp(
     maxUpdatedAtSupabase ?? new Date(0).getTime()
