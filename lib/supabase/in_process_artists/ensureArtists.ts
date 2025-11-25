@@ -1,4 +1,4 @@
-import { Database } from '@/legacy/lib/supabase/types';
+import { Database } from '../types';
 import { supabase } from '../client';
 
 /**
