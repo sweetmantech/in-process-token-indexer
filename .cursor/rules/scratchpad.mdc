@@ -118,42 +118,44 @@ Key principles to follow:
 
 ---
 
-# Current Task: Moments Indexing
+# Current Task: Moment Admins Indexing
 
 ## Task Overview
-Building new architecture to index `InProcess_Moments` from Envio GraphQL to Supabase. This follows the same pattern as Collections indexing and is part of migrating from legacy indexer to new architecture.
+Building new architecture to index `InProcess_Moment_Admins` from Envio GraphQL to Supabase. This follows the same pattern as Collections and Moments indexing and is part of migrating from legacy indexer to new architecture.
 
-**Last Updated**: Current session - Moments indexing implementation completed
+**Last Updated**: Current session - Moment admins indexing implementation completed
 
 ## Progress
 
 ### Completed ✅
-- [X] Added `InProcess_Moments_t` type to `types/envio.ts`
-- [X] Created GraphQL query function (`lib/grpc/InProcess_Moments/queryMoments.ts`)
-- [X] Created moments indexing function (`lib/grpc/InProcess_Moments/indexMoments.ts`)
-- [X] Created batch processing function (`lib/moments/processMomentsInBatches.ts`)
-- [X] Created multi-chain indexing function (`lib/moments/executeMomentsIndexingParallel.ts`)
-- [X] Created Supabase mapping function (`lib/supabase/in_process_moments/mapMomentsToSupabase.ts`)
-- [X] Created Supabase upsert function (`lib/supabase/in_process_moments/upsertMoments.ts`)
-- [X] Created Supabase selectMaxUpdatedAt function (`lib/supabase/in_process_moments/selectMaxUpdatedAt.ts`)
-- [X] Created collection ID resolver utility (`lib/supabase/in_process_collections/getCollectionId.ts`)
-- [X] Integrated moments indexing into main indexer (`indexer.ts`)
+- [X] Added `InProcess_Moment_Admins_t` type to `types/envio.ts`
+- [X] Created GraphQL query function (`lib/grpc/InProcess_Moment_Admins/queryMomentAdmins.ts`)
+- [X] Created moment admins indexing function (`lib/grpc/InProcess_Moment_Admins/indexMomentAdmins.ts`)
+- [X] Created batch processing function (`lib/momentAdmins/processMomentAdminsInBatches.ts`)
+- [X] Created multi-chain indexing function (`lib/momentAdmins/executeMomentAdminsIndexing.ts`)
+- [X] Created Supabase mapping function (`lib/supabase/in_process_moment_admins/mapMomentAdminsToSupabase.ts`)
+- [X] Created Supabase upsert function (`lib/supabase/in_process_moment_admins/upsertMomentAdmins.ts`)
+- [X] Created getMomentIdMap utility (`lib/supabase/in_process_moments/getMomentIdMap.ts`)
+- [X] Created selectMaxGrantedAt function for incremental indexing (`lib/supabase/in_process_moment_admins/selectMaxGrantedAt.ts`)
+- [X] Integrated moment admins indexing into main indexer (`indexer.ts`)
 - [X] All files follow TypeScript coding principles (one function per file, <100 lines, emojis in logs)
 
 ### Key Implementation Details
-- **Collection ID Resolution**: Moments reference collections by ID (not address), so we resolve collection address+chain_id to collection ID using `getCollectionId()`
-- **Max Supply Conversion**: Converts `max_supply` from string (BigInt from GraphQL) to number for Supabase
-- **Incremental Indexing**: 
-  - Both Collections and Moments use `selectMaxUpdatedAt()` to fetch only records updated since last sync
+- **Moment ID Resolution**: Moment admins reference moments by ID, so we resolve collection address+chain_id+token_id → moment ID using `getMomentIdMap()`
+  - First resolves collection address+chain_id → collection ID
+  - Then resolves collection ID+token_id → moment ID
+- **Incremental Indexing**: Moment Admins doesn't have `updated_at`, so we use `granted_at` for incremental indexing
   - Pattern: Supabase ISO timestamp → milliseconds → chain timestamp (seconds) → GraphQL filter
-  - Handles empty table gracefully (returns `null`, falls back to epoch 0)
-- **Conflict Resolution**: 
-  - Collections: Uses `address, chain_id` as unique constraint
-  - Moments: Uses `collection, token_id` as unique constraint
+- **Mapping**: 
+  - `admin` (from Envio) → `artist_address` (in Supabase, lowercased)
+  - `collection` (address) + `token_id` + `chain_id` → `moment` (UUID in Supabase)
+  - `granted_at` (chain timestamp) → ISO timestamp
+  - `hidden` defaults to `false`
+- **Conflict Resolution**: Uses `moment, artist_address` as unique constraint
 
 ## Architecture Notes
 - New code is in `lib/` directory (not `legacy/`)
 - Using Envio GraphQL endpoint directly (not gRPC)
 - Following single responsibility principle (one function per file)
 - All files kept under 100 lines
-- Moments indexing runs in parallel with Collections indexing
+- Moment admins indexing runs in parallel with Collections and Moments indexing
