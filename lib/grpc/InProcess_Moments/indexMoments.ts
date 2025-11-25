@@ -27,9 +27,11 @@ export async function indexMoments(): Promise<InProcess_Moments_t[]> {
       minUpdatedAt: minUpdatedAtEnvio,
     });
 
-    console.log(
-      `💾 Processing ${allMoments.length} ~ ${allMoments.length + momentsResult.moments.length}`
-    );
+    if (momentsResult.moments.length > 0) {
+      console.log(
+        `💾 Processing ${allMoments.length} ~ ${allMoments.length + momentsResult.moments.length}`
+      );
+    }
 
     // ℹ️ Process fetched moments for this page (batch upserts handled in processMomentsInBatches)
     await processMomentsInBatches(momentsResult.moments);

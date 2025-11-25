@@ -29,9 +29,11 @@ export async function indexCollectionAdmins(): Promise<
       minGrantedAt: minGrantedAtEnvio,
     });
 
-    console.log(
-      `💾 Processing ${allAdmins.length} ~ ${allAdmins.length + adminsResult.collectionAdmins.length}`
-    );
+    if (adminsResult.collectionAdmins.length > 0) {
+      console.log(
+        `💾 Processing ${allAdmins.length} ~ ${allAdmins.length + adminsResult.collectionAdmins.length}`
+      );
+    }
 
     // ℹ️ Process fetched admins for this page (batch upserts handled in processCollectionAdminsInBatches)
     await processCollectionAdminsInBatches(adminsResult.collectionAdmins);

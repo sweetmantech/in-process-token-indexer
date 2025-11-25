@@ -29,9 +29,11 @@ export async function indexMomentComments(): Promise<
       minCommentedAt: minCommentedAtEnvio,
     });
 
-    console.log(
-      `💾 Processing ${allComments.length} ~ ${allComments.length + commentsResult.momentComments.length}`
-    );
+    if (commentsResult.momentComments.length > 0) {
+      console.log(
+        `💾 Processing ${allComments.length} ~ ${allComments.length + commentsResult.momentComments.length}`
+      );
+    }
 
     // ℹ️ Process fetched comments for this page (batch upserts handled in processMomentCommentsInBatches)
     await processMomentCommentsInBatches(commentsResult.momentComments);

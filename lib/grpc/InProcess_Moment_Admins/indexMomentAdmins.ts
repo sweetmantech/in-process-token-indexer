@@ -29,9 +29,11 @@ export async function indexMomentAdmins(): Promise<
       minGrantedAt: minGrantedAtEnvio,
     });
 
-    console.log(
-      `💾 Processing ${allAdmins.length} ~ ${allAdmins.length + adminsResult.momentAdmins.length}`
-    );
+    if (adminsResult.momentAdmins.length > 0) {
+      console.log(
+        `💾 Processing ${allAdmins.length} ~ ${allAdmins.length + adminsResult.momentAdmins.length}`
+      );
+    }
 
     // ℹ️ Process fetched admins for this page (batch upserts handled in processMomentAdminsInBatches)
     await processMomentAdminsInBatches(adminsResult.momentAdmins);

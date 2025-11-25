@@ -79,3 +79,23 @@ export interface MomentCommentsQueryResult {
   momentComments: InProcess_Moment_Comments_t[];
   pageInfo: PageInfo;
 }
+
+export type InProcess_Sales_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly token_id: number;
+  readonly sale_start: string; // BigInt from GraphQL comes as string
+  readonly sale_end: string; // BigInt from GraphQL comes as string
+  readonly max_tokens_per_address: string; // BigInt from GraphQL comes as string
+  readonly price_per_token: string; // BigInt from GraphQL comes as string
+  readonly funds_recipient: string;
+  readonly currency: string;
+  readonly chain_id: number;
+  readonly transaction_hash: string;
+  readonly created_at: number;
+};
+
+export interface SalesQueryResult {
+  sales: InProcess_Sales_t[];
+  pageInfo: PageInfo;
+}
