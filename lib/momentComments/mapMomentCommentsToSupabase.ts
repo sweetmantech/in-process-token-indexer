@@ -34,7 +34,7 @@ export async function mapMomentCommentsToSupabase(
       mappedComments.push({
         moment: momentId,
         artist_address: comment.sender.toLowerCase(),
-        comment: comment.comment || null,
+        comment: comment.comment ?? null,
         commented_at: toSupabaseTimestamp(comment.commented_at),
       });
     }
