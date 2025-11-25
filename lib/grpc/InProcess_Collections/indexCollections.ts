@@ -27,9 +27,11 @@ export async function indexCollections(): Promise<InProcess_Collections_t[]> {
       minUpdatedAt: minUpdatedAtEnvio,
     });
 
-    console.log(
-      `💾 Processing ${allCollections.length} ~ ${allCollections.length + collectionsResult.collections.length}`
-    );
+    if (collectionsResult.collections.length > 0) {
+      console.log(
+        `💾 Processing ${allCollections.length} ~ ${allCollections.length + collectionsResult.collections.length}`
+      );
+    }
 
     // ℹ️ Process fetched collections for this page (batch upserts handled in processCollectionsInBatches)
     await processCollectionsInBatches(collectionsResult.collections);

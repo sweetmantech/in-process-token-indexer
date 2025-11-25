@@ -16,9 +16,7 @@ export async function indexMoments(): Promise<InProcess_Moments_t[]> {
 
   // Get the latest updated_at from in_process_moments for incremental indexing
   const maxUpdatedAtSupabase = await selectMaxUpdatedAt();
-  const minUpdatedAtEnvio = toChainTimestamp(
-    maxUpdatedAtSupabase ?? new Date(0).getTime()
-  );
+  const minUpdatedAtEnvio = toChainTimestamp(new Date(0).getTime());
 
   while (hasNextPage) {
     const momentsResult = await queryMoments({
@@ -27,9 +25,11 @@ export async function indexMoments(): Promise<InProcess_Moments_t[]> {
       minUpdatedAt: minUpdatedAtEnvio,
     });
 
-    console.log(
-      `💾 Processing ${allMoments.length} ~ ${allMoments.length + momentsResult.moments.length}`
-    );
+    if (momentsResult.moments.length > 0) {
+      console.log(
+        `💾 Processing ${allMoments.length} ~ ${allMoments.length + momentsResult.moments.length}`
+      );
+    }
 
     // ℹ️ Process fetched moments for this page (batch upserts handled in processMomentsInBatches)
     await processMomentsInBatches(momentsResult.moments);

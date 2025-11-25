@@ -1,6 +1,7 @@
 import {
   InProcess_Moment_Admins_t,
   InProcess_Moment_Comments_t,
+  InProcess_Sales_t,
 } from '@/types/envio';
 import { selectMoments } from '../supabase/in_process_moments/selectMoments';
 
@@ -11,7 +12,10 @@ import { selectMoments } from '../supabase/in_process_moments/selectMoments';
  * @returns Map with key as `${collectionAddress}:${chainId}:${tokenId}` and value as moment ID.
  */
 export async function getMomentIdMap(
-  momentAdmins: InProcess_Moment_Admins_t[] | InProcess_Moment_Comments_t[]
+  momentAdmins:
+    | InProcess_Moment_Admins_t[]
+    | InProcess_Moment_Comments_t[]
+    | InProcess_Sales_t[]
 ): Promise<Map<string, string>> {
   try {
     if (momentAdmins.length === 0) {
