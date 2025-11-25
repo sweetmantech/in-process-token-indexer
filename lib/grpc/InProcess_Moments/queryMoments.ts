@@ -13,7 +13,6 @@ const MOMENTS_QUERY = `query GetMoments($limit: Int, $offset: Int, $minUpdatedAt
 
 /**
  * Queries Envio GraphQL for InProcess_Moments.
- * @param chainId - Chain ID to filter by (required).
  * @param limit - Number of records to fetch per request (default: 1000).
  * @param offset - Number of records to skip (default: 0).
  * @param minUpdatedAt - Minimum updated_at timestamp to filter by (for incremental indexing).
