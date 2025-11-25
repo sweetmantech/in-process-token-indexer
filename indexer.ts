@@ -42,10 +42,10 @@ async function index(): Promise<void> {
   ]);
 }
 
-// legacyIndex().catch(error => {
-//   console.error('Fatal error in indexer:', error);
-//   process.exit(1);
-// });
+legacyIndex().catch(error => {
+  console.error('Fatal error in indexer:', error);
+  process.exit(1);
+});
 
 index().catch(error => {
   console.error('Fatal error in indexer:', error);
