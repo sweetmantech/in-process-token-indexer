@@ -1,7 +1,6 @@
-import indexLegacyPayments from './legacy/lib/payments/indexPayments';
-import indexLegacyMoments from './legacy/lib/moment/indexMoments';
-import indexLegacyAdmins from './legacy/lib/moment/indexAdmins';
-import { executeCollectionsIndexingParallel } from './lib/collections/executeCollectionsIndexingParallel';
+import indexLegacyPayments from './legacy/lib/payments/indexPayments.js';
+import indexLegacyMoments from './legacy/lib/moment/indexMoments.js';
+import indexLegacyAdmins from './legacy/lib/moment/indexAdmins.js';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -14,11 +13,12 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-async function legacyIndex(): Promise<void> {
+async function indexAllNetworks(): Promise<void> {
   // Start all indexers: payments, moments, and admins
   const legacyPaymentsIndexer = indexLegacyPayments();
   const legacyMomentsIndexer = indexLegacyMoments();
   const legacyAdminsIndexer = indexLegacyAdmins();
+
   await Promise.all([
     legacyPaymentsIndexer,
     legacyMomentsIndexer,
@@ -26,16 +26,7 @@ async function legacyIndex(): Promise<void> {
   ]);
 }
 
-async function index(): Promise<void> {
-  await executeCollectionsIndexingParallel();
-}
-
-legacyIndex().catch(error => {
-  console.error('Fatal error in indexer:', error);
-  process.exit(1);
-});
-
-index().catch(error => {
+indexAllNetworks().catch(error => {
   console.error('Fatal error in indexer:', error);
   process.exit(1);
 });
