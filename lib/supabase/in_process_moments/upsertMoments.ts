@@ -13,7 +13,7 @@ export async function upsertMoments(
   moments: Array<Database['public']['Tables']['in_process_moments']['Insert']>
 ): Promise<Array<Database['public']['Tables']['in_process_moments']['Row']>> {
   if (!moments.length) {
-    console.log('ℹ️ No moments to upsert');
+    console.log('ℹ️  No moments to upsert');
     return [];
   }
 
@@ -30,4 +30,3 @@ export async function upsertMoments(
   console.log(`✅ upsertMoments: Upserted ${data?.length || 0} moments`);
   return data || [];
 }
-
