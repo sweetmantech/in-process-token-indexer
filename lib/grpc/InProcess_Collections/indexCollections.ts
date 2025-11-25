@@ -6,7 +6,6 @@ import { queryCollections } from './queryCollections';
 
 /**
  * Fetches all collections from Envio GraphQL with pagination.
- * @param chainId - Chain ID to filter by (required).
  * @returns Array of all collections.
  */
 export async function indexCollections(): Promise<InProcess_Collections_t[]> {
