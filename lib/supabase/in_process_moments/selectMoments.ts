@@ -4,7 +4,7 @@ import { InProcessMoment } from '@/types/moments';
 /**
  * Queries moments from Supabase by collection addresses and token IDs.
  * Returns moments with their associated collection data.
- * @param collectionAddresses - Array of collection addresses (case-insensitive matching).
+ * @param collectionAddresses - Array of collection addresses (case-sensitive matching).
  * @param tokenIds - Array of token IDs to filter by.
  * @returns Array of moment records with id, token_id, and collection data.
  */

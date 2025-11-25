@@ -6,16 +6,18 @@ import { getMomentIdMap } from './getMomentIdMap';
 /**
  * Maps Envio InProcess_Moment_Admins_t entities from GraphQL
  * to the Supabase schema for upserting.
- * - Filters out records with token_id = 0 (not expected in InProcess_Moment_Admins_t).
+ * - Skips admins whose (collection, chain_id, token_id) cannot be resolved to a moment ID.
  * - Maps admin address to artist_address.
  * - Converts granted_at from chain timestamp to ISO timestamp.
  *
  * @param momentAdmins - Array of InProcess_Moment_Admins_t from Envio.
- * @returns Array of objects formatted for Supabase upsert.
+ * @returns Promise of objects formatted for Supabase upsert.
  */
 export async function mapMomentAdminsToSupabase(
   momentAdmins: InProcess_Moment_Admins_t[]
-) {
+): Promise<
+  Database['public']['Tables']['in_process_moment_admins']['Insert'][]
+> {
   const mappedAdmins: Array<
     Database['public']['Tables']['in_process_moment_admins']['Insert']
   > = [];

@@ -3,7 +3,7 @@ import { supabase } from '../client';
 
 /**
  * Queries collections from Supabase by their addresses.
- * @param addresses - Array of collection addresses (case-insensitive matching).
+ * @param addresses - Array of collection addresses (case-sensitive matching).
  * @returns Array of collection records with id, address, and chain_id.
  */
 export async function selectCollections(

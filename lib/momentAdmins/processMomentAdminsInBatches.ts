@@ -18,7 +18,7 @@ export async function processMomentAdminsInBatches(
       await ensureArtists(artistAddresses);
       await upsertMomentAdmins(mappedAdmins);
 
-      // totalProcessed += mappedAdmins.length;
+      totalProcessed += mappedAdmins.length;
       console.log(
         `👥 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} moment admins`
       );
