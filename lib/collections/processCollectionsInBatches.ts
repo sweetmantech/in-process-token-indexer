@@ -8,23 +8,29 @@ export async function processCollectionsInBatches(
   collections: InProcess_Collections_t[]
 ): Promise<void> {
   let totalProcessed = 0;
+  for (let i = 0; i < collections.length; i = BATCH_SIZE) {
+    try {
+      const batch = collections.slice(i, i + BATCH_SIZE);
+      const mappedCollections = mapCollectionsToSupabase(batch);
 
-  for (let i = 0; i < collections.length; i += BATCH_SIZE) {
-    const batch = collections.slice(i, i + BATCH_SIZE);
-    const mappedCollections = mapCollectionsToSupabase(batch);
+      // Ensure artists exist in the database
+      const artistAddresses = mappedCollections.map(
+        collection => collection.default_admin
+      );
+      await ensureArtists(artistAddresses);
 
-    // Ensure artists exist in the database
-    const artistAddresses = mappedCollections.map(
-      collection => collection.default_admin
-    );
-    await ensureArtists(artistAddresses);
+      const upsertedCollections = await upsertCollections(mappedCollections);
 
-    const upsertedCollections = await upsertCollections(mappedCollections);
-
-    totalProcessed += upsertedCollections.length;
-    console.log(
-      `📚 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} collections`
-    );
+      totalProcessed = upsertedCollections.length;
+      console.log(
+        `📚 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} collections`
+      );
+    } catch (error) {
+      console.error(
+        `❌ Failed to process batch ${Math.floor(i / BATCH_SIZE) + 1}:`,
+        error
+      );
+    }
   }
 
   console.log(`✅ Completed processing: ${totalProcessed} collections`);
