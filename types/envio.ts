@@ -10,6 +10,18 @@ export type InProcess_Collections_t = {
   readonly uri: string;
 };
 
+export type InProcess_Moments_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly token_id: number;
+  readonly uri: string;
+  readonly max_supply: string; // BigInt from GraphQL comes as string
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly updated_at: number;
+  readonly transaction_hash: string;
+};
+
 export interface PageInfo {
   hasNextPage: boolean;
   nextOffset: number;
@@ -17,5 +29,10 @@ export interface PageInfo {
 
 export interface QueryResult {
   collections: InProcess_Collections_t[];
+  pageInfo: PageInfo;
+}
+
+export interface MomentsQueryResult {
+  moments: InProcess_Moments_t[];
   pageInfo: PageInfo;
 }

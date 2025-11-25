@@ -2,6 +2,7 @@ import indexLegacyPayments from './legacy/lib/payments/indexPayments';
 import indexLegacyMoments from './legacy/lib/moment/indexMoments';
 import indexLegacyAdmins from './legacy/lib/moment/indexAdmins';
 import { executeCollectionsIndexingParallel } from './lib/collections/executeCollectionsIndexingParallel';
+import { executeMomentsIndexingParallel } from './lib/moments/executeMomentsIndexingParallel';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -27,7 +28,10 @@ async function legacyIndex(): Promise<void> {
 }
 
 async function index(): Promise<void> {
-  await executeCollectionsIndexingParallel();
+  await Promise.all([
+    executeCollectionsIndexingParallel(),
+    executeMomentsIndexingParallel(),
+  ]);
 }
 
 legacyIndex().catch(error => {
