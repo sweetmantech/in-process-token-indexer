@@ -43,6 +43,10 @@ export async function getFeeRecipientsForSale(
           percent_allocation: Number(recipient.percentAllocation ?? 0),
         });
       }
+    } else {
+      console.warn(
+        `⚠️  No recipients returned for split contract ${sale.funds_recipient} on chain ${sale.chain_id}`
+      );
     }
   } else {
     feeRecipients.push({
