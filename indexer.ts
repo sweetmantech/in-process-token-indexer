@@ -1,10 +1,8 @@
 import indexLegacyPayments from './legacy/lib/payments/indexPayments';
 import indexLegacyMoments from './legacy/lib/moment/indexMoments';
 import indexLegacyAdmins from './legacy/lib/moment/indexAdmins';
+import { executeMomentsIndexing } from './lib/moments/executeMomentsIndexing';
 import { executeCollectionsIndexing } from './lib/collections/executeCollectionsIndexing';
-import { supabase } from './lib/supabase/client';
-import { ensureArtists } from './lib/supabase/in_process_artists/ensureArtists';
-import getArtistProfile from './legacy/lib/profile/getArtistProfile';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -30,7 +28,7 @@ async function legacyIndex(): Promise<void> {
 }
 
 async function index(): Promise<void> {
-  executeCollectionsIndexing();
+  await Promise.all([executeCollectionsIndexing(), executeMomentsIndexing()]);
 }
 
 // legacyIndex().catch(error => {

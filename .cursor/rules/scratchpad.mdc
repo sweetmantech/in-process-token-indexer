@@ -73,10 +73,33 @@ The goal is to help you maintain a big picture as well as the progress of the ta
 - **Logging**: Log per-chain results and total count
 
 ### File Structure Patterns
-- **Query Functions**: `lib/grpc/query[Entity].ts` - single GraphQL query with pagination params
-- **Pagination Functions**: `lib/grpc/getAll[Entity].ts` - handles pagination loop, returns all results
-- **Index Functions**: `lib/index[Entity].ts` - orchestrates fetching and syncing to Supabase
-- **Multi-Chain Functions**: `lib/index[Entity]ForAllChains.ts` - handles parallel indexing across chains
+- **Query Functions**: `lib/grpc/InProcess_[Entity]/query[Entity].ts` - single GraphQL query with pagination params
+- **Index Functions**: `lib/grpc/InProcess_[Entity]/index[Entity].ts` - orchestrates fetching and syncing to Supabase with incremental indexing
+- **Batch Processing**: `lib/[entity]/process[Entity]InBatches.ts` - handles batch upserts to Supabase
+- **Multi-Chain Functions**: `lib/[entity]/execute[Entity]IndexingParallel.ts` - handles parallel indexing across chains
+- **Supabase Queries**: `lib/supabase/in_process_[table]/` - organized by table name, one function per file
+
+### Incremental Indexing Pattern
+- **Purpose**: Only fetch records updated since last sync to minimize data transfer and processing
+- **selectMaxUpdatedAt() Function**: 
+  - Location: `lib/supabase/in_process_[table]/selectMaxUpdatedAt.ts`
+  - Returns: Maximum `updated_at` timestamp in milliseconds (epoch), or `null` if no records exist
+  - Error Handling: Handles `PGRST116` error code (no records found) gracefully by returning `null`
+  - Conversion: Converts Supabase ISO timestamp string to milliseconds using `new Date(data.updated_at).getTime()`
+- **Timestamp Conversion Flow**:
+  1. Supabase stores `updated_at` as ISO string
+  2. `selectMaxUpdatedAt()` converts ISO → milliseconds (epoch)
+  3. `toChainTimestamp()` converts milliseconds → chain timestamp (seconds)
+  4. GraphQL query uses `minUpdatedAt` (chain timestamp) to filter records
+- **Usage in Index Functions**:
+  ```typescript
+  const maxUpdatedAtSupabase = await selectMaxUpdatedAt();
+  const minUpdatedAtEnvio = toChainTimestamp(
+    maxUpdatedAtSupabase ?? new Date(0).getTime()
+  );
+  // Use minUpdatedAtEnvio in GraphQL query where clause
+  ```
+- **Fallback**: If no records exist (`null`), uses `new Date(0).getTime()` to fetch all records from beginning
 
 ### TypeScript Coding Principles Quick Reference
 **ALWAYS CHECK `typescript.coding.principle.mdc` BEFORE WRITING CODE!**
@@ -95,42 +118,42 @@ Key principles to follow:
 
 ---
 
-# Current Task: Collections Indexing
+# Current Task: Moments Indexing
 
 ## Task Overview
-Building new architecture to index `InProcess_Collections` from Envio GraphQL to Supabase. This is part of migrating from legacy indexer to new architecture that directly queries Envio GraphQL.
+Building new architecture to index `InProcess_Moments` from Envio GraphQL to Supabase. This follows the same pattern as Collections indexing and is part of migrating from legacy indexer to new architecture.
 
-**Last Updated**: Current session - discussing Scratchpad update workflow
+**Last Updated**: Current session - Moments indexing implementation completed
 
 ## Progress
 
 ### Completed ✅
-- [X] Set up GraphQL query function (`lib/grpc/queryCollections.ts`)
-- [X] Implemented pagination logic (`lib/grpc/getAllCollections.ts`)
-- [X] Created collections indexing function (`lib/indexCollections.ts`)
-- [X] Created multi-chain indexing function (`lib/indexCollectionsForAllChains.ts`)
-- [X] Integrated into main indexer (`indexer.ts`)
-- [X] Set up types for Envio entities (`types/envio.ts`)
-- [X] Set up Supabase client and types (`lib/supabase/`)
-- [X] Committed to continuous Scratchpad updates (user feedback addressed)
-- [X] Committed to always referencing TypeScript coding principles when writing code (user feedback addressed)
-- [X] Moved `INDEX_INTERVAL_MS` constant to `lib/consts.ts` for centralized configuration
+- [X] Added `InProcess_Moments_t` type to `types/envio.ts`
+- [X] Created GraphQL query function (`lib/grpc/InProcess_Moments/queryMoments.ts`)
+- [X] Created moments indexing function (`lib/grpc/InProcess_Moments/indexMoments.ts`)
+- [X] Created batch processing function (`lib/moments/processMomentsInBatches.ts`)
+- [X] Created multi-chain indexing function (`lib/moments/executeMomentsIndexingParallel.ts`)
+- [X] Created Supabase mapping function (`lib/supabase/in_process_moments/mapMomentsToSupabase.ts`)
+- [X] Created Supabase upsert function (`lib/supabase/in_process_moments/upsertMoments.ts`)
+- [X] Created Supabase selectMaxUpdatedAt function (`lib/supabase/in_process_moments/selectMaxUpdatedAt.ts`)
+- [X] Created collection ID resolver utility (`lib/supabase/in_process_collections/getCollectionId.ts`)
+- [X] Integrated moments indexing into main indexer (`indexer.ts`)
+- [X] All files follow TypeScript coding principles (one function per file, <100 lines, emojis in logs)
 
-### In Progress 🚧
-- [ ] **TODO**: Sync collections to Supabase (see `lib/indexCollections.ts` line 13)
-  - Need to create Supabase upsert function for collections
-  - Need to map Envio `InProcess_Collections` to Supabase schema
-  - Current status: Collections fetching works, but Supabase sync not yet implemented
-
-### Next Steps
-1. Check Supabase schema for collections table
-2. Create mapping function from Envio to Supabase format
-3. Create upsert function in `lib/supabase/in_process_collections/`
-4. Integrate Supabase sync into `indexCollections` function
-5. Test end-to-end flow
+### Key Implementation Details
+- **Collection ID Resolution**: Moments reference collections by ID (not address), so we resolve collection address+chain_id to collection ID using `getCollectionId()`
+- **Max Supply Conversion**: Converts `max_supply` from string (BigInt from GraphQL) to number for Supabase
+- **Incremental Indexing**: 
+  - Both Collections and Moments use `selectMaxUpdatedAt()` to fetch only records updated since last sync
+  - Pattern: Supabase ISO timestamp → milliseconds → chain timestamp (seconds) → GraphQL filter
+  - Handles empty table gracefully (returns `null`, falls back to epoch 0)
+- **Conflict Resolution**: 
+  - Collections: Uses `address, chain_id` as unique constraint
+  - Moments: Uses `collection, token_id` as unique constraint
 
 ## Architecture Notes
 - New code is in `lib/` directory (not `legacy/`)
 - Using Envio GraphQL endpoint directly (not gRPC)
 - Following single responsibility principle (one function per file)
 - All files kept under 100 lines
+- Moments indexing runs in parallel with Collections indexing
