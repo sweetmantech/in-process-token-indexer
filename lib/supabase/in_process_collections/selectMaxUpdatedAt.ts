@@ -1,10 +1,10 @@
 import { supabase } from '../client';
 
 /**
- * Gets the maximum created_at timestamp from in_process_collections table for a given chainId.
+ * Gets the maximum updated_at timestamp from in_process_collections table for a given chainId.
  * Used for incremental indexing to determine the starting point for fetching new records.
  * @param chainId - Chain ID to filter by.
- * @returns Maximum created_at timestamp in milliseconds (epoch), or null if no records exist.
+ * @returns Maximum updated_at timestamp in milliseconds (epoch), or null if no records exist.
  */
 export async function selectMaxUpdatedAt(
   chainId: number
