@@ -1,6 +1,6 @@
 import { InProcess_Collections_t } from '@/types/envio';
 import { BATCH_SIZE } from '../consts';
-import { mapCollectionsToSupabase } from '../supabase/in_process_collections/mapCollectionsToSupabase';
+import { mapCollectionsToSupabase } from './mapCollectionsToSupabase';
 import { ensureArtists } from '../supabase/in_process_artists/ensureArtists';
 import { upsertCollections } from '../supabase/in_process_collections/upsertCollections';
 

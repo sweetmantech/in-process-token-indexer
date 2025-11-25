@@ -1,6 +1,6 @@
 import { InProcess_Moments_t } from '@/types/envio';
 import { BATCH_SIZE } from '../consts';
-import { mapMomentsToSupabase } from '../supabase/in_process_moments/mapMomentsToSupabase';
+import { mapMomentsToSupabase } from './mapMomentsToSupabase';
 import { upsertMoments } from '../supabase/in_process_moments/upsertMoments';
 
 export async function processMomentsInBatches(

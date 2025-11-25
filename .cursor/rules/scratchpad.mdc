@@ -78,6 +78,8 @@ The goal is to help you maintain a big picture as well as the progress of the ta
 - **Batch Processing**: `lib/[entity]/process[Entity]InBatches.ts` - handles batch upserts to Supabase
 - **Multi-Chain Functions**: `lib/[entity]/execute[Entity]IndexingParallel.ts` - handles parallel indexing across chains
 - **Supabase Queries**: `lib/supabase/in_process_[table]/` - organized by table name, one function per file
+- **ID Resolution Utilities**: `lib/[entity]/get[Entity]IdMap.ts` - resolves foreign key relationships (e.g., collection address → collection ID, moment lookup)
+- **Select Functions**: `lib/supabase/in_process_[table]/select[Entity].ts` - queries entities with joins (e.g., `selectMoments` with collection join)
 
 ### Incremental Indexing Pattern
 - **Purpose**: Only fetch records updated since last sync to minimize data transfer and processing
@@ -86,20 +88,39 @@ The goal is to help you maintain a big picture as well as the progress of the ta
   - Returns: Maximum `updated_at` timestamp in milliseconds (epoch), or `null` if no records exist
   - Error Handling: Handles `PGRST116` error code (no records found) gracefully by returning `null`
   - Conversion: Converts Supabase ISO timestamp string to milliseconds using `new Date(data.updated_at).getTime()`
+- **Alternative Timestamp Fields**: Some entities don't have `updated_at` field
+  - **Moment Admins**: Uses `granted_at` instead of `updated_at` for incremental indexing
+  - Location: `lib/supabase/in_process_moment_admins/selectMaxGrantedAt.ts`
+  - Same pattern: ISO → milliseconds → chain timestamp (seconds) → GraphQL filter
+  - GraphQL query uses `minGrantedAt` instead of `minUpdatedAt`
 - **Timestamp Conversion Flow**:
-  1. Supabase stores `updated_at` as ISO string
-  2. `selectMaxUpdatedAt()` converts ISO → milliseconds (epoch)
+  1. Supabase stores timestamp as ISO string
+  2. `selectMax[Timestamp]()` converts ISO → milliseconds (epoch)
   3. `toChainTimestamp()` converts milliseconds → chain timestamp (seconds)
-  4. GraphQL query uses `minUpdatedAt` (chain timestamp) to filter records
+  4. GraphQL query uses `min[Timestamp]` (chain timestamp) to filter records
 - **Usage in Index Functions**:
   ```typescript
-  const maxUpdatedAtSupabase = await selectMaxUpdatedAt();
-  const minUpdatedAtEnvio = toChainTimestamp(
-    maxUpdatedAtSupabase ?? new Date(0).getTime()
+  const maxTimestampSupabase = await selectMaxUpdatedAt(); // or selectMaxGrantedAt()
+  const minTimestampEnvio = toChainTimestamp(
+    maxTimestampSupabase ?? new Date(0).getTime()
   );
-  // Use minUpdatedAtEnvio in GraphQL query where clause
+  // Use minTimestampEnvio in GraphQL query where clause
   ```
 - **Fallback**: If no records exist (`null`), uses `new Date(0).getTime()` to fetch all records from beginning
+
+### Entity-Specific Incremental Indexing Patterns
+- **Standard Pattern**: Most entities use `updated_at` for incremental indexing
+  - Use `selectMaxUpdatedAt()` function
+  - GraphQL query filters with `where: { updated_at: { _gt: $minUpdatedAt } }`
+- **Alternative Timestamp Fields**: Some entities use different timestamp fields
+  - **Moment Admins**: Uses `granted_at` instead of `updated_at`
+    - Create `selectMaxGrantedAt()` function (same pattern as `selectMaxUpdatedAt`)
+    - GraphQL query filters with `where: { granted_at: { _gt: $minGrantedAt } }`
+  - **Future entities**: Check Envio schema to identify the appropriate timestamp field
+- **Pattern Consistency**: Always follow the same conversion flow regardless of timestamp field name
+  1. Supabase ISO string → milliseconds (epoch)
+  2. Milliseconds → chain timestamp (seconds) via `toChainTimestamp()`
+  3. Use in GraphQL query filter
 
 ### TypeScript Coding Principles Quick Reference
 **ALWAYS CHECK `typescript.coding.principle.mdc` BEFORE WRITING CODE!**
@@ -112,48 +133,64 @@ Key principles to follow:
   - One function per file (file name = function name)
   - Types in `types/` folder
   - Supabase queries in `supabase/[table_name]/` folders
+  - Business logic utilities in `lib/[entity]/` folders (e.g., `getMomentIdMap`)
 - **Imports**: NO `.js` extensions in TypeScript imports
 - **Logging**: Use emojis (✅ ❌ ⚠️ ℹ️ 🔄 📊 🔍 💾)
 - **Functions**: Small, focused, pure when possible
 
 ---
 
-# Current Task: Moments Indexing
+# Current Task: Moment Admins Indexing ✅ COMPLETED
 
 ## Task Overview
-Building new architecture to index `InProcess_Moments` from Envio GraphQL to Supabase. This follows the same pattern as Collections indexing and is part of migrating from legacy indexer to new architecture.
+Built new architecture to index `InProcess_Moment_Admins` from Envio GraphQL to Supabase. This follows the same pattern as Collections and Moments indexing and is part of migrating from legacy indexer to new architecture.
 
-**Last Updated**: Current session - Moments indexing implementation completed
+**Status**: ✅ **COMPLETED** - Ready for push
+**Branch**: `techengme/myc-3526-indexadmins-use-in_process_moment_admins`
 
 ## Progress
 
 ### Completed ✅
-- [X] Added `InProcess_Moments_t` type to `types/envio.ts`
-- [X] Created GraphQL query function (`lib/grpc/InProcess_Moments/queryMoments.ts`)
-- [X] Created moments indexing function (`lib/grpc/InProcess_Moments/indexMoments.ts`)
-- [X] Created batch processing function (`lib/moments/processMomentsInBatches.ts`)
-- [X] Created multi-chain indexing function (`lib/moments/executeMomentsIndexingParallel.ts`)
-- [X] Created Supabase mapping function (`lib/supabase/in_process_moments/mapMomentsToSupabase.ts`)
-- [X] Created Supabase upsert function (`lib/supabase/in_process_moments/upsertMoments.ts`)
-- [X] Created Supabase selectMaxUpdatedAt function (`lib/supabase/in_process_moments/selectMaxUpdatedAt.ts`)
-- [X] Created collection ID resolver utility (`lib/supabase/in_process_collections/getCollectionId.ts`)
-- [X] Integrated moments indexing into main indexer (`indexer.ts`)
+- [X] Added `InProcess_Moment_Admins_t` type to `types/envio.ts`
+- [X] Created GraphQL query function (`lib/grpc/InProcess_Moment_Admins/queryMomentAdmins.ts`)
+- [X] Created moment admins indexing function (`lib/grpc/InProcess_Moment_Admins/indexMomentAdmins.ts`)
+- [X] Created batch processing function (`lib/momentAdmins/processMomentAdminsInBatches.ts`)
+- [X] Created multi-chain indexing function (`lib/momentAdmins/executeMomentAdminsIndexing.ts`)
+- [X] Created Supabase mapping function (`lib/momentAdmins/mapMomentAdminsToSupabase.ts`)
+- [X] Created Supabase upsert function (`lib/supabase/in_process_moment_admins/upsertMomentAdmins.ts`)
+- [X] Created getMomentIdMap utility (`lib/momentAdmins/getMomentIdMap.ts`)
+- [X] Created selectMaxGrantedAt function for incremental indexing (`lib/supabase/in_process_moment_admins/selectMaxGrantedAt.ts`)
+- [X] Created selectMoments function for moment lookup (`lib/supabase/in_process_moments/selectMoments.ts`)
+- [X] Integrated moment admins indexing into main indexer (`indexer.ts`)
 - [X] All files follow TypeScript coding principles (one function per file, <100 lines, emojis in logs)
 
 ### Key Implementation Details
-- **Collection ID Resolution**: Moments reference collections by ID (not address), so we resolve collection address+chain_id to collection ID using `getCollectionId()`
-- **Max Supply Conversion**: Converts `max_supply` from string (BigInt from GraphQL) to number for Supabase
-- **Incremental Indexing**: 
-  - Both Collections and Moments use `selectMaxUpdatedAt()` to fetch only records updated since last sync
+- **Moment ID Resolution**: Moment admins reference moments by ID, so we resolve collection address+chain_id+token_id → moment ID using `getMomentIdMap()`
+  - Uses `selectMoments()` to query moments with collection join
+  - Creates map key: `${collectionAddress}:${chainId}:${tokenId}` → moment ID
+- **Token ID Filtering**: `InProcess_Moment_Admins` entity's `token_id` is never 0
+  - Collection-level admins (token_id = 0) are stored in `InProcess_Collection_Admins` entity
+  - Query filters using `where: { granted_at: { _gt: $minGrantedAt } }` (no explicit token_id filter needed as Envio schema ensures token_id > 0)
+- **Incremental Indexing**: Moment Admins doesn't have `updated_at`, so we use `granted_at` for incremental indexing
   - Pattern: Supabase ISO timestamp → milliseconds → chain timestamp (seconds) → GraphQL filter
-  - Handles empty table gracefully (returns `null`, falls back to epoch 0)
-- **Conflict Resolution**: 
-  - Collections: Uses `address, chain_id` as unique constraint
-  - Moments: Uses `collection, token_id` as unique constraint
+  - Uses `selectMaxGrantedAt()` instead of `selectMaxUpdatedAt()`
+- **Mapping**: 
+  - `admin` (from Envio) → `artist_address` (in Supabase, lowercased)
+  - `collection` (address) + `token_id` + `chain_id` → `moment` (UUID in Supabase)
+  - `granted_at` (chain timestamp) → ISO timestamp
+  - `hidden` defaults to `false`
+- **Conflict Resolution**: Uses `moment, artist_address` as unique constraint
+- **File Organization**: 
+  - `getMomentIdMap` moved to `lib/momentAdmins/` (not in supabase folder, as it's a business logic utility)
+  - `selectMoments` created in `lib/supabase/in_process_moments/` for reusable moment queries
 
 ## Architecture Notes
 - New code is in `lib/` directory (not `legacy/`)
 - Using Envio GraphQL endpoint directly (not gRPC)
 - Following single responsibility principle (one function per file)
 - All files kept under 100 lines
-- Moments indexing runs in parallel with Collections indexing
+- Moment admins indexing runs in parallel with Collections and Moments indexing (currently only moment admins enabled in indexer.ts)
+
+## Next Steps
+- Ready to push changes
+- Future: Enable Collections and Moments indexing in parallel with Moment Admins
