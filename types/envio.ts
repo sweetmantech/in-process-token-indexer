@@ -50,3 +50,16 @@ export interface MomentAdminsQueryResult {
   momentAdmins: InProcess_Moment_Admins_t[];
   pageInfo: PageInfo;
 }
+
+export type InProcess_Collection_Admins_t = {
+  readonly id: string;
+  readonly admin: string;
+  readonly collection: string;
+  readonly chain_id: number;
+  readonly granted_at: number;
+};
+
+export interface CollectionAdminsQueryResult {
+  collectionAdmins: InProcess_Collection_Admins_t[];
+  pageInfo: PageInfo;
+}
