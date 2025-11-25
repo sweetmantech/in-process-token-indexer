@@ -35,8 +35,9 @@ export async function indexCollections(
     console.log(
       `💾 Chain ${padChainId(chainId)}: Processing ${allCollections.length} ~ ${allCollections.length + collectionsResult.collections.length}`
     );
+
     // ℹ️ Process fetched collections for this page (batch upserts handled in processCollectionsInBatches)
-    processCollectionsInBatches(collectionsResult.collections);
+    await processCollectionsInBatches(collectionsResult.collections);
 
     hasNextPage = collectionsResult.pageInfo.hasNextPage;
     offset = collectionsResult.pageInfo.nextOffset;
