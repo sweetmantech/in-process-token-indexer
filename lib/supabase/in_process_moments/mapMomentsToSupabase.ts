@@ -1,7 +1,6 @@
 import toSupabaseTimestamp from '../../utils/toSupabaseTimestamp';
 import { InProcess_Moments_t } from '../../../types/envio';
 import { Database } from '../types';
-import { getCollectionId } from '../in_process_collections/getCollectionId';
 import { getCollectionIdMap } from '../in_process_collections/getCollectionIdMap';
 
 /**
