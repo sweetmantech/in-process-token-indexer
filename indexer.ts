@@ -30,16 +30,16 @@ async function legacyIndex(): Promise<void> {
 
 async function index(): Promise<void> {
   await Promise.all([
-    // executeCollectionsIndexing(),
-    // executeMomentsIndexing(),
+    executeCollectionsIndexing(),
+    executeMomentsIndexing(),
     executeMomentAdminsIndexing(),
   ]);
 }
 
-// legacyIndex().catch(error => {
-//   console.error('Fatal error in indexer:', error);
-//   process.exit(1);
-// });
+legacyIndex().catch(error => {
+  console.error('Fatal error in indexer:', error);
+  process.exit(1);
+});
 
 index().catch(error => {
   console.error('Fatal error in indexer:', error);
