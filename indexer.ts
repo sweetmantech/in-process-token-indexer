@@ -5,6 +5,7 @@ import { executeMomentsIndexing } from './lib/moments/executeMomentsIndexing';
 import { executeCollectionsIndexing } from './lib/collections/executeCollectionsIndexing';
 import { executeMomentAdminsIndexing } from './lib/momentAdmins/executeMomentAdminsIndexing';
 import { executeCollectionAdminsIndexing } from './lib/collectionAdmins/executeCollectionAdminsIndexing';
+import { executeMomentCommentsIndexing } from './lib/momentComments/executeMomentCommentsIndexing';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -35,6 +36,7 @@ async function index(): Promise<void> {
     executeMomentsIndexing(),
     executeMomentAdminsIndexing(),
     executeCollectionAdminsIndexing(),
+    executeMomentCommentsIndexing(),
   ]);
 }
 

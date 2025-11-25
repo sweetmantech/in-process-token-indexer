@@ -63,3 +63,19 @@ export interface CollectionAdminsQueryResult {
   collectionAdmins: InProcess_Collection_Admins_t[];
   pageInfo: PageInfo;
 }
+
+export type InProcess_Moment_Comments_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly sender: string;
+  readonly token_id: number;
+  readonly comment: string | undefined;
+  readonly chain_id: number;
+  readonly commented_at: number;
+  readonly transaction_hash: string;
+};
+
+export interface MomentCommentsQueryResult {
+  momentComments: InProcess_Moment_Comments_t[];
+  pageInfo: PageInfo;
+}
