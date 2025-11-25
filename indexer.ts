@@ -1,6 +1,10 @@
-import indexLegacyPayments from './legacy/lib/payments/indexPayments.js';
-import indexLegacyMoments from './legacy/lib/moment/indexMoments.js';
-import indexLegacyAdmins from './legacy/lib/moment/indexAdmins.js';
+import indexLegacyPayments from './legacy/lib/payments/indexPayments';
+import indexLegacyMoments from './legacy/lib/moment/indexMoments';
+import indexLegacyAdmins from './legacy/lib/moment/indexAdmins';
+import { executeCollectionsIndexing } from './lib/collections/executeCollectionsIndexing';
+import { supabase } from './lib/supabase/client';
+import { ensureArtists } from './lib/supabase/in_process_artists/ensureArtists';
+import getArtistProfile from './legacy/lib/profile/getArtistProfile';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -13,12 +17,11 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-async function indexAllNetworks(): Promise<void> {
+async function legacyIndex(): Promise<void> {
   // Start all indexers: payments, moments, and admins
   const legacyPaymentsIndexer = indexLegacyPayments();
   const legacyMomentsIndexer = indexLegacyMoments();
   const legacyAdminsIndexer = indexLegacyAdmins();
-
   await Promise.all([
     legacyPaymentsIndexer,
     legacyMomentsIndexer,
@@ -26,7 +29,16 @@ async function indexAllNetworks(): Promise<void> {
   ]);
 }
 
-indexAllNetworks().catch(error => {
+async function index(): Promise<void> {
+  executeCollectionsIndexing();
+}
+
+// legacyIndex().catch(error => {
+//   console.error('Fatal error in indexer:', error);
+//   process.exit(1);
+// });
+
+index().catch(error => {
   console.error('Fatal error in indexer:', error);
   process.exit(1);
 });
