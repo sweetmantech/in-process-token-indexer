@@ -18,10 +18,10 @@ export async function processMomentAdminsInBatches(
       await ensureArtists(artistAddresses);
       await upsertMomentAdmins(mappedAdmins);
 
-      totalProcessed += mappedAdmins.length;
       console.log(
-        `👥 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} moment admins`
+        `👥 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processed ${mappedAdmins.length} moment admins`
       );
+      totalProcessed += mappedAdmins.length;
     } catch (error) {
       console.error(
         `❌ Failed to process batch ${Math.floor(i / BATCH_SIZE) + 1}:`,

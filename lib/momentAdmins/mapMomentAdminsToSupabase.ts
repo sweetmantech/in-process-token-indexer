@@ -31,7 +31,7 @@ export async function mapMomentAdminsToSupabase(
       mappedAdmins.push({
         moment: momentId,
         artist_address: admin.admin.toLowerCase(),
-        granted_at: toSupabaseTimestamp(admin.granted_at)!,
+        granted_at: toSupabaseTimestamp(admin.granted_at),
       });
     }
   }
