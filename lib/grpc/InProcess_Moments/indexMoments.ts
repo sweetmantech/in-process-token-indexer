@@ -7,11 +7,9 @@ import { queryMoments } from './queryMoments';
 
 /**
  * Fetches all moments from Envio GraphQL with pagination.
- * @param chainId - Chain ID to filter by (required).
  * @returns Array of all moments.
  */
 export async function indexMoments(
-  chainId: number
 ): Promise<InProcess_Moments_t[]> {
   const allMoments: InProcess_Moments_t[] = [];
   let offset = 0;
@@ -19,7 +17,7 @@ export async function indexMoments(
   let hasNextPage = true;
 
   // Get the latest updated_at from in_process_moments for incremental indexing
-  const maxUpdatedAtSupabase = await selectMaxUpdatedAt(chainId);
+  const maxUpdatedAtSupabase = await selectMaxUpdatedAt();
   const minUpdatedAtEnvio = toChainTimestamp(
     maxUpdatedAtSupabase ?? new Date(0).getTime()
   );
