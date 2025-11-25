@@ -16,7 +16,9 @@ export async function getCollectionIdMap(
     }
 
     // Get unique addresses from pairs
-    const uniqueAddresses = [...new Set(pairs.map(([address]) => address.toLowerCase()))];
+    const uniqueAddresses = [
+      ...new Set(pairs.map(([address]) => address.toLowerCase())),
+    ];
 
     // Query collections by addresses
     const { data, error } = await supabase

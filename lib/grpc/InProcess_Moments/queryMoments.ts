@@ -5,8 +5,8 @@ import type {
   MomentsQueryResult,
 } from '../../../types/envio';
 
-const MOMENTS_QUERY = `query GetMoments($limit: Int, $offset: Int, $chainId: Int, $minUpdatedAt: Int) {
-  InProcess_Moments(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { chain_id: { _eq: $chainId }, updated_at: { _gt: $minUpdatedAt } }) {
+const MOMENTS_QUERY = `query GetMoments($limit: Int, $offset: Int, $minUpdatedAt: Int) {
+  InProcess_Moments(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { updated_at: { _gt: $minUpdatedAt } }) {
     id collection token_id uri max_supply chain_id created_at updated_at transaction_hash
   }
 }`;
@@ -20,18 +20,16 @@ const MOMENTS_QUERY = `query GetMoments($limit: Int, $offset: Int, $chainId: Int
  * @returns Object containing moments and pagination info.
  */
 export async function queryMoments({
-  chainId,
   limit = 1000,
   offset = 0,
   minUpdatedAt,
 }: {
-  chainId: number;
   limit?: number;
   offset?: number;
   minUpdatedAt: number;
 }): Promise<MomentsQueryResult> {
   try {
-    const variables = { limit, offset, chainId, minUpdatedAt };
+    const variables = { limit, offset, minUpdatedAt };
 
     const response = await fetch(GRPC_ENDPOINT, {
       method: 'POST',

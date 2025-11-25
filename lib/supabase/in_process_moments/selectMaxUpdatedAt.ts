@@ -5,14 +5,11 @@ import { supabase } from '../client';
  * @param chainId - Chain ID to filter by.
  * @returns Maximum updated_at timestamp in milliseconds (epoch), or null if no records exist.
  */
-export async function selectMaxUpdatedAt(
-  chainId: number
-): Promise<number | null> {
+export async function selectMaxUpdatedAt(): Promise<number | null> {
   try {
     const { data, error } = await supabase
       .from('in_process_moments')
       .select('updated_at')
-      .eq('chain_id', chainId)
       .order('updated_at', { ascending: false })
       .limit(1)
       .single();

@@ -2,6 +2,7 @@ import toSupabaseTimestamp from '../../utils/toSupabaseTimestamp';
 import { InProcess_Moments_t } from '../../../types/envio';
 import { Database } from '../types';
 import { getCollectionId } from '../in_process_collections/getCollectionId';
+import { getCollectionIdMap } from '../in_process_collections/getCollectionIdMap';
 
 /**
  * Maps Envio InProcess_Moments_t entities from GraphQL
@@ -18,38 +19,29 @@ export async function mapMomentsToSupabase(
 ): Promise<
   Array<Database['public']['Tables']['in_process_moments']['Insert']>
 > {
-  const mappedMoments = await Promise.all(
-    moments.map(async moment => {
-      // Resolve collection ID from address and chain_id
-      const collectionId = await getCollectionId(
-        moment.collection,
-        moment.chain_id
+  const collectionPairs: Array<[string, number]> = moments.map(
+    moment => [moment.collection, moment.chain_id] as [string, number]
+  );
+  const collectionIdMap = await getCollectionIdMap(collectionPairs);
+
+  const mappedMoments = moments
+    .map(moment => {
+      const collectionId = collectionIdMap.get(
+        `${moment.collection}:${moment.chain_id}`
       );
-
       if (!collectionId) {
-        throw new Error(
-          `⚠️ Collection not found: ${moment.collection} on chain ${moment.chain_id}`
-        );
+        return undefined;
       }
-
-      // Convert max_supply from string (BigInt) to number
-      const maxSupply = Number(moment.max_supply);
-      if (!Number.isFinite(maxSupply) || maxSupply < 0) {
-        throw new Error(
-          `❌ Invalid max_supply for moment ${moment.id}: ${moment.max_supply}`
-        );
-      }
-
       return {
         collection: collectionId,
         token_id: moment.token_id,
         uri: moment.uri,
-        max_supply: maxSupply,
-        created_at: toSupabaseTimestamp(moment.created_at),
-        updated_at: toSupabaseTimestamp(moment.updated_at),
+        max_supply: Number(moment.max_supply)!,
+        created_at: toSupabaseTimestamp(moment.created_at)!,
+        updated_at: toSupabaseTimestamp(moment.updated_at)!,
       };
     })
-  );
+    .filter(moment => moment !== undefined);
 
   return mappedMoments;
 }

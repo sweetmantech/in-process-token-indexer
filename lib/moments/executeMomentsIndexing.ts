@@ -16,13 +16,8 @@ export async function executeMomentsIndexing(): Promise<void> {
       const moments = await indexMoments();
 
       if (moments.length)
-        console.log(
-          `📊 Indexed new ${moments.length} moments`
-        );
-      else
-        console.log(
-          `ℹ️  No new moments found`
-        );
+        console.log(`📊 Indexed new ${moments.length} moments`);
+      else console.log(`ℹ️  No new moments found`);
 
       const duration = Date.now() - startTime;
       console.log(

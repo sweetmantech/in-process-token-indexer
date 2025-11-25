@@ -28,10 +28,7 @@ async function legacyIndex(): Promise<void> {
 }
 
 async function index(): Promise<void> {
-  await Promise.all([
-    executeCollectionsIndexing(),
-    executeMomentsIndexing(),
-  ]);
+  await Promise.all([executeCollectionsIndexing(), executeMomentsIndexing()]);
 }
 
 // legacyIndex().catch(error => {
