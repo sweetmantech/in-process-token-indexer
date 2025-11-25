@@ -17,13 +17,6 @@ export async function ensureArtists(addresses: string[]): Promise<void> {
   const artists: Database['public']['Tables']['in_process_artists']['Insert'][] =
     [...new Set(addresses.map(addr => addr.toLowerCase()))].map(address => ({
       address,
-      bio: null,
-      farcaster_username: null,
-      instagram_username: null,
-      smart_wallet: null,
-      telegram_username: null,
-      twitter_username: null,
-      username: null,
     }));
 
   try {
