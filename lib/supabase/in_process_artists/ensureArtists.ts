@@ -1,5 +1,6 @@
 import { Database } from '../types';
 import { supabase } from '../client';
+import { upsertArtists } from './upsertArtists';
 
 /**
  * Ensures artists exist in the 'in_process_artists' table based on provided addresses.
@@ -17,25 +18,10 @@ export async function ensureArtists(addresses: string[]): Promise<void> {
   const artists: Database['public']['Tables']['in_process_artists']['Insert'][] =
     [...new Set(addresses.map(addr => addr.toLowerCase()))].map(address => ({
       address,
-      bio: null,
-      farcaster_username: null,
-      instagram_username: null,
-      smart_wallet: null,
-      telegram_username: null,
-      twitter_username: null,
-      username: null,
     }));
 
   try {
-    const { error } = await supabase
-      .from('in_process_artists')
-      .upsert(artists, { onConflict: 'address' });
-
-    if (error) {
-      console.error(`❌ ensureArtists upsert error:`, error);
-    } else {
-      console.log(`✅ ensureArtists: Upserted ${artists.length} artists`);
-    }
+    await upsertArtists(artists);
   } catch (err) {
     console.error('❌ ensureArtists exception:', err);
   }
