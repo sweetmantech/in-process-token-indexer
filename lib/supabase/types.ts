@@ -256,7 +256,7 @@ export type Database = {
           moment: string;
         };
         Insert: {
-          artist_address?: string;
+          artist_address: string;
           comment?: string | null;
           commented_at?: string;
           id?: string;
