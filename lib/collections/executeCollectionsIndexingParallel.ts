@@ -27,7 +27,7 @@ export async function executeCollectionsIndexingParallel(): Promise<void> {
               );
             else
               console.log(
-                `ℹ️ Chain ${padChainId(chainId)}: No new collections found`
+                `ℹ️  Chain ${padChainId(chainId)}: No new collections found`
               );
           } catch (error) {
             console.error(

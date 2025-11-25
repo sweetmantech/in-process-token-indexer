@@ -8,7 +8,7 @@ export async function processCollectionsInBatches(
   collections: InProcess_Collections_t[]
 ): Promise<void> {
   let totalProcessed = 0;
-  for (let i = 0; i < collections.length; i = BATCH_SIZE) {
+  for (let i = 0; i < collections.length; i += BATCH_SIZE) {
     try {
       const batch = collections.slice(i, i + BATCH_SIZE);
       const mappedCollections = mapCollectionsToSupabase(batch);
@@ -33,5 +33,7 @@ export async function processCollectionsInBatches(
     }
   }
 
-  console.log(`✅ Completed processing: ${totalProcessed} collections`);
+  if (totalProcessed > 0)
+    console.log(`✅  Completed processing: ${totalProcessed} collections`);
+  else console.log(`ℹ️  No collections to process`);
 }
