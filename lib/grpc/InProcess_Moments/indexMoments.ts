@@ -16,7 +16,9 @@ export async function indexMoments(): Promise<InProcess_Moments_t[]> {
 
   // Get the latest updated_at from in_process_moments for incremental indexing
   const maxUpdatedAtSupabase = await selectMaxUpdatedAt();
-  const minUpdatedAtEnvio = toChainTimestamp(new Date(0).getTime());
+  const minUpdatedAtEnvio = toChainTimestamp(
+    maxUpdatedAtSupabase ?? new Date(0).getTime()
+  );
 
   while (hasNextPage) {
     const momentsResult = await queryMoments({

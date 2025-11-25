@@ -23,7 +23,6 @@ export async function processSalesInBatches(
       ];
       await ensureArtists(artistAddresses);
 
-      console.log(mappedFeeRecipients);
       await upsertSales(mappedSales);
       await upsertFeeRecipients(mappedFeeRecipients);
 
