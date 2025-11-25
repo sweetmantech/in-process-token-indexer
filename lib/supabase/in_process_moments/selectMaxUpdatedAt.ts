@@ -1,8 +1,7 @@
 import { supabase } from '../client';
 
 /**
- * Gets the maximum updated_at timestamp from in_process_moments table for a given chainId.
- * @param chainId - Chain ID to filter by.
+ * Gets the maximum updated_at timestamp from in_process_moments table.
  * @returns Maximum updated_at timestamp in milliseconds (epoch), or null if no records exist.
  */
 export async function selectMaxUpdatedAt(): Promise<number | null> {
