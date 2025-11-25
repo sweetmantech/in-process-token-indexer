@@ -1,4 +1,4 @@
-import { supabase } from '../client';
+import { selectCollections } from '../supabase/in_process_collections/selectCollections';
 
 /**
  * Gets collection IDs from Supabase for given [address, chain_id] pairs
@@ -21,29 +21,20 @@ export async function getCollectionIdMap(
     ];
 
     // Query collections by addresses
-    const { data, error } = await supabase
-      .from('in_process_collections')
-      .select('id, address, chain_id')
-      .in('address', uniqueAddresses);
-
-    if (error) {
-      throw error;
-    }
+    const data = await selectCollections(uniqueAddresses);
 
     const collectionMap = new Map<string, string>();
 
-    if (data) {
-      // Create a Set of requested pairs for efficient lookup
-      const requestedPairs = new Set(
-        pairs.map(([address, chainId]) => `${address.toLowerCase()}:${chainId}`)
-      );
+    // Create a Set of requested pairs for efficient lookup
+    const requestedPairs = new Set(
+      pairs.map(([address, chainId]) => `${address.toLowerCase()}:${chainId}`)
+    );
 
-      // Filter results to only include exact pairs that were requested
-      for (const collection of data) {
-        const key = `${collection.address.toLowerCase()}:${collection.chain_id}`;
-        if (requestedPairs.has(key)) {
-          collectionMap.set(key, collection.id);
-        }
+    // Filter results to only include exact pairs that were requested
+    for (const collection of data) {
+      const key = `${collection.address.toLowerCase()}:${collection.chain_id}`;
+      if (requestedPairs.has(key)) {
+        collectionMap.set(key, collection.id);
       }
     }
 
