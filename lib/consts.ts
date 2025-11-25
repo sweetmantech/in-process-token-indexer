@@ -21,5 +21,5 @@ export const NETWORKS = [
   },
 ];
 
-export const INDEX_INTERVAL_MS = 1000; // 1 second between indexing cycles
-export const BATCH_SIZE = 100; // 100 entities per batch
+export const INDEX_INTERVAL_MS = 1000;
+export const BATCH_SIZE = 100;

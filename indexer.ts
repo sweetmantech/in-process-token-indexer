@@ -1,7 +1,7 @@
 import indexLegacyPayments from './legacy/lib/payments/indexPayments';
 import indexLegacyMoments from './legacy/lib/moment/indexMoments';
 import indexLegacyAdmins from './legacy/lib/moment/indexAdmins';
-import { executeCollectionsIndexingParallel } from './lib/collections/executeCollectionsIndexingParallel';
+import { executeCollectionsIndexing } from './lib/collections/executeCollectionsIndexing';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -27,13 +27,13 @@ async function legacyIndex(): Promise<void> {
 }
 
 async function index(): Promise<void> {
-  await executeCollectionsIndexingParallel();
+  await executeCollectionsIndexing();
 }
 
-legacyIndex().catch(error => {
-  console.error('Fatal error in indexer:', error);
-  process.exit(1);
-});
+// legacyIndex().catch(error => {
+//   console.error('Fatal error in indexer:', error);
+//   process.exit(1);
+// });
 
 index().catch(error => {
   console.error('Fatal error in indexer:', error);
