@@ -1,5 +1,4 @@
 import { Database } from '../types';
-import { supabase } from '../client';
 import { upsertArtists } from './upsertArtists';
 
 /**

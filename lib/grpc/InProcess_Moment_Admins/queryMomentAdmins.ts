@@ -6,7 +6,7 @@ import type {
 } from '../../../types/envio';
 
 const MOMENT_ADMINS_QUERY = `query GetMomentAdmins($limit: Int, $offset: Int, $minGrantedAt: Int) {
-  InProcess_Moment_Admins(limit: $limit, offset: $offset, order_by: { granted_at: desc }, where: { granted_at: { _gt: $minGrantedAt } }) {
+  InProcess_Moment_Admins(limit: $limit, offset: $offset, order_by: { granted_at: desc }, where: { granted_at: { _gt: $minGrantedAt }}) {
     id admin collection token_id chain_id granted_at
   }
 }`;

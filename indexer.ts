@@ -30,8 +30,8 @@ async function legacyIndex(): Promise<void> {
 
 async function index(): Promise<void> {
   await Promise.all([
-    executeCollectionsIndexing(),
-    executeMomentsIndexing(),
+    // executeCollectionsIndexing(),
+    // executeMomentsIndexing(),
     executeMomentAdminsIndexing(),
   ]);
 }

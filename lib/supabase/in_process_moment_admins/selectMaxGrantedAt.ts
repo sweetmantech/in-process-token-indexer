@@ -31,9 +31,6 @@ export async function selectMaxGrantedAt(): Promise<number | null> {
 
     // Convert ISO timestamp to milliseconds
     const maxGrantedAt = new Date(data.granted_at).getTime();
-    console.log(
-      `📊 Max granted_at in Supabase: ${new Date(maxGrantedAt).toISOString()}`
-    );
     return maxGrantedAt;
   } catch (error) {
     console.error('❌ Error selecting max granted_at:', error);

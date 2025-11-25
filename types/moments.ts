@@ -1,0 +1,6 @@
+import { Database } from '@/lib/supabase/types';
+
+export type InProcessMoment =
+  Database['public']['Tables']['in_process_moments']['Row'] & {
+    collection: Database['public']['Tables']['in_process_collections']['Row'];
+  };
