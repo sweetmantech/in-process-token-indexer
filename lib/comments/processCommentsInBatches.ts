@@ -1,18 +1,18 @@
 import { InProcess_Moment_Comments_t } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
-import { mapMomentCommentsToSupabase } from './mapMomentCommentsToSupabase';
+import { mapCommentsToSupabase } from './mapCommentsToSupabase';
 import { upsertComments } from '@/lib/supabase/in_process_moment_comments/upsertComments';
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 
-export async function processMomentCommentsInBatches(
-  momentComments: InProcess_Moment_Comments_t[]
+export async function processCommentsInBatches(
+  comments: InProcess_Moment_Comments_t[]
 ): Promise<void> {
   let totalProcessed = 0;
 
-  for (let i = 0; i < momentComments.length; i += BATCH_SIZE) {
+  for (let i = 0; i < comments.length; i += BATCH_SIZE) {
     try {
-      const batch = momentComments.slice(i, i + BATCH_SIZE);
-      const mappedComments = await mapMomentCommentsToSupabase(batch);
+      const batch = comments.slice(i, i + BATCH_SIZE);
+      const mappedComments = await mapCommentsToSupabase(batch);
 
       const artistAddresses = mappedComments.map(
         comment => comment.artist_address

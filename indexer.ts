@@ -1,11 +1,11 @@
 import indexLegacyPayments from '@/legacy/lib/payments/indexPayments';
 import indexLegacyMoments from '@/legacy/lib/moment/indexMoments';
 import indexLegacyAdmins from '@/legacy/lib/moment/indexAdmins';
-import { executeMomentsIndexing } from '@/lib/moments/executeMomentsIndexing';
-import { executeCollectionsIndexing } from '@/lib/collections/executeCollectionsIndexing';
-import { executeAdminsIndexing } from '@/lib/admins/executeAdminsIndexing';
-import { executeMomentCommentsIndexing } from '@/lib/momentComments/executeMomentCommentsIndexing';
-import { executeSalesIndexing } from '@/lib/sales/executeSalesIndexing';
+import { momentsIndexer } from '@/lib/indexers/momentsIndexer';
+import { collectionsIndexer } from '@/lib/indexers/collectionsIndexer';
+import { adminsIndexer } from '@/lib/indexers/adminsIndexer';
+import { commentsIndexer } from '@/lib/indexers/commentsIndexer';
+import { salesIndexer } from '@/lib/indexers/salesIndexer';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -32,11 +32,11 @@ async function legacyIndex(): Promise<void> {
 
 async function index(): Promise<void> {
   await Promise.all([
-    executeCollectionsIndexing(),
-    executeMomentsIndexing(),
-    executeAdminsIndexing(),
-    executeMomentCommentsIndexing(),
-    executeSalesIndexing(),
+    collectionsIndexer.execute(),
+    momentsIndexer.execute(),
+    adminsIndexer.execute(),
+    commentsIndexer.execute(),
+    salesIndexer.execute(),
   ]);
 }
 
