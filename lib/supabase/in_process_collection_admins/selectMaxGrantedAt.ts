@@ -1,4 +1,4 @@
-import { supabase } from '../client';
+import { supabase } from '@/lib/supabase/client';
 
 /**
  * Gets the maximum granted_at timestamp from in_process_collection_admins table.

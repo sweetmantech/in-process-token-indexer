@@ -1,4 +1,4 @@
-import { Database } from '../types';
+import { Database } from '@/lib/supabase/types';
 import { upsertArtists } from './upsertArtists';
 
 /**

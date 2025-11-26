@@ -1,5 +1,5 @@
-import { supabase } from '../client';
-import type { Database } from '../types';
+import { supabase } from '@/lib/supabase/client';
+import type { Database } from '@/lib/supabase/types';
 
 /**
  * Upserts an array of artists into the 'in_process_artists' table.

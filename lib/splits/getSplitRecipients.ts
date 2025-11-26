@@ -1,8 +1,8 @@
-import getPublicClient from '../viem/getPublicClient';
+import getPublicClient from '@/lib/viem/getPublicClient';
 import { getSplitsClient } from './getSplitsClient';
-import { isRateLimitError } from '../utils/isRateLimitError';
-import { getRetryDelay } from '../utils/getRetryDelay';
-import { SplitRecipient, RetryOptions } from '../../types/splits';
+import { isRateLimitError } from '@/lib/utils/isRateLimitError';
+import { getRetryDelay } from '@/lib/utils/getRetryDelay';
+import { SplitRecipient, RetryOptions } from '@/types/splits';
 
 /**
  * Gets the recipient addresses (recipients) from a split contract address.
