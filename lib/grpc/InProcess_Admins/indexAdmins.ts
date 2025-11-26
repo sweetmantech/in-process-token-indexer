@@ -1,17 +1,15 @@
-import { processMomentAdminsInBatches } from '../../../lib/momentAdmins/processMomentAdminsInBatches';
-import type { InProcess_Moment_Admins_t } from '../../../types/envio';
-import { selectMaxGrantedAt } from '../../supabase/in_process_moment_admins/selectMaxGrantedAt';
+import { processAdminsInBatches } from '@/lib/admins/processAdminsInBatches';
+import type { InProcess_Admins_t } from '@/types/envio';
+import { selectMaxGrantedAt } from '../../admins/selectMaxGrantedAt';
 import { toChainTimestamp } from '../../utils/toChainTimestamp';
-import { queryMomentAdmins } from './queryMomentAdmins';
+import { queryAdmins } from './queryAdmins';
 
 /**
  * Fetches all moment admins from Envio GraphQL with pagination.
  * @returns Array of all moment admins.
  */
-export async function indexMomentAdmins(): Promise<
-  InProcess_Moment_Admins_t[]
-> {
-  const allAdmins: InProcess_Moment_Admins_t[] = [];
+export async function indexAdmins(): Promise<InProcess_Admins_t[]> {
+  const allAdmins: InProcess_Admins_t[] = [];
   let offset = 0;
   const limit = 1000;
   let hasNextPage = true;
@@ -23,24 +21,24 @@ export async function indexMomentAdmins(): Promise<
   );
 
   while (hasNextPage) {
-    const adminsResult = await queryMomentAdmins({
+    const adminsResult = await queryAdmins({
       limit,
       offset,
       minGrantedAt: minGrantedAtEnvio,
     });
 
-    if (adminsResult.momentAdmins.length > 0) {
+    if (adminsResult.admins.length > 0) {
       console.log(
-        `💾 Processing ${allAdmins.length} ~ ${allAdmins.length + adminsResult.momentAdmins.length}`
+        `💾 Processing ${allAdmins.length} ~ ${allAdmins.length + adminsResult.admins.length}`
       );
     }
 
     // ℹ️ Process fetched admins for this page (batch upserts handled in processMomentAdminsInBatches)
-    await processMomentAdminsInBatches(adminsResult.momentAdmins);
+    await processAdminsInBatches(adminsResult.admins);
 
     hasNextPage = adminsResult.pageInfo.hasNextPage;
     offset = adminsResult.pageInfo.nextOffset;
-    allAdmins.push(...adminsResult.momentAdmins);
+    allAdmins.push(...adminsResult.admins);
   }
 
   return allAdmins;

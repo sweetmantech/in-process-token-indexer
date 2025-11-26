@@ -3,7 +3,7 @@ import {
   InProcess_Moment_Comments_t,
   InProcess_Sales_t,
 } from '@/types/envio';
-import { InProcessMoment } from '@/types/moments';
+import { InProcessMoment } from '@/types/supabase';
 import { selectMoments } from '@/lib/supabase/in_process_moments/selectMoments';
 
 /**

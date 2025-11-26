@@ -37,7 +37,7 @@ export interface MomentsQueryResult {
   pageInfo: PageInfo;
 }
 
-export type InProcess_Moment_Admins_t = {
+export type InProcess_Admins_t = {
   readonly id: string;
   readonly admin: string;
   readonly collection: string;
@@ -46,8 +46,8 @@ export type InProcess_Moment_Admins_t = {
   readonly granted_at: number;
 };
 
-export interface MomentAdminsQueryResult {
-  momentAdmins: InProcess_Moment_Admins_t[];
+export interface AdminsQueryResult {
+  admins: InProcess_Admins_t[];
   pageInfo: PageInfo;
 }
 

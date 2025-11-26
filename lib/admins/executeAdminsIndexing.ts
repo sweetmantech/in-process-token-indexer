@@ -1,26 +1,25 @@
 import { INDEX_INTERVAL_MS } from '../consts';
-import { indexMomentAdmins } from '../grpc/InProcess_Moment_Admins/indexMomentAdmins';
+import { indexAdmins } from '../grpc/InProcess_Admins/indexAdmins';
 import { sleep } from '../utils/sleep';
 
 /**
  * Indexes moment admins using granted_at for incremental indexing.
  * Runs continuously in a loop.
  */
-export async function executeMomentAdminsIndexing(): Promise<void> {
+export async function executeAdminsIndexing(): Promise<void> {
   while (true) {
     try {
       const startTime = Date.now();
 
-      console.log(`🔍 Indexing moment admins`);
+      console.log(`🔍 Indexing admins`);
 
-      const admins = await indexMomentAdmins();
+      const admins = await indexAdmins();
 
-      if (admins.length)
-        console.log(`📊 Indexed new ${admins.length} moment admins`);
-      else console.log(`ℹ️  No new moment admins found`);
+      if (admins.length) console.log(`📊 Indexed new ${admins.length} admins`);
+      else console.log(`ℹ️  No new admins found`);
 
       const duration = Date.now() - startTime;
-      console.log(`✅ Completed indexing moment admins (${duration}ms)`);
+      console.log(`✅ Completed indexing admins (${duration}ms)`);
 
       // Wait before next iteration
       await sleep(INDEX_INTERVAL_MS);

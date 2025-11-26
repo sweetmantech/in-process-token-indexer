@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase/client';
-import { InProcessMoment } from '@/types/moments';
+import { InProcessMoment } from '@/types/supabase';
 
 interface SelectMomentsOptions {
   collectionAddresses?: string[];
