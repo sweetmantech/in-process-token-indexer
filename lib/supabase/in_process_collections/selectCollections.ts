@@ -14,14 +14,7 @@ interface SelectCollectionsOptions {
  */
 export async function selectCollections(
   options: SelectCollectionsOptions = {}
-): Promise<
-  Array<
-    Pick<
-      Database['public']['Tables']['in_process_collections']['Row'],
-      'id' | 'address' | 'chain_id' | 'updated_at'
-    >
-  >
-> {
+): Promise<Database['public']['Tables']['in_process_collections']['Row'][]> {
   let query = supabase.from('in_process_collections').select('*');
 
   if (options.addresses && options.addresses.length > 0) {
