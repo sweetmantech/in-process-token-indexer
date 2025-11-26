@@ -53,10 +53,10 @@ export class IndexFactory<T> implements IIndexFactory<T> {
         console.log(
           `💻 Processing ${allEntities.length} ~ ${allEntities.length + entities.length} ${this.indexName}`
         );
-      }
 
-      // ℹ️ Process fetched entities for this page (batch upserts handled in processBatchFn)
-      await this.processBatchFn(entities);
+        // ℹ️ Process fetched entities for this page (batch upserts handled in processBatchFn)
+        await this.processBatchFn(entities);
+      }
 
       hasNextPage = pageInfo.hasNextPage;
       offset = pageInfo.nextOffset;
