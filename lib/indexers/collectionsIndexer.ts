@@ -1,14 +1,10 @@
 import { processCollectionsInBatches } from '@/lib/collections/processCollectionsInBatches';
 import { selectMaxUpdatedAt } from '@/lib/collections/selectMaxUpdatedAt';
 import type { InProcess_Collections_t } from '@/types/envio';
-import { createIndexFunction } from '@/lib/factories/indexFactory';
-import { queryCollections } from './queryCollections';
+import { IndexFactory } from '@/lib/indexers/IndexFactory';
+import { queryCollections } from '@/lib/grpc/queryCollections';
 
-/**
- * Fetches all collections from Envio GraphQL with pagination.
- * @returns Array of all collections.
- */
-export const indexCollections = createIndexFunction<InProcess_Collections_t>({
+export const collectionsIndexer = new IndexFactory<InProcess_Collections_t>({
   queryFn: queryCollections,
   processBatchFn: processCollectionsInBatches,
   selectMaxTimestampFn: selectMaxUpdatedAt,

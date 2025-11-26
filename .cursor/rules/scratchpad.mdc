@@ -74,7 +74,11 @@ The goal is to help you maintain a big picture as well as the progress of the ta
 
 ### File Structure Patterns
 - **Query Functions**: `lib/grpc/InProcess_[Entity]/query[Entity].ts` - single GraphQL query with pagination params
-- **Index Functions**: `lib/grpc/InProcess_[Entity]/index[Entity].ts` - orchestrates fetching and syncing to Supabase with incremental indexing
+- **Indexer Files**: `lib/indexers/[entity]Indexer.ts` - exports `[entity]Indexer` instance (e.g., `adminsIndexer`, `collectionsIndexer`)
+  - Indexer instance is created with `queryFn`, `processBatchFn`, `selectMaxTimestampFn`, and `indexName`
+  - `indexer.ts` calls `execute()` directly on indexer instances
+  - All indexer files are organized in `lib/indexers/` folder
+- **IndexFactory**: `lib/indexers/IndexFactory.ts` - factory class for creating indexer instances
 - **Batch Processing**: `lib/[entity]/process[Entity]InBatches.ts` - handles batch upserts to Supabase
 - **Multi-Chain Functions**: `lib/[entity]/execute[Entity]IndexingParallel.ts` - handles parallel indexing across chains
 - **Supabase Queries**: `lib/supabase/in_process_[table]/` - organized by table name, one function per file
@@ -144,7 +148,45 @@ Key principles to follow:
 
 ---
 
-# Current Task: Sales Indexing ✅ COMPLETED
+# Current Task: Code Refactoring - Reorganize Indexer Files ✅ COMPLETED
+
+## Task Overview
+Reorganized indexer files by moving them from `lib/grpc/InProcess_*/` to `lib/indexers/` and renaming them to follow a consistent `[...]Indexer` naming pattern. Also moved `IndexFactory` to the `indexers` folder for better organization.
+
+**Status**: ✅ **COMPLETED**
+**Last Updated**: Just completed
+
+## Progress
+
+### Completed ✅
+- [X] Moved all index files from `lib/grpc/InProcess_*/` to `lib/indexers/`
+- [X] Renamed files to `[...]Indexer.ts` pattern:
+  - `indexAdmins.ts` → `adminsIndexer.ts`
+  - `indexCollections.ts` → `collectionsIndexer.ts`
+  - `indexComments.ts` → `commentsIndexer.ts`
+  - `indexMoments.ts` → `momentsIndexer.ts`
+  - `indexSales.ts` → `salesIndexer.ts`
+- [X] Updated exports to match new naming (e.g., `adminsIndexer`, `collectionsIndexer`)
+- [X] Moved `IndexFactory` from `lib/IndexFactory.ts` to `lib/indexers/IndexFactory.ts`
+- [X] Updated all imports in indexer files to use new `IndexFactory` location
+- [X] Updated `indexer.ts` to import from new locations and use new constant names
+
+### Key Changes
+- **File Organization**: All indexer files now live in `lib/indexers/` folder
+- **Naming Convention**: Files and exports follow `[...]Indexer` pattern for consistency
+- **IndexFactory Location**: Moved to `lib/indexers/IndexFactory.ts` to co-locate with indexers
+- **Import Updates**: Updated query function imports from relative (`./querySales`) to absolute (`@/lib/grpc/InProcess_Sales/querySales`)
+- **Usage**: `indexer.ts` now imports and uses `adminsIndexer`, `collectionsIndexer`, etc.
+
+## Architecture Notes
+- All indexer files are now organized in a single `lib/indexers/` directory
+- Consistent naming pattern makes it easier to find and understand indexer files
+- `IndexFactory` is co-located with indexers for better code organization
+- Query functions remain in `lib/grpc/InProcess_*/` directories (separation of concerns)
+
+---
+
+# Previous Task: Sales Indexing ✅ COMPLETED
 
 ## Task Overview
 Built new architecture to index `InProcess_Sales` from Envio GraphQL to Supabase. This follows the same pattern as other entity indexing but maps sales to moments (collection+chain_id+token_id → moment ID) and uses `created_at` for incremental indexing.

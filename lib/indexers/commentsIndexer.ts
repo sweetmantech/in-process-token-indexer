@@ -1,14 +1,10 @@
 import { processCommentsInBatches } from '@/lib/comments/processCommentsInBatches';
 import type { InProcess_Moment_Comments_t } from '@/types/envio';
 import { selectMaxCommentedAt } from '@/lib/comments/selectMaxCommentedAt';
-import { createIndexFunction } from '@/lib/factories/indexFactory';
-import { queryComments } from './queryComments';
+import { IndexFactory } from '@/lib/indexers/IndexFactory';
+import { queryComments } from '@/lib/grpc/queryComments';
 
-/**
- * Fetches all moment comments from Envio GraphQL with pagination.
- * @returns Array of all moment comments.
- */
-export const indexComments = createIndexFunction<InProcess_Moment_Comments_t>({
+export const commentsIndexer = new IndexFactory<InProcess_Moment_Comments_t>({
   queryFn: queryComments,
   processBatchFn: processCommentsInBatches,
   selectMaxTimestampFn: selectMaxCommentedAt,

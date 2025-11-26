@@ -5,7 +5,11 @@ import type { PageInfo } from '@/types/envio';
 export interface GraphQLQueryParams {
   query: string;
   dataPath: string;
-  variables: Record<string, unknown>;
+  variables: {
+    limit: number;
+    offset: number;
+    minTimestamp: number;
+  };
 }
 
 /**
@@ -18,8 +22,7 @@ export async function queryGraphQL<T>({
   dataPath,
   variables,
 }: GraphQLQueryParams): Promise<{ entities: T[]; pageInfo: PageInfo }> {
-  const limit = (variables.limit as number) ?? 1000;
-  const offset = (variables.offset as number) ?? 0;
+  const { limit, offset } = variables;
 
   try {
     const response = await fetch(GRPC_ENDPOINT, {
