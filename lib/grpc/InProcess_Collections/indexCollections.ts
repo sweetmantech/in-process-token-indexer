@@ -1,6 +1,6 @@
 import { processCollectionsInBatches } from '../../../lib/collections/processCollectionsInBatches';
+import { selectMaxUpdatedAt } from '../../../lib/collections/selectMaxUpdatedAt';
 import type { InProcess_Collections_t } from '../../../types/envio';
-import { selectMaxUpdatedAt } from '../../supabase/in_process_collections/selectMaxUpdatedAt';
 import { toChainTimestamp } from '../../utils/toChainTimestamp';
 import { queryCollections } from './queryCollections';
 
