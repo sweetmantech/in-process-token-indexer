@@ -12,11 +12,11 @@ const ADMINS_QUERY = `query GetAdmins($limit: Int, $offset: Int, $minGrantedAt: 
 }`;
 
 /**
- * Queries Envio GraphQL for InProcess_Moment_Admins.
+ * Queries Envio GraphQL for InProcess_Admins.
  * @param limit - Number of records to fetch per request (default: 1000).
  * @param offset - Number of records to skip (default: 0).
  * @param minGrantedAt - Minimum granted_at timestamp to filter by (for incremental indexing).
- * @returns Object containing moment admins and pagination info.
+ * @returns Object containing admins and pagination info.
  */
 export async function queryAdmins({
   limit = 1000,

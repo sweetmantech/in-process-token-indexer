@@ -1,5 +1,5 @@
 import {
-  InProcess_Moment_Admins_t,
+  InProcess_Admins_t,
   InProcess_Moment_Comments_t,
   InProcess_Sales_t,
 } from '@/types/envio';
@@ -7,27 +7,27 @@ import { InProcessMoment } from '@/types/supabase';
 import { selectMoments } from '@/lib/supabase/in_process_moments/selectMoments';
 
 /**
- * Gets moment IDs from Supabase for given moment admins
+ * Gets moment IDs from Supabase for given entities
  * and returns a Map mapping [collection address, chain_id, token_id] triplets to moment IDs.
- * @param momentAdmins - Array of InProcess_Moment_Admins_t to query moments for.
+ * @param entities - Array of InProcess_Admins_t, InProcess_Moment_Comments_t, or InProcess_Sales_t to query moments for.
  * @returns Map with key as `${collectionAddress}:${chainId}:${tokenId}` and value as moment ID.
  */
 export async function getMomentIdMap(
-  momentAdmins:
-    | InProcess_Moment_Admins_t[]
+  entities:
+    | InProcess_Admins_t[]
     | InProcess_Moment_Comments_t[]
     | InProcess_Sales_t[]
 ): Promise<Map<string, string>> {
   try {
-    if (momentAdmins.length === 0) {
-      console.log('ℹ️  No moment admins provided, returning empty map');
+    if (entities.length === 0) {
+      console.log('ℹ️  No entities provided, returning empty map');
       return new Map<string, string>();
     }
 
-    const collectionAddresses = momentAdmins.map(admin =>
+    const collectionAddresses = entities.map(admin =>
       admin.collection.toLowerCase()
     );
-    const tokenIds = momentAdmins.map(admin => Number(admin.token_id));
+    const tokenIds = entities.map(entity => Number(entity.token_id));
 
     const data = (await selectMoments({
       collectionAddresses,
@@ -38,9 +38,9 @@ export async function getMomentIdMap(
 
     // Create a Set of requested triplets for efficient lookup
     const requestedTriplets = new Set(
-      momentAdmins.map(
-        admin =>
-          `${admin.collection.toLowerCase()}:${admin.chain_id}:${admin.token_id}`
+      entities.map(
+        entity =>
+          `${entity.collection.toLowerCase()}:${entity.chain_id}:${entity.token_id}`
       )
     );
 
@@ -53,13 +53,13 @@ export async function getMomentIdMap(
     }
 
     console.log(
-      `✅ Retrieved ${momentMap.size} moment ID(s) from Supabase for ${momentAdmins.length} admin(s)`
+      `✅ Retrieved ${momentMap.size} moment ID(s) from Supabase for ${entities.length} entity(ies)`
     );
 
     return momentMap;
   } catch (error) {
     console.error(
-      `❌ Failed to get moment IDs for ${momentAdmins.length} admin(s):`,
+      `❌ Failed to get moment IDs for ${entities.length} entity(ies):`,
       error
     );
     throw error;

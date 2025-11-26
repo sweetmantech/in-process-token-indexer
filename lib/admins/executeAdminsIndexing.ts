@@ -3,7 +3,7 @@ import { indexAdmins } from '@/lib/grpc/InProcess_Admins/indexAdmins';
 import { sleep } from '@/lib/utils/sleep';
 
 /**
- * Indexes moment admins using granted_at for incremental indexing.
+ * Indexes admins using granted_at for incremental indexing.
  * Runs continuously in a loop.
  */
 export async function executeAdminsIndexing(): Promise<void> {
