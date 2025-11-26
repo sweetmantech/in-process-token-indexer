@@ -78,7 +78,7 @@ export class IndexFactory<T> implements IIndexFactory<T> {
 
         const entities = await this.index();
 
-        if (entities)
+        if (entities.length > 0)
           console.log(`📊 Indexed new ${entities.length} ${this.indexName}`);
         else console.log(`ℹ️  No new ${this.indexName} found`);
 
