@@ -3,7 +3,8 @@ name: Deploy to DigitalOcean Droplet
 on:
   push:
     branches:
-      - 'main'
+      - main
+      - test
 
 jobs:
   deploy:
@@ -17,11 +18,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
       - name: Install dependencies
-        run: pnpm install
+        run: npm install
+
+      - name: Run tests
+        run: npm test
 
       - name: Debug Secrets
         run: |
@@ -51,25 +52,18 @@ jobs:
             git fetch --all
             git checkout -B ${{ github.ref_name }} origin/${{ github.ref_name }}
             git reset HEAD --hard
-            git pull origin/${{ github.ref_name }}
+            git pull origin ${{ github.ref_name }}
 
             echo "Current branch:"
             git branch --show-current
             echo "Git status:"
             git status
 
-            # Install pnpm if not already installed
-            if ! command -v pnpm &> /dev/null; then
-              echo "Installing pnpm globally..."
-              npm install -g pnpm
-            fi
-
             # Install dependencies
-            pnpm install
+            npm install
 
             # Build the application
-            echo "🔨 Building application..."
-            pnpm build
+            npm run build
 
             # Restart the application
             pm2 restart ecosystem.config.cjs --update-env

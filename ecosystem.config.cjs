@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'in-process-token-indexer',
-      script: 'pnpm',
+      script: 'npm',
       args: 'run start',
       exec_mode: 'fork',
       node_args: '--max-old-space-size=512',
