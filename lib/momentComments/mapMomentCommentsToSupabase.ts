@@ -4,7 +4,7 @@ import {
   InProcess_Moment_Admins_t,
 } from '../../types/envio';
 import { Database } from '../supabase/types';
-import { getMomentIdMap } from '../momentAdmins/getMomentIdMap';
+import { getMomentIdMap } from '../moments/getMomentIdMap';
 
 /**
  * Maps Envio InProcess_Moment_Comments_t entities from GraphQL

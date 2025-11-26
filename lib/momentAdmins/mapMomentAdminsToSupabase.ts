@@ -1,7 +1,7 @@
 import toSupabaseTimestamp from '../utils/toSupabaseTimestamp';
 import { InProcess_Moment_Admins_t } from '../../types/envio';
 import { Database } from '../supabase/types';
-import { getMomentIdMap } from './getMomentIdMap';
+import { getMomentIdMap } from '../moments/getMomentIdMap';
 
 /**
  * Maps Envio InProcess_Moment_Admins_t entities from GraphQL
