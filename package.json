@@ -6,8 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "dev": "tsx indexer.ts",
-    "start": "pnpm exec tsc && tsc-alias && nodemon --experimental-specifier-resolution=node --no-warnings ./dist/indexer.js",
-    "build": "tsc && tsc-alias",
+    "start": "NODE_OPTIONS=--max-old-space-size=4096 pnpm exec tsc && tsc-alias && nodemon --experimental-specifier-resolution=node --no-warnings ./dist/indexer.js",
+    "build": "NODE_OPTIONS=--max-old-space-size=4096 tsc && tsc-alias",
     "test": "echo \"No tests specified\" && exit 0",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
