@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
-import { GRPC_ENDPOINT } from '../../consts';
-import type { InProcess_Sales_t, SalesQueryResult } from '../../../types/envio';
+import { GRPC_ENDPOINT } from '@/lib/consts';
+import type { InProcess_Sales_t, SalesQueryResult } from '@/types/envio';
 
 const SALES_QUERY = `query GetSales($limit: Int, $offset: Int, $minCreatedAt: Int) {
   InProcess_Sales(limit: $limit, offset: $offset, order_by: { created_at: desc }, where: { created_at: { _gt: $minCreatedAt }}) {

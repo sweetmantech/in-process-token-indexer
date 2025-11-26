@@ -1,19 +1,19 @@
-import { supabase } from '../client';
-import type { Database } from '../types';
+import { supabase } from '@/lib/supabase/client';
+import type { Database } from '@/lib/supabase/types';
 
 /**
  * Upserts moment comments into Supabase.
- * @param momentComments - Array of moment comment objects to upsert.
+ * @param comments - Array of comment objects to upsert.
  * @returns Array of upserted moment comment rows.
  */
-export async function upsertMomentComments(
-  momentComments: Array<
+export async function upsertComments(
+  comments: Array<
     Database['public']['Tables']['in_process_moment_comments']['Insert']
   >
 ): Promise<
   Array<Database['public']['Tables']['in_process_moment_comments']['Row']>
 > {
-  if (momentComments.length === 0) {
+  if (comments.length === 0) {
     console.log('ℹ️  No moment comments to upsert');
     return [];
   }
@@ -21,7 +21,7 @@ export async function upsertMomentComments(
   try {
     const { data, error } = await supabase
       .from('in_process_moment_comments')
-      .upsert(momentComments, {
+      .upsert(comments, {
         onConflict: 'id',
         ignoreDuplicates: false,
       })
@@ -31,10 +31,10 @@ export async function upsertMomentComments(
       throw error;
     }
 
-    console.log(`✅ Upserted ${data?.length || 0} moment comment(s)`);
+    console.log(`✅ Upserted ${data?.length || 0} comment(s)`);
     return data || [];
   } catch (error) {
-    console.error(`❌ Failed to upsert moment comments:`, error);
+    console.error(`❌ Failed to upsert comments:`, error);
     throw error;
   }
 }

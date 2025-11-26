@@ -1,8 +1,8 @@
 import { InProcess_Moment_Comments_t } from '@/types/envio';
-import { BATCH_SIZE } from '../consts';
+import { BATCH_SIZE } from '@/lib/consts';
 import { mapMomentCommentsToSupabase } from './mapMomentCommentsToSupabase';
-import { upsertMomentComments } from '../supabase/in_process_moment_comments/upsertMomentComments';
-import { ensureArtists } from '../supabase/in_process_artists/ensureArtists';
+import { upsertMomentComments } from '@/lib/supabase/in_process_moment_comments/upsertComments';
+import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 
 export async function processMomentCommentsInBatches(
   momentComments: InProcess_Moment_Comments_t[]

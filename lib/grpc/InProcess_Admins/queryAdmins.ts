@@ -1,9 +1,6 @@
 import fetch from 'node-fetch';
-import { GRPC_ENDPOINT } from '../../consts';
-import type {
-  InProcess_Admins_t,
-  AdminsQueryResult,
-} from '../../../types/envio';
+import { GRPC_ENDPOINT } from '@/lib/consts';
+import type { InProcess_Admins_t, AdminsQueryResult } from '@/types/envio';
 
 const ADMINS_QUERY = `query GetAdmins($limit: Int, $offset: Int, $minGrantedAt: Int) {
   InProcess_Admins(limit: $limit, offset: $offset, order_by: { granted_at: desc }, where: { granted_at: { _gt: $minGrantedAt }}) {

@@ -1,8 +1,8 @@
 import { InProcess_Collections_t } from '@/types/envio';
-import { BATCH_SIZE } from '../consts';
+import { BATCH_SIZE } from '@/lib/consts';
 import { mapCollectionsToSupabase } from './mapCollectionsToSupabase';
-import { ensureArtists } from '../supabase/in_process_artists/ensureArtists';
-import { upsertCollections } from '../supabase/in_process_collections/upsertCollections';
+import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
+import { upsertCollections } from '@/lib/supabase/in_process_collections/upsertCollections';
 
 export async function processCollectionsInBatches(
   collections: InProcess_Collections_t[]

@@ -1,4 +1,4 @@
-import getPublicClient from '../viem/getPublicClient';
+import getPublicClient from '@/lib/viem/getPublicClient';
 
 const isSplitContract = async (
   address: `0x${string}`,

@@ -1,7 +1,7 @@
-import { processSalesInBatches } from '../../../lib/sales/processSalesInBatches';
-import type { InProcess_Sales_t } from '../../../types/envio';
-import { selectMaxCreatedAt } from '../../supabase/in_process_sales/selectMaxCreatedAt';
-import { toChainTimestamp } from '../../utils/toChainTimestamp';
+import { processSalesInBatches } from '@/lib/sales/processSalesInBatches';
+import type { InProcess_Sales_t } from '@/types/envio';
+import { selectMaxCreatedAt } from '@/lib/supabase/in_process_sales/selectMaxCreatedAt';
+import { toChainTimestamp } from '@/lib/utils/toChainTimestamp';
 import { querySales } from './querySales';
 
 /**
