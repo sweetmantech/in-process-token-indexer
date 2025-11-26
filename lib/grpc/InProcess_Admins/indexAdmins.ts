@@ -14,7 +14,7 @@ export async function indexAdmins(): Promise<InProcess_Admins_t[]> {
   const limit = 1000;
   let hasNextPage = true;
 
-  // Get the latest granted_at from in_process_moment_admins for incremental indexing
+  // Get the latest granted_at from in_process_admins for incremental indexing
   const maxGrantedAtSupabase = await selectMaxGrantedAt();
   const minGrantedAtEnvio = toChainTimestamp(
     maxGrantedAtSupabase ?? new Date(0).getTime()
@@ -29,11 +29,11 @@ export async function indexAdmins(): Promise<InProcess_Admins_t[]> {
 
     if (adminsResult.admins.length > 0) {
       console.log(
-        `💾 Processing ${allAdmins.length} ~ ${allAdmins.length + adminsResult.admins.length}`
+        `💾 Processing ${allAdmins.length} ~ ${allAdmins.length + adminsResult.admins.length} admins`
       );
     }
 
-    // ℹ️ Process fetched admins for this page (batch upserts handled in processMomentAdminsInBatches)
+    // ℹ️ Process fetched admins for this page (batch upserts handled in processAdminsInBatches)
     await processAdminsInBatches(adminsResult.admins);
 
     hasNextPage = adminsResult.pageInfo.hasNextPage;
