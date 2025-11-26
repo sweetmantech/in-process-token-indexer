@@ -1,10 +1,7 @@
-import toSupabaseTimestamp from '../utils/toSupabaseTimestamp';
-import {
-  InProcess_Moment_Comments_t,
-  InProcess_Moment_Admins_t,
-} from '../../types/envio';
-import { Database } from '../supabase/types';
-import { getMomentIdMap } from '../momentAdmins/getMomentIdMap';
+import toSupabaseTimestamp from '@/lib/utils/toSupabaseTimestamp';
+import { InProcess_Moment_Comments_t } from '@/types/envio';
+import { Database } from '@/lib/supabase/types';
+import { getMomentIdMap } from '@/lib/moments/getMomentIdMap';
 
 /**
  * Maps Envio InProcess_Moment_Comments_t entities from GraphQL
