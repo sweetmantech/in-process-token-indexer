@@ -1,15 +1,12 @@
-import type { PageInfo } from '@/types/envio';
 import { toChainTimestamp } from '@/lib/toChainTimestamp';
+import { PageInfo } from '@/types/envio';
 
-interface IndexConfig<
-  T,
-  TQueryResult extends { entities: T[]; pageInfo: PageInfo },
-> {
+interface IndexConfig<T> {
   queryFn: (params: {
     limit: number;
     offset: number;
     minTimestamp: number;
-  }) => Promise<TQueryResult>;
+  }) => Promise<{ entities: T[]; pageInfo: PageInfo }>;
   processBatchFn: (entities: T[]) => Promise<void>;
   selectMaxTimestampFn: () => Promise<number | null>;
   indexName: string;
@@ -21,10 +18,7 @@ interface IndexConfig<
  * @param config - Configuration object with query, process, and select functions.
  * @returns Index function that fetches and processes all entities.
  */
-export function createIndexFunction<
-  T,
-  TQueryResult extends { entities: T[]; pageInfo: PageInfo },
->(config: IndexConfig<T, TQueryResult>) {
+export function createIndexFunction<T>(config: IndexConfig<T>) {
   return async function index(): Promise<T[]> {
     const allEntities: T[] = [];
     let offset = 0;
