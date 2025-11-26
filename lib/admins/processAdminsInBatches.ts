@@ -1,8 +1,8 @@
 import { InProcess_Admins_t } from '@/types/envio';
-import { BATCH_SIZE } from '../consts';
+import { BATCH_SIZE } from '@/lib/consts';
 import { mapAdminsToSupabase } from './mapAdminsToSupabase';
-import { upsertAdmins } from '../supabase/in_process_admins/upsertAdmins';
-import { ensureArtists } from '../supabase/in_process_artists/ensureArtists';
+import { upsertAdmins } from '@/lib/supabase/in_process_admins/upsertAdmins';
+import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 
 export async function processAdminsInBatches(
   admins: InProcess_Admins_t[]

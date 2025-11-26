@@ -1,5 +1,5 @@
-import { supabase } from '../client';
-import type { Database } from '../types';
+import { supabase } from '@/lib/supabase/client';
+import { Database } from '@/lib/supabase/types';
 
 /**
  * Upserts admins into Supabase.

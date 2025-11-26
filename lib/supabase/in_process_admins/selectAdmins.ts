@@ -1,10 +1,5 @@
 import { supabase } from '@/lib/supabase/client';
-import { Database } from '@/lib/supabase/types';
-
-export type InProcessAdmin =
-  Database['public']['Tables']['in_process_admins']['Row'] & {
-    collection: Database['public']['Tables']['in_process_collections']['Row'];
-  };
+import { InProcessAdmin } from '@/types/supabase';
 
 interface SelectAdminsOptions {
   order?: { column: string; ascending: boolean };

@@ -134,7 +134,11 @@ Key principles to follow:
   - Types in `types/` folder
   - Supabase queries in `supabase/[table_name]/` folders
   - Business logic utilities in `lib/[entity]/` folders (e.g., `getMomentIdMap`)
-- **Imports**: NO `.js` extensions in TypeScript imports
+- **Imports**: 
+  - NO `.js` extensions in TypeScript imports
+  - **Use alias imports (`@/`) instead of relative imports (`../`) when importing from other directories**
+  - Example: `import { INDEX_INTERVAL_MS } from '@/lib/consts'` ✅ (not `'../consts'` ❌)
+  - Relative imports (`./`) are acceptable for same-directory imports
 - **Logging**: Use emojis (✅ ❌ ⚠️ ℹ️ 🔄 📊 🔍 💾)
 - **Functions**: Small, focused, pure when possible
 

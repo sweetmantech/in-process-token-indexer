@@ -1,12 +1,12 @@
 import { processAdminsInBatches } from '@/lib/admins/processAdminsInBatches';
 import type { InProcess_Admins_t } from '@/types/envio';
-import { selectMaxGrantedAt } from '../../admins/selectMaxGrantedAt';
-import { toChainTimestamp } from '../../utils/toChainTimestamp';
+import { selectMaxGrantedAt } from '@/lib/admins/selectMaxGrantedAt';
+import { toChainTimestamp } from '@/lib/utils/toChainTimestamp';
 import { queryAdmins } from './queryAdmins';
 
 /**
- * Fetches all moment admins from Envio GraphQL with pagination.
- * @returns Array of all moment admins.
+ * Fetches all admins from Envio GraphQL with pagination.
+ * @returns Array of all admins.
  */
 export async function indexAdmins(): Promise<InProcess_Admins_t[]> {
   const allAdmins: InProcess_Admins_t[] = [];
