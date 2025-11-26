@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "tsx indexer.ts",
     "start": "pnpm exec tsc && tsc-alias && nodemon --experimental-specifier-resolution=node --no-warnings ./dist/indexer.js",
-    "build": "tsc && tsc-alias",
+    "build": "NODE_OPTIONS=--max-old-space-size=512 tsc && tsc-alias",
     "test": "echo \"No tests specified\" && exit 0",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
