@@ -25,7 +25,7 @@ export async function querySales({
 }): Promise<SalesQueryResult> {
   const result = await queryGraphQL<InProcess_Sales_t>({
     query: SALES_QUERY,
-    entityName: 'InProcess_Sales',
+    dataPath: 'InProcess_Sales',
     variables: {
       limit,
       offset,

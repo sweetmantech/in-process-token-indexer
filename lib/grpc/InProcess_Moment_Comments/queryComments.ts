@@ -28,7 +28,7 @@ export async function queryComments({
 }): Promise<MomentCommentsQueryResult> {
   const result = await queryGraphQL<InProcess_Moment_Comments_t>({
     query: MOMENT_COMMENTS_QUERY,
-    entityName: 'InProcess_Moment_Comments',
+    dataPath: 'InProcess_Moment_Comments',
     variables: {
       limit,
       offset,

@@ -4,18 +4,18 @@ import type { PageInfo } from '@/types/envio';
 
 export interface GraphQLQueryParams {
   query: string;
-  entityName: string;
+  dataPath: string;
   variables: Record<string, unknown>;
 }
 
 /**
  * Generic function to query Envio GraphQL for any entity.
- * @param params - Query parameters including query string, entity name, and variables.
+ * @param params - Query parameters including query string, data path, and variables.
  * @returns Object containing entities array and pagination info.
  */
 export async function queryGraphQL<T>({
   query,
-  entityName,
+  dataPath,
   variables,
 }: GraphQLQueryParams): Promise<{ entities: T[]; pageInfo: PageInfo }> {
   const limit = (variables.limit as number) ?? 1000;
@@ -48,7 +48,7 @@ export async function queryGraphQL<T>({
       throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
     }
 
-    const entities = data.data?.[entityName] || [];
+    const entities = data.data?.[dataPath] || [];
 
     return {
       entities,

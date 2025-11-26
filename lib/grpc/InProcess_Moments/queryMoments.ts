@@ -25,7 +25,7 @@ export async function queryMoments({
 }): Promise<MomentsQueryResult> {
   const result = await queryGraphQL<InProcess_Moments_t>({
     query: MOMENTS_QUERY,
-    entityName: 'InProcess_Moments',
+    dataPath: 'InProcess_Moments',
     variables: {
       limit,
       offset,

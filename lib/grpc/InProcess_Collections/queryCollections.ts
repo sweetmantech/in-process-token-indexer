@@ -28,7 +28,7 @@ export async function queryCollections({
 }): Promise<CollectionsQueryResult> {
   const result = await queryGraphQL<InProcess_Collections_t>({
     query: COLLECTIONS_QUERY,
-    entityName: 'InProcess_Collections',
+    dataPath: 'InProcess_Collections',
     variables: {
       limit,
       offset,

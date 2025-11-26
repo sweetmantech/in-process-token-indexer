@@ -25,7 +25,7 @@ export async function queryAdmins({
 }): Promise<AdminsQueryResult> {
   const result = await queryGraphQL<InProcess_Admins_t>({
     query: ADMINS_QUERY,
-    entityName: 'InProcess_Admins',
+    dataPath: 'InProcess_Admins',
     variables: {
       limit,
       offset,
