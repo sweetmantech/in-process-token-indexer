@@ -1,4 +1,4 @@
-import { selectCollections } from '../supabase/in_process_collections/selectCollections';
+import { selectCollections } from '@/lib/supabase/in_process_collections/selectCollections';
 
 /**
  * Gets collection IDs from Supabase for given [address, chain_id] pairs
@@ -21,7 +21,7 @@ export async function getCollectionIdMap(
     ];
 
     // Query collections by addresses
-    const data = await selectCollections(uniqueAddresses);
+    const data = await selectCollections({ addresses: uniqueAddresses });
 
     const collectionMap = new Map<string, string>();
 

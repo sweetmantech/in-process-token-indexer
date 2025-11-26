@@ -1,32 +1,39 @@
 import { Database } from '@/lib/supabase/types';
 import { supabase } from '../client';
 
+interface SelectCollectionsOptions {
+  addresses?: string[];
+  order?: { column: string; ascending: boolean };
+  limit?: number;
+}
+
 /**
- * Queries collections from Supabase by their addresses.
- * @param addresses - Array of collection addresses (case-sensitive matching).
- * @returns Array of collection records with id, address, and chain_id.
+ * Queries collections from Supabase.
+ * @param options - Query options including addresses, order, and limit.
+ * @returns Array of collection records.
  */
 export async function selectCollections(
-  addresses: string[]
-): Promise<
-  Array<
-    Pick<
-      Database['public']['Tables']['in_process_collections']['Row'],
-      'id' | 'address' | 'chain_id'
-    >
-  >
-> {
-  if (addresses.length === 0) {
-    return [];
+  options: SelectCollectionsOptions = {}
+): Promise<Database['public']['Tables']['in_process_collections']['Row'][]> {
+  let query = supabase.from('in_process_collections').select('*');
+
+  if (options.addresses && options.addresses.length > 0) {
+    query = query.in('address', options.addresses);
+  }
+  if (options.order) {
+    query = query.order(options.order.column, {
+      ascending: options.order.ascending,
+    });
   }
 
-  const { data, error } = await supabase
-    .from('in_process_collections')
-    .select('id, address, chain_id')
-    .in('address', addresses);
+  if (options.limit) {
+    query = query.limit(options.limit);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
-    console.error(`❌ Failed to select collections by addresses:`, error);
+    console.error(`❌ Failed to select collections:`, error);
     throw error;
   }
 
