@@ -20,7 +20,6 @@ export async function selectCollections(
   if (options.addresses && options.addresses.length > 0) {
     query = query.in('address', options.addresses);
   }
-
   if (options.order) {
     query = query.order(options.order.column, {
       ascending: options.order.ascending,
