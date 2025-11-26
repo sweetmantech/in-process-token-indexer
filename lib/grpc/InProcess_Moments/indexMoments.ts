@@ -1,7 +1,7 @@
-import { processMomentsInBatches } from '../../../lib/moments/processMomentsInBatches';
-import type { InProcess_Moments_t } from '../../../types/envio';
-import { selectMaxUpdatedAt } from '../../supabase/in_process_moments/selectMaxUpdatedAt';
-import { toChainTimestamp } from '../../utils/toChainTimestamp';
+import { processMomentsInBatches } from '@/lib/moments/processMomentsInBatches';
+import { selectMaxUpdatedAt } from '@/lib/moments/selectMaxUpdatedAt';
+import type { InProcess_Moments_t } from '@/types/envio';
+import { toChainTimestamp } from '@/lib/utils/toChainTimestamp';
 import { queryMoments } from './queryMoments';
 
 /**
