@@ -1,28 +1,52 @@
+import { Database } from '@/lib/supabase/types';
 import { supabase } from '../client';
 import { InProcessMoment } from '@/types/moments';
 
+interface SelectMomentsOptions {
+  collectionAddresses?: string[];
+  tokenIds?: number[];
+  order?: { column: string; ascending: boolean };
+  limit?: number;
+}
+
 /**
- * Queries moments from Supabase by collection addresses and token IDs.
- * Returns moments with their associated collection data.
- * @param collectionAddresses - Array of collection addresses (case-sensitive matching).
- * @param tokenIds - Array of token IDs to filter by.
- * @returns Array of moment records with id, token_id, and collection data.
+ * Queries moments from Supabase.
+ * @param options - Query options including collectionAddresses, tokenIds, order, and limit.
+ * @returns Array of moment records. If collectionAddresses and tokenIds are provided, returns moments with collection data.
  */
 export async function selectMoments(
-  collectionAddresses: string[],
-  tokenIds: number[]
-): Promise<InProcessMoment[]> {
-  if (collectionAddresses.length === 0 || tokenIds.length === 0) {
-    return [];
-  }
+  options: SelectMomentsOptions = {}
+): Promise<
+  | InProcessMoment[]
+  | Database['public']['Tables']['in_process_moments']['Row'][]
+> {
+  const { collectionAddresses = [], tokenIds = [], order, limit } = options;
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('in_process_moments')
     .select(
-      'id, token_id, collection:in_process_collections!inner(id, address, chain_id)'
-    )
-    .in('collection.address', collectionAddresses)
-    .in('token_id', tokenIds);
+      '*, collection:in_process_collections!inner(id, address, chain_id)'
+    );
+  // If collectionAddresses and tokenIds are provided, use the join query
+  if (collectionAddresses.length > 0) {
+    query = query.in('collection.address', collectionAddresses);
+  }
+
+  if (tokenIds.length > 0) {
+    query = query.in('token_id', tokenIds);
+  }
+
+  if (order) {
+    query = query.order(order.column, {
+      ascending: order.ascending,
+    });
+  }
+
+  if (limit) {
+    query = query.limit(limit);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error('❌ Failed to select moments:', error);

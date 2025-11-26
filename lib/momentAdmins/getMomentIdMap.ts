@@ -3,7 +3,8 @@ import {
   InProcess_Moment_Comments_t,
   InProcess_Sales_t,
 } from '@/types/envio';
-import { selectMoments } from '../supabase/in_process_moments/selectMoments';
+import { InProcessMoment } from '@/types/moments';
+import { selectMoments } from '@/lib/supabase/in_process_moments/selectMoments';
 
 /**
  * Gets moment IDs from Supabase for given moment admins
@@ -28,7 +29,10 @@ export async function getMomentIdMap(
     );
     const tokenIds = momentAdmins.map(admin => Number(admin.token_id));
 
-    const data = await selectMoments(collectionAddresses, tokenIds);
+    const data = (await selectMoments({
+      collectionAddresses,
+      tokenIds,
+    })) as InProcessMoment[];
 
     const momentMap = new Map<string, string>();
 
