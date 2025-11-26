@@ -5,7 +5,7 @@ module.exports = {
       script: 'pnpm',
       args: 'run start',
       exec_mode: 'fork',
-      node_args: '--max-old-space-size=256',
+      node_args: '--max-old-space-size=512',
       max_memory_restart: '300M',
       cwd: '/root/in-process-token-indexer',
     },
