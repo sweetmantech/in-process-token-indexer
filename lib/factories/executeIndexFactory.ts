@@ -11,7 +11,7 @@ export function createExecuteIndexFunction({
   indexFn,
   indexName,
 }: {
-  indexFn: (indexName: string) => Promise<any[]>;
+  indexFn: () => Promise<any[]>;
   indexName: string;
 }) {
   return async function executeIndexing(): Promise<void> {
@@ -21,7 +21,7 @@ export function createExecuteIndexFunction({
 
         console.log(`🔍 Indexing ${indexName}`);
 
-        const entities = await indexFn(indexName);
+        const entities = await indexFn();
 
         if (entities)
           console.log(`📊 Indexed new ${entities.length} ${indexName}`);
