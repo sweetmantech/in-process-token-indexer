@@ -18,7 +18,7 @@ export async function selectComments(
 
   let query = supabase
     .from('in_process_moment_comments')
-    .select('*, moment:in_process_moments!inner(id, collection, token_id)');
+    .select('*, moment:in_process_moments!inner(*)');
 
   if (order) {
     query = query.order(order.column, {
