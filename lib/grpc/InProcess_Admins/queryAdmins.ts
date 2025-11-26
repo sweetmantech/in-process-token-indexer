@@ -1,24 +1,24 @@
 import fetch from 'node-fetch';
 import { GRPC_ENDPOINT } from '../../consts';
 import type {
-  InProcess_Moment_Admins_t,
-  MomentAdminsQueryResult,
+  InProcess_Admins_t,
+  AdminsQueryResult,
 } from '../../../types/envio';
 
-const MOMENT_ADMINS_QUERY = `query GetMomentAdmins($limit: Int, $offset: Int, $minGrantedAt: Int) {
-  InProcess_Moment_Admins(limit: $limit, offset: $offset, order_by: { granted_at: desc }, where: { granted_at: { _gt: $minGrantedAt }}) {
+const ADMINS_QUERY = `query GetAdmins($limit: Int, $offset: Int, $minGrantedAt: Int) {
+  InProcess_Admins(limit: $limit, offset: $offset, order_by: { granted_at: desc }, where: { granted_at: { _gt: $minGrantedAt }}) {
     id admin collection token_id chain_id granted_at
   }
 }`;
 
 /**
- * Queries Envio GraphQL for InProcess_Moment_Admins.
+ * Queries Envio GraphQL for InProcess_Admins.
  * @param limit - Number of records to fetch per request (default: 1000).
  * @param offset - Number of records to skip (default: 0).
  * @param minGrantedAt - Minimum granted_at timestamp to filter by (for incremental indexing).
- * @returns Object containing moment admins and pagination info.
+ * @returns Object containing admins and pagination info.
  */
-export async function queryMomentAdmins({
+export async function queryAdmins({
   limit = 1000,
   offset = 0,
   minGrantedAt,
@@ -26,7 +26,7 @@ export async function queryMomentAdmins({
   limit?: number;
   offset?: number;
   minGrantedAt: number;
-}): Promise<MomentAdminsQueryResult> {
+}): Promise<AdminsQueryResult> {
   try {
     const variables = { limit, offset, minGrantedAt };
 
@@ -36,7 +36,7 @@ export async function queryMomentAdmins({
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        query: MOMENT_ADMINS_QUERY,
+        query: ADMINS_QUERY,
         variables,
       }),
     });
@@ -48,7 +48,7 @@ export async function queryMomentAdmins({
     const data = (await response.json()) as {
       errors?: unknown[];
       data?: {
-        InProcess_Moment_Admins?: InProcess_Moment_Admins_t[];
+        InProcess_Admins?: InProcess_Admins_t[];
       };
     };
 
@@ -56,12 +56,12 @@ export async function queryMomentAdmins({
       throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
     }
 
-    const momentAdmins = data.data?.InProcess_Moment_Admins || [];
+    const admins = data.data?.InProcess_Admins || [];
 
     return {
-      momentAdmins,
+      admins,
       pageInfo: {
-        hasNextPage: momentAdmins.length === limit,
+        hasNextPage: admins.length === limit,
         nextOffset: offset + limit,
       },
     };
