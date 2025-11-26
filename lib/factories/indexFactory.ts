@@ -19,7 +19,7 @@ interface IndexConfig<T> {
  * @returns Index function that fetches and processes all entities.
  */
 export function createIndexFunction<T>(config: IndexConfig<T>) {
-  return async function index(): Promise<T[]> {
+  return async function index(indexName: string): Promise<T[]> {
     const allEntities: T[] = [];
     let offset = 0;
     const limit = 1000;
@@ -40,7 +40,7 @@ export function createIndexFunction<T>(config: IndexConfig<T>) {
 
       if (entities.length > 0) {
         console.log(
-          `💾 Processing ${allEntities.length} ~ ${allEntities.length + entities.length} ${config.indexName}`
+          `💻 Processing ${allEntities.length} ~ ${allEntities.length + entities.length} ${config.indexName}`
         );
       }
 

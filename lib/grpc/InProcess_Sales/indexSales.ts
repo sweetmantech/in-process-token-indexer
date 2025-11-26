@@ -1,7 +1,7 @@
 import { processSalesInBatches } from '@/lib/sales/processSalesInBatches';
 import type { InProcess_Sales_t } from '@/types/envio';
 import { selectMaxCreatedAt } from '@/lib/sales/selectMaxCreatedAt';
-import { createIndexFunction } from '@/lib/grpc/indexFactory';
+import { createIndexFunction } from '@/lib/factories/indexFactory';
 import { querySales } from './querySales';
 
 /**

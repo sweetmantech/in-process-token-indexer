@@ -1,7 +1,7 @@
 import { processAdminsInBatches } from '@/lib/admins/processAdminsInBatches';
 import type { InProcess_Admins_t } from '@/types/envio';
 import { selectMaxGrantedAt } from '@/lib/admins/selectMaxGrantedAt';
-import { createIndexFunction } from '@/lib/grpc/indexFactory';
+import { createIndexFunction } from '@/lib/factories/indexFactory';
 import { queryAdmins } from './queryAdmins';
 
 /**

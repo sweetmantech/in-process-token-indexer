@@ -1,7 +1,7 @@
 import { processMomentsInBatches } from '@/lib/moments/processMomentsInBatches';
 import { selectMaxUpdatedAt } from '@/lib/moments/selectMaxUpdatedAt';
 import type { InProcess_Moments_t } from '@/types/envio';
-import { createIndexFunction } from '@/lib/grpc/indexFactory';
+import { createIndexFunction } from '@/lib/factories/indexFactory';
 import { queryMoments } from './queryMoments';
 
 /**

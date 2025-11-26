@@ -1,35 +1,13 @@
-import { INDEX_INTERVAL_MS } from '@/lib/consts';
 import { indexMoments } from '@/lib/grpc/InProcess_Moments/indexMoments';
-import { sleep } from '@/lib/sleep';
+import { createExecuteIndexFunction } from '@/lib/factories/executeIndexFactory';
+import { InProcess_Moments_t } from '@/types/envio';
 
 /**
  * Indexes moments.
  * Runs continuously in a loop.
  */
-export async function executeMomentsIndexing(): Promise<void> {
-  while (true) {
-    try {
-      const startTime = Date.now();
-
-      console.log(`🔍 Indexing moments`);
-
-      const moments = await indexMoments();
-
-      if (moments.length)
-        console.log(`📊 Indexed new ${moments.length} moments`);
-      else console.log(`ℹ️  No new moments found`);
-
-      const duration = Date.now() - startTime;
-      console.log(
-        `✅ Completed indexing moments for all chains (${duration}ms)`
-      );
-
-      // Wait before next iteration
-      await sleep(INDEX_INTERVAL_MS);
-    } catch (error) {
-      console.error(`❌ Error in indexing cycle:`, error);
-      // Wait before retrying even on error
-      await sleep(INDEX_INTERVAL_MS);
-    }
-  }
-}
+export const executeMomentsIndexing =
+  createExecuteIndexFunction<InProcess_Moments_t>({
+    indexFn: indexMoments,
+    indexName: 'moments',
+  });

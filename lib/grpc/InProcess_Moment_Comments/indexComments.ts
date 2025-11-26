@@ -1,7 +1,7 @@
 import { processCommentsInBatches } from '@/lib/comments/processCommentsInBatches';
 import type { InProcess_Moment_Comments_t } from '@/types/envio';
 import { selectMaxCommentedAt } from '@/lib/comments/selectMaxCommentedAt';
-import { createIndexFunction } from '@/lib/grpc/indexFactory';
+import { createIndexFunction } from '@/lib/factories/indexFactory';
 import { queryComments } from './queryComments';
 
 /**
