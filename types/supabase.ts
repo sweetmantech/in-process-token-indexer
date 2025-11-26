@@ -12,3 +12,7 @@ export type InProcessMomentComment =
   Database['public']['Tables']['in_process_moment_comments']['Row'] & {
     moment: Database['public']['Tables']['in_process_moments']['Row'];
   };
+export type InProcessSale =
+  Database['public']['Tables']['in_process_sales']['Row'] & {
+    moment: Database['public']['Tables']['in_process_moments']['Row'];
+  };

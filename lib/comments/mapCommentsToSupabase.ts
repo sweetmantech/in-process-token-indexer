@@ -13,7 +13,7 @@ import { getMomentIdMap } from '@/lib/moments/getMomentIdMap';
  * @param momentComments - Array of InProcess_Moment_Comments_t from Envio.
  * @returns Promise of objects formatted for Supabase upsert.
  */
-export async function mapMomentCommentsToSupabase(
+export async function mapCommentsToSupabase(
   momentComments: InProcess_Moment_Comments_t[]
 ): Promise<
   Database['public']['Tables']['in_process_moment_comments']['Insert'][]

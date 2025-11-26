@@ -1,45 +1,22 @@
 import { processCollectionsInBatches } from '@/lib/collections/processCollectionsInBatches';
 import { selectMaxUpdatedAt } from '@/lib/collections/selectMaxUpdatedAt';
-import type { InProcess_Collections_t } from '@/types/envio';
-import { toChainTimestamp } from '@/lib/toChainTimestamp';
+import type {
+  InProcess_Collections_t,
+  CollectionsQueryResult,
+} from '@/types/envio';
+import { createIndexFunction } from '@/lib/grpc/indexFactory';
 import { queryCollections } from './queryCollections';
 
 /**
  * Fetches all collections from Envio GraphQL with pagination.
  * @returns Array of all collections.
  */
-export async function indexCollections(): Promise<InProcess_Collections_t[]> {
-  const allCollections: InProcess_Collections_t[] = [];
-  let offset = 0;
-  const limit = 1000;
-  let hasNextPage = true;
-
-  // Get the latest updated_at from in_process_collections for incremental indexing
-  const maxUpdatedAtSupabase = await selectMaxUpdatedAt();
-  const minUpdatedAtEnvio = toChainTimestamp(
-    maxUpdatedAtSupabase ?? new Date(0).getTime()
-  );
-
-  while (hasNextPage) {
-    const collectionsResult = await queryCollections({
-      limit,
-      offset,
-      minUpdatedAt: minUpdatedAtEnvio,
-    });
-
-    if (collectionsResult.collections.length > 0) {
-      console.log(
-        `💾 Processing ${allCollections.length} ~ ${allCollections.length + collectionsResult.collections.length}`
-      );
-    }
-
-    // ℹ️ Process fetched collections for this page (batch upserts handled in processCollectionsInBatches)
-    await processCollectionsInBatches(collectionsResult.collections);
-
-    hasNextPage = collectionsResult.pageInfo.hasNextPage;
-    offset = collectionsResult.pageInfo.nextOffset;
-    allCollections.push(...collectionsResult.collections);
-  }
-
-  return allCollections;
-}
+export const indexCollections = createIndexFunction<
+  InProcess_Collections_t,
+  CollectionsQueryResult
+>({
+  queryFn: queryCollections,
+  processBatchFn: processCollectionsInBatches,
+  selectMaxTimestampFn: selectMaxUpdatedAt,
+  indexName: 'collections',
+});

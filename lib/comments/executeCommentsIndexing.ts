@@ -1,26 +1,26 @@
 import { INDEX_INTERVAL_MS } from '@/lib/consts';
-import { indexMomentComments } from '@/lib/grpc/InProcess_Moment_Comments/indexMomentComments';
+import { indexComments } from '@/lib/grpc/InProcess_Moment_Comments/indexComments';
 import { sleep } from '@/lib/sleep';
 
 /**
  * Indexes moment comments using commented_at for incremental indexing.
  * Runs continuously in a loop.
  */
-export async function executeMomentCommentsIndexing(): Promise<void> {
+export async function executeCommentsIndexing(): Promise<void> {
   while (true) {
     try {
       const startTime = Date.now();
 
-      console.log(`🔍 Indexing moment comments`);
+      console.log(`🔍 Indexing comments`);
 
-      const comments = await indexMomentComments();
+      const comments = await indexComments();
 
       if (comments.length)
-        console.log(`📊 Indexed new ${comments.length} moment comments`);
-      else console.log(`ℹ️  No new moment comments found`);
+        console.log(`📊 Indexed new ${comments.length} comments`);
+      else console.log(`ℹ️  No new comments found`);
 
       const duration = Date.now() - startTime;
-      console.log(`✅ Completed indexing moment comments (${duration}ms)`);
+      console.log(`✅ Completed indexing comments (${duration}ms)`);
 
       // Wait before next iteration
       await sleep(INDEX_INTERVAL_MS);

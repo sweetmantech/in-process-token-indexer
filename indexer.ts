@@ -4,7 +4,7 @@ import indexLegacyAdmins from '@/legacy/lib/moment/indexAdmins';
 import { executeMomentsIndexing } from '@/lib/moments/executeMomentsIndexing';
 import { executeCollectionsIndexing } from '@/lib/collections/executeCollectionsIndexing';
 import { executeAdminsIndexing } from '@/lib/admins/executeAdminsIndexing';
-import { executeMomentCommentsIndexing } from '@/lib/momentComments/executeMomentCommentsIndexing';
+import { executeMomentCommentsIndexing } from '@/lib/comments/executeCommentsIndexing';
 import { executeSalesIndexing } from '@/lib/sales/executeSalesIndexing';
 
 // Handle graceful shutdown

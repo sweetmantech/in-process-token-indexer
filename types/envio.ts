@@ -1,3 +1,8 @@
+export interface PageInfo {
+  hasNextPage: boolean;
+  nextOffset: number;
+}
+
 export type InProcess_Collections_t = {
   readonly address: string;
   readonly chain_id: number;
@@ -9,6 +14,11 @@ export type InProcess_Collections_t = {
   readonly updated_at: number;
   readonly uri: string;
 };
+
+export interface CollectionsQueryResult {
+  entities: InProcess_Collections_t[];
+  pageInfo: PageInfo;
+}
 
 export type InProcess_Moments_t = {
   readonly id: string;
@@ -22,18 +32,8 @@ export type InProcess_Moments_t = {
   readonly transaction_hash: string;
 };
 
-export interface PageInfo {
-  hasNextPage: boolean;
-  nextOffset: number;
-}
-
-export interface QueryResult {
-  collections: InProcess_Collections_t[];
-  pageInfo: PageInfo;
-}
-
 export interface MomentsQueryResult {
-  moments: InProcess_Moments_t[];
+  entities: InProcess_Moments_t[];
   pageInfo: PageInfo;
 }
 
@@ -47,20 +47,7 @@ export type InProcess_Admins_t = {
 };
 
 export interface AdminsQueryResult {
-  admins: InProcess_Admins_t[];
-  pageInfo: PageInfo;
-}
-
-export type InProcess_Collection_Admins_t = {
-  readonly id: string;
-  readonly admin: string;
-  readonly collection: string;
-  readonly chain_id: number;
-  readonly granted_at: number;
-};
-
-export interface CollectionAdminsQueryResult {
-  collectionAdmins: InProcess_Collection_Admins_t[];
+  entities: InProcess_Admins_t[];
   pageInfo: PageInfo;
 }
 
@@ -76,7 +63,7 @@ export type InProcess_Moment_Comments_t = {
 };
 
 export interface MomentCommentsQueryResult {
-  momentComments: InProcess_Moment_Comments_t[];
+  entities: InProcess_Moment_Comments_t[];
   pageInfo: PageInfo;
 }
 
@@ -96,6 +83,6 @@ export type InProcess_Sales_t = {
 };
 
 export interface SalesQueryResult {
-  sales: InProcess_Sales_t[];
+  entities: InProcess_Sales_t[];
   pageInfo: PageInfo;
 }
