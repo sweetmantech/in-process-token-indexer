@@ -1,5 +1,4 @@
-import { Database } from '@/lib/supabase/types';
-import { supabase } from '../client';
+import { supabase } from '@/lib/supabase/client';
 import { InProcessMoment } from '@/types/moments';
 
 interface SelectMomentsOptions {
@@ -16,10 +15,7 @@ interface SelectMomentsOptions {
  */
 export async function selectMoments(
   options: SelectMomentsOptions = {}
-): Promise<
-  | InProcessMoment[]
-  | Database['public']['Tables']['in_process_moments']['Row'][]
-> {
+): Promise<InProcessMoment[]> {
   const { collectionAddresses = [], tokenIds = [], order, limit } = options;
 
   let query = supabase
