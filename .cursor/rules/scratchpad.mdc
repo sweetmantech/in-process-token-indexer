@@ -43,12 +43,23 @@ The goal is to help you maintain a big picture as well as the progress of the ta
 - **Query Method**: Use `node-fetch` to POST GraphQL queries to Envio endpoint (despite constant name `GRPC_ENDPOINT`, it's actually a GraphQL endpoint)
 - **Entity Names**: Use exact entity names from Envio schema with underscores and capitals (e.g., `InProcess_Collections`, not `InProcessCollections`)
 - **Field Names**: Use snake_case field names in GraphQL queries (e.g., `chain_id`, `created_at`, `token_id`)
-- **GraphQL Variables**: Pass `limit`, `offset`, and `chainId` as variables in the query
+- **GraphQL Variables**: Pass `limit`, `offset`, and `minTimestamp` as variables in the query
+  - **Type Definition**: `GraphQLQueryParams` interface defines concrete variable types:
+    ```typescript
+    variables: {
+      limit: number;      // Required (defaults handled in query functions)
+      offset: number;     // Required (defaults handled in query functions)
+      minTimestamp: number; // Required (for incremental indexing)
+    }
+    ```
+  - Query functions handle defaults (limit: 1000, offset: 0) before passing to `queryGraphQL`
 - **Ordering**: Use `order_by: { created_at: desc }` for consistent pagination
-- **Filtering**: Use `where: { chain_id: { _eq: $chainId } }` for chain filtering
+- **Filtering**: Use `where: { updated_at: { _gt: $minTimestamp } }` for incremental indexing
 
 ### Pagination Pattern
-- **Limit/Offset**: Use limit/offset pagination (default limit: 1000)
+- **Limit/Offset**: Use limit/offset pagination (default limit: 1000, default offset: 0)
+  - Defaults are handled in individual query functions (e.g., `queryCollections`, `queryAdmins`)
+  - `queryGraphQL` receives concrete values (no defaults, uses destructuring: `const { limit, offset } = variables`)
 - **HasNextPage Detection**: If returned results length equals limit, there might be more pages (set `hasNextPage = true`)
 - **NextOffset**: Calculate as `offset + limit`
 - **Pagination Loop**: Use `while (hasNextPage)` loop to fetch all pages
@@ -73,7 +84,14 @@ The goal is to help you maintain a big picture as well as the progress of the ta
 - **Logging**: Log per-chain results and total count
 
 ### File Structure Patterns
-- **Query Functions**: `lib/grpc/InProcess_[Entity]/query[Entity].ts` - single GraphQL query with pagination params
+- **Query Functions**: `lib/grpc/query[Entity].ts` - single GraphQL query with pagination params
+  - Functions handle default values for `limit` (1000) and `offset` (0)
+  - Pass concrete values to `queryGraphQL` with `GraphQLQueryParams` interface
+  - All query functions follow same pattern: `limit = 1000, offset = 0, minTimestamp: number`
+- **GraphQL Query Interface**: `lib/grpc/queryGraphQL.ts` - generic GraphQL query function
+  - Uses concrete `GraphQLQueryParams` interface with typed variables
+  - Variables are required (no optional fields), defaults handled by query functions
+  - Uses destructuring: `const { limit, offset } = variables`
 - **Indexer Files**: `lib/indexers/[entity]Indexer.ts` - exports `[entity]Indexer` instance (e.g., `adminsIndexer`, `collectionsIndexer`)
   - Indexer instance is created with `queryFn`, `processBatchFn`, `selectMaxTimestampFn`, and `indexName`
   - `indexer.ts` calls `execute()` directly on indexer instances
@@ -175,7 +193,7 @@ Reorganized indexer files by moving them from `lib/grpc/InProcess_*/` to `lib/in
 - **File Organization**: All indexer files now live in `lib/indexers/` folder
 - **Naming Convention**: Files and exports follow `[...]Indexer` pattern for consistency
 - **IndexFactory Location**: Moved to `lib/indexers/IndexFactory.ts` to co-locate with indexers
-- **Import Updates**: Updated query function imports from relative (`./querySales`) to absolute (`@/lib/grpc/InProcess_Sales/querySales`)
+- **Import Updates**: Updated query function imports from relative (`./querySales`) to absolute (`@/lib/grpc/querySales`)
 - **Usage**: `indexer.ts` now imports and uses `adminsIndexer`, `collectionsIndexer`, etc.
 
 ## Architecture Notes

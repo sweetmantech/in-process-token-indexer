@@ -1,4 +1,4 @@
-import { INDEX_INTERVAL_MS } from '@/lib/consts';
+import { INDEX_INTERVAL_MS, INDEX_INTERVAL_EMPTY_MS } from '@/lib/consts';
 import { sleep } from '@/lib/sleep';
 import { toChainTimestamp } from '@/lib/toChainTimestamp';
 import {
@@ -85,8 +85,10 @@ export class IndexFactory<T> implements IIndexFactory<T> {
         const duration = Date.now() - startTime;
         console.log(`✅ Completed indexing ${this.indexName} (${duration}ms)`);
 
-        // Wait before next iteration
-        await sleep(INDEX_INTERVAL_MS);
+        // Wait before next iteration - longer wait if no entities found
+        const sleepTime =
+          entities.length === 0 ? INDEX_INTERVAL_EMPTY_MS : INDEX_INTERVAL_MS;
+        await sleep(sleepTime);
       } catch (error) {
         console.error(`❌ Error in ${this.indexName} indexing cycle:`, error);
         // Wait before retrying even on error
