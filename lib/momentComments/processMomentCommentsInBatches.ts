@@ -1,7 +1,7 @@
 import { InProcess_Moment_Comments_t } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapMomentCommentsToSupabase } from './mapMomentCommentsToSupabase';
-import { upsertMomentComments } from '@/lib/supabase/in_process_moment_comments/upsertComments';
+import { upsertComments } from '@/lib/supabase/in_process_moment_comments/upsertComments';
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 
 export async function processMomentCommentsInBatches(
@@ -18,7 +18,7 @@ export async function processMomentCommentsInBatches(
         comment => comment.artist_address
       );
       await ensureArtists(artistAddresses);
-      await upsertMomentComments(mappedComments);
+      await upsertComments(mappedComments);
 
       console.log(
         `💬 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processed ${mappedComments.length} moment comments`

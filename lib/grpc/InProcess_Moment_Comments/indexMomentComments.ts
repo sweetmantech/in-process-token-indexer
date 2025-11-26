@@ -1,7 +1,7 @@
 import { processMomentCommentsInBatches } from '@/lib/momentComments/processMomentCommentsInBatches';
 import type { InProcess_Moment_Comments_t } from '@/types/envio';
 import { selectMaxCommentedAt } from '@/lib/momentComments/selectMaxCommentedAt';
-import { toChainTimestamp } from '@/lib/utils/toChainTimestamp';
+import { toChainTimestamp } from '@/lib/toChainTimestamp';
 import { queryMomentComments } from './queryMomentComments';
 
 /**

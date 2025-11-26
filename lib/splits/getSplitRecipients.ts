@@ -1,7 +1,7 @@
 import getPublicClient from '@/lib/viem/getPublicClient';
 import { getSplitsClient } from './getSplitsClient';
-import { isRateLimitError } from '@/lib/utils/isRateLimitError';
-import { getRetryDelay } from '@/lib/utils/getRetryDelay';
+import { isRateLimitError } from '@/lib/isRateLimitError';
+import { getRetryDelay } from '@/lib/getRetryDelay';
 import { SplitRecipient, RetryOptions } from '@/types/splits';
 
 /**

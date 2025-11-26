@@ -207,7 +207,7 @@ Built new architecture to index `InProcess_Moment_Comments` from Envio GraphQL t
 - [X] Created batch processing function (`lib/momentComments/processMomentCommentsInBatches.ts`)
 - [X] Created execute function (`lib/momentComments/executeMomentCommentsIndexing.ts`)
 - [X] Created Supabase mapping function (`lib/momentComments/mapMomentCommentsToSupabase.ts`)
-- [X] Created Supabase upsert function (`lib/supabase/in_process_moment_comments/upsertMomentComments.ts`)
+- [X] Created Supabase upsert function (`lib/supabase/in_process_moment_comments/upsertComments.ts`)
 - [X] Created selectMaxCommentedAt function (`lib/supabase/in_process_moment_comments/selectMaxCommentedAt.ts`)
 - [X] Integrated moment comments indexing into main indexer (`indexer.ts`)
 - [X] All files follow TypeScript coding principles (one function per file, <100 lines, emojis in logs)
