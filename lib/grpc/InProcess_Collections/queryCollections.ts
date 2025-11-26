@@ -1,9 +1,6 @@
 import fetch from 'node-fetch';
-import { GRPC_ENDPOINT } from '../../consts';
-import type {
-  InProcess_Collections_t,
-  QueryResult,
-} from '../../../types/envio';
+import { GRPC_ENDPOINT } from '@/lib/consts';
+import type { InProcess_Collections_t, QueryResult } from '@/types/envio';
 
 const COLLECTIONS_QUERY = `query GetCollections($limit: Int, $offset: Int, $minUpdatedAt: Int) {
   InProcess_Collections(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { updated_at: { _gt: $minUpdatedAt } }) {

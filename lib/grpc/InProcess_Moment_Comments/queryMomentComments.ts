@@ -1,9 +1,9 @@
 import fetch from 'node-fetch';
-import { GRPC_ENDPOINT } from '../../consts';
+import { GRPC_ENDPOINT } from '@/lib/consts';
 import type {
   InProcess_Moment_Comments_t,
   MomentCommentsQueryResult,
-} from '../../../types/envio';
+} from '@/types/envio';
 
 const MOMENT_COMMENTS_QUERY = `query GetMomentComments($limit: Int, $offset: Int, $minCommentedAt: Int) {
   InProcess_Moment_Comments(limit: $limit, offset: $offset, order_by: { commented_at: desc }, where: { commented_at: { _gt: $minCommentedAt }}) {

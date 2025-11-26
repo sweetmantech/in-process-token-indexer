@@ -1,7 +1,7 @@
 import { processAdminsInBatches } from '@/lib/admins/processAdminsInBatches';
 import type { InProcess_Admins_t } from '@/types/envio';
 import { selectMaxGrantedAt } from '@/lib/admins/selectMaxGrantedAt';
-import { toChainTimestamp } from '@/lib/utils/toChainTimestamp';
+import { toChainTimestamp } from '@/lib/toChainTimestamp';
 import { queryAdmins } from './queryAdmins';
 
 /**

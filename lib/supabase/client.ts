@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from '../consts';
+import { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } from '@/lib/consts';
 import type { Database } from './types';
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {

@@ -1,5 +1,5 @@
 import { Database } from '@/lib/supabase/types';
-import { supabase } from '../client';
+import { supabase } from '@/lib/supabase/client';
 
 interface SelectCollectionsOptions {
   addresses?: string[];

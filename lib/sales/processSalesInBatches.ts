@@ -1,9 +1,9 @@
 import { InProcess_Sales_t } from '@/types/envio';
-import { BATCH_SIZE } from '../consts';
+import { BATCH_SIZE } from '@/lib/consts';
 import { mapSalesToSupabase } from './mapSalesToSupabase';
-import { upsertSales } from '../supabase/in_process_sales/upsertSales';
-import { upsertFeeRecipients } from '../supabase/in_process_moment_fee_recipients/upsertFeeRecipients';
-import { ensureArtists } from '../supabase/in_process_artists/ensureArtists';
+import { upsertSales } from '@/lib/supabase/in_process_sales/upsertSales';
+import { upsertFeeRecipients } from '@/lib/supabase/in_process_moment_fee_recipients/upsertFeeRecipients';
+import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 
 export async function processSalesInBatches(
   sales: InProcess_Sales_t[]

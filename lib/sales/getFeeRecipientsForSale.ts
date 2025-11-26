@@ -1,8 +1,8 @@
-import { Database } from '../supabase/types';
-import isSplitContract from '../splits/isSplitContract';
+import { Database } from '@/lib/supabase/types';
+import isSplitContract from '@/lib/splits/isSplitContract';
 import { Address } from 'viem';
-import { getSplitRecipients } from '../splits/getSplitRecipients';
-import { InProcess_Sales_t } from '../../types/envio';
+import { getSplitRecipients } from '@/lib/splits/getSplitRecipients';
+import { InProcess_Sales_t } from '@/types/envio';
 
 /**
  * Gets fee recipients for a sale, handling split contracts.

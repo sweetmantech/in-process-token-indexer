@@ -1,9 +1,6 @@
 import fetch from 'node-fetch';
-import { GRPC_ENDPOINT } from '../../consts';
-import type {
-  InProcess_Moments_t,
-  MomentsQueryResult,
-} from '../../../types/envio';
+import { GRPC_ENDPOINT } from '@/lib/consts';
+import type { InProcess_Moments_t, MomentsQueryResult } from '@/types/envio';
 
 const MOMENTS_QUERY = `query GetMoments($limit: Int, $offset: Int, $minUpdatedAt: Int) {
   InProcess_Moments(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { updated_at: { _gt: $minUpdatedAt } }) {

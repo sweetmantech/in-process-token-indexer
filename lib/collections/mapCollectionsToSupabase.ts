@@ -1,4 +1,4 @@
-import toSupabaseTimestamp from '@/lib/utils/toSupabaseTimestamp';
+import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
 import { InProcess_Collections_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 

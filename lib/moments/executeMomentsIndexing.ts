@@ -1,6 +1,6 @@
 import { INDEX_INTERVAL_MS } from '@/lib/consts';
 import { indexMoments } from '@/lib/grpc/InProcess_Moments/indexMoments';
-import { sleep } from '@/lib/utils/sleep';
+import { sleep } from '@/lib/sleep';
 
 /**
  * Indexes moments.

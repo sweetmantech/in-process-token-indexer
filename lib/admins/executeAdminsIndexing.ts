@@ -1,6 +1,6 @@
 import { INDEX_INTERVAL_MS } from '@/lib/consts';
 import { indexAdmins } from '@/lib/grpc/InProcess_Admins/indexAdmins';
-import { sleep } from '@/lib/utils/sleep';
+import { sleep } from '@/lib/sleep';
 
 /**
  * Indexes admins using granted_at for incremental indexing.

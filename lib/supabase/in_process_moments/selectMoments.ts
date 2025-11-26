@@ -20,9 +20,7 @@ export async function selectMoments(
 
   let query = supabase
     .from('in_process_moments')
-    .select(
-      '*, collection:in_process_collections!inner(id, address, chain_id)'
-    );
+    .select('*, collection:in_process_collections!inner(*)');
   // If collectionAddresses and tokenIds are provided, use the join query
   if (collectionAddresses.length > 0) {
     query = query.in('collection.address', collectionAddresses);

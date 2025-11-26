@@ -1,4 +1,4 @@
-import toSupabaseTimestamp from '@/lib/utils/toSupabaseTimestamp';
+import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
 import { InProcess_Moment_Comments_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getMomentIdMap } from '@/lib/moments/getMomentIdMap';

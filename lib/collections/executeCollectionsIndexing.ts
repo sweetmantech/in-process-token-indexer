@@ -1,6 +1,6 @@
-import { INDEX_INTERVAL_MS } from '../consts';
-import { indexCollections } from '../grpc/InProcess_Collections/indexCollections';
-import { sleep } from '../utils/sleep';
+import { INDEX_INTERVAL_MS } from '@/lib/consts';
+import { indexCollections } from '@/lib/grpc/InProcess_Collections/indexCollections';
+import { sleep } from '@/lib/sleep';
 
 /**
  * Indexes collections.

@@ -1,6 +1,6 @@
-import { INDEX_INTERVAL_MS } from '../consts';
-import { indexMomentComments } from '../grpc/InProcess_Moment_Comments/indexMomentComments';
-import { sleep } from '../utils/sleep';
+import { INDEX_INTERVAL_MS } from '@/lib/consts';
+import { indexMomentComments } from '@/lib/grpc/InProcess_Moment_Comments/indexMomentComments';
+import { sleep } from '@/lib/sleep';
 
 /**
  * Indexes moment comments using commented_at for incremental indexing.

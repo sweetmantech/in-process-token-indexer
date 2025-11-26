@@ -1,6 +1,6 @@
-import { INDEX_INTERVAL_MS } from '../consts';
-import { indexSales } from '../grpc/InProcess_Sales/indexSales';
-import { sleep } from '../utils/sleep';
+import { INDEX_INTERVAL_MS } from '@/lib/consts';
+import { indexSales } from '@/lib/grpc/InProcess_Sales/indexSales';
+import { sleep } from '@/lib/sleep';
 
 /**
  * Indexes sales using created_at for incremental indexing.
