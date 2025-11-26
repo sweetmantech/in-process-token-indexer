@@ -2,7 +2,8 @@ module.exports = {
   apps: [
     {
       name: 'in-process-token-indexer',
-      script: 'dist/indexer.js',
+      script: 'pnpm',
+      args: 'run start',
       exec_mode: 'fork',
       node_args: '--max-old-space-size=256',
       max_memory_restart: '300M',
