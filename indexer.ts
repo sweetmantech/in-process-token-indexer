@@ -3,8 +3,8 @@ import indexLegacyMoments from './legacy/lib/moment/indexMoments';
 import indexLegacyAdmins from './legacy/lib/moment/indexAdmins';
 import { executeMomentsIndexing } from './lib/moments/executeMomentsIndexing';
 import { executeCollectionsIndexing } from './lib/collections/executeCollectionsIndexing';
-import { executeMomentAdminsIndexing } from './lib/momentAdmins/executeMomentAdminsIndexing';
-import { executeCollectionAdminsIndexing } from './lib/collectionAdmins/executeCollectionAdminsIndexing';
+// import { executeMomentAdminsIndexing } from './lib/momentAdmins/executeMomentAdminsIndexing';
+// import { executeCollectionAdminsIndexing } from './lib/collectionAdmins/executeCollectionAdminsIndexing';
 import { executeMomentCommentsIndexing } from './lib/momentComments/executeMomentCommentsIndexing';
 import { executeSalesIndexing } from './lib/sales/executeSalesIndexing';
 
@@ -35,8 +35,8 @@ async function index(): Promise<void> {
   await Promise.all([
     executeCollectionsIndexing(),
     executeMomentsIndexing(),
-    executeMomentAdminsIndexing(),
-    executeCollectionAdminsIndexing(),
+    // executeMomentAdminsIndexing(),
+    // executeCollectionAdminsIndexing(),
     executeMomentCommentsIndexing(),
     executeSalesIndexing(),
   ]);
