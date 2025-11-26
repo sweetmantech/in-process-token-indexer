@@ -64,10 +64,6 @@ jobs:
               npm install -g pnpm
             fi
 
-            # Ensure correct Node.js version
-            source ~/.nvm/nvm.sh
-            nvm use 20
-
             # Install dependencies
             pnpm install
 
