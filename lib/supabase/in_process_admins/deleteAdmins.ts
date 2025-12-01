@@ -1,6 +1,6 @@
 import { supabase } from '@/lib/supabase/client';
 
-interface DeleteAdminCriteria {
+export interface DeleteAdminCriteria {
   collection: string;
   artist_address: string;
   token_id: number;

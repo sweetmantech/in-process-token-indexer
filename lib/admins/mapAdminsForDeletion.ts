@@ -1,11 +1,6 @@
 import { InProcess_Admins_t } from '@/types/envio';
 import { getCollectionIdMap } from '@/lib/collections/getCollectionIdMap';
-
-interface DeleteAdminCriteria {
-  collection: string;
-  artist_address: string;
-  token_id: number;
-}
+import { DeleteAdminCriteria } from '@/lib/supabase/in_process_admins/deleteAdmins';
 
 /**
  * Maps Envio InProcess_Admins_t entities to deletion criteria.
