@@ -43,7 +43,8 @@ export type InProcess_Admins_t = {
   readonly collection: string;
   readonly token_id: number;
   readonly chain_id: number;
-  readonly granted_at: number;
+  readonly permission: number;
+  readonly updated_at: number;
 };
 
 export interface AdminsQueryResult {

@@ -17,7 +17,7 @@ The Envio indexer defines these entities in `schema.graphql`:
 - `InProcess_Collections` - Collection/contract metadata
 - `InProcess_Moments` - Token/moment data
 - `InProcess_Sales` - Sale configuration data
-- `InProcess_Moment_Admins` - Admin permissions for moments
+- `InProcess_Admins` - Admin permissions for moments
 - `InProcess_Moment_Comments` - Comments on moments
 - `InProcess_ERC20RewardsDeposit` - Payment/reward deposits
 
@@ -70,7 +70,9 @@ type InProcess_Admins {
   collection: String!
   token_id: Int!
   chain_id: Int!
+  permission: Int!
   granted_at: Int!
+  updated_at: Int!
 }
 
 type InProcess_Moment_Comments {
@@ -94,8 +96,9 @@ type InProcess_ERC20RewardsDeposit {
   amount: String!
   chain_id: Int!
   transaction_hash: String!
-  block_number: Int!
+  transferred_at: Int!
 }
+
 
 ```
 
@@ -143,13 +146,14 @@ export type InProcess_Sales_t = {
   readonly transaction_hash: string;
 };
 
-export type InProcess_Moment_Admins_t = {
-  readonly admin: string;
-  readonly chain_id: number;
-  readonly collection: string;
-  readonly granted_at: number;
+export type InProcess_Admins_t = {
   readonly id: string;
+  readonly admin: string;
+  readonly collection: string;
   readonly token_id: number;
+  readonly chain_id: number;
+  readonly permission: number;
+  readonly updated_at: number;
 };
 
 export type InProcess_Moment_Comments_t = {
