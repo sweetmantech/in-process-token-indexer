@@ -1,21 +1,23 @@
-import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
 import { InProcess_Admins_t } from '@/types/envio';
-import { Database } from '@/lib/supabase/types';
 import { getCollectionIdMap } from '@/lib/collections/getCollectionIdMap';
 
+interface DeleteAdminCriteria {
+  collection: string;
+  artist_address: string;
+  token_id: number;
+}
+
 /**
- * Maps Envio InProcess_Admins_t entities from GraphQL
- * to the Supabase schema for upserting.
+ * Maps Envio InProcess_Admins_t entities to deletion criteria.
  * - Resolves collection address+chain_id to collection ID.
  * - Maps admin address to artist_address.
- * - Converts granted_at from chain timestamp to ISO timestamp.
  *
  * @param admins - Array of InProcess_Admins_t from Envio.
- * @returns Promise of objects formatted for Supabase upsert.
+ * @returns Promise of deletion criteria objects.
  */
-export async function mapAdminsToSupabase(
+export async function mapAdminsForDeletion(
   admins: InProcess_Admins_t[]
-): Promise<Database['public']['Tables']['in_process_admins']['Insert'][]> {
+): Promise<DeleteAdminCriteria[]> {
   const collectionPairs: Array<[string, number]> = admins.map(
     admin => [admin.collection, admin.chain_id] as [string, number]
   );
@@ -33,10 +35,9 @@ export async function mapAdminsToSupabase(
         collection: collectionId,
         token_id: admin.token_id,
         artist_address: admin.admin.toLowerCase(),
-        granted_at: toSupabaseTimestamp(admin.updated_at),
       };
     })
-    .filter(admin => admin !== undefined);
+    .filter((admin): admin is DeleteAdminCriteria => admin !== undefined);
 
   return mappedAdmins;
 }
