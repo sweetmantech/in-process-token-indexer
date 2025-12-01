@@ -21,7 +21,7 @@ export async function deleteAdmins(
 
   try {
     // Build OR conditions for all admins to delete
-    // Format: (collection.eq.X.and.artist_address.eq.Y.and.token_id.eq.Z).or(...)
+    // Format: and(collection.eq.X,artist_address.eq.Y,token_id.eq.Z),and(...)
     const orConditions = admins
       .map(
         admin =>
