@@ -16,3 +16,9 @@ export type InProcessSale =
   Database['public']['Tables']['in_process_sales']['Row'] & {
     moment: Database['public']['Tables']['in_process_moments']['Row'];
   };
+
+export interface DeleteAdminCriteria {
+  collection: string;
+  artist_address: string;
+  token_id: number;
+}

@@ -1,6 +1,6 @@
 import { InProcess_Admins_t } from '@/types/envio';
 import { getCollectionIdMap } from '@/lib/collections/getCollectionIdMap';
-import { DeleteAdminCriteria } from '@/lib/supabase/in_process_admins/deleteAdmins';
+import { DeleteAdminCriteria } from '@/types/supabase';
 
 /**
  * Maps Envio InProcess_Admins_t entities to deletion criteria.
