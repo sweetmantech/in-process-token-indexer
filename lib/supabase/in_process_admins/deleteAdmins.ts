@@ -39,7 +39,6 @@ export async function deleteAdmins(
       throw error;
     }
 
-    console.log('ziad here', error, data);
     const deletedCount = data?.length || 0;
     console.log(`🗑️  Deleted ${deletedCount} admin(s)`);
     return deletedCount;
