@@ -1,10 +1,5 @@
 import { supabase } from '@/lib/supabase/client';
-
-export interface DeleteAdminCriteria {
-  collection: string;
-  artist_address: string;
-  token_id: number;
-}
+import { DeleteAdminCriteria } from '@/types/supabase';
 
 /**
  * Deletes admins from Supabase based on collection, artist_address, and token_id.
