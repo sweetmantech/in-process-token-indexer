@@ -1,11 +1,9 @@
-import indexLegacyPayments from '@/legacy/lib/payments/indexPayments';
-import indexLegacyMoments from '@/legacy/lib/moment/indexMoments';
-import indexLegacyAdmins from '@/legacy/lib/moment/indexAdmins';
 import { momentsIndexer } from '@/lib/indexers/momentsIndexer';
 import { collectionsIndexer } from '@/lib/indexers/collectionsIndexer';
 import { adminsIndexer } from '@/lib/indexers/adminsIndexer';
 import { commentsIndexer } from '@/lib/indexers/commentsIndexer';
 import { salesIndexer } from '@/lib/indexers/salesIndexer';
+import { paymentsIndexer } from '@/lib/indexers/paymentsIndexer';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -18,18 +16,6 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-async function legacyIndex(): Promise<void> {
-  // Start all indexers: payments, moments, and admins
-  const legacyPaymentsIndexer = indexLegacyPayments();
-  const legacyMomentsIndexer = indexLegacyMoments();
-  const legacyAdminsIndexer = indexLegacyAdmins();
-  await Promise.all([
-    legacyPaymentsIndexer,
-    legacyMomentsIndexer,
-    legacyAdminsIndexer,
-  ]);
-}
-
 async function index(): Promise<void> {
   await Promise.all([
     collectionsIndexer.execute(),
@@ -37,13 +23,9 @@ async function index(): Promise<void> {
     adminsIndexer.execute(),
     commentsIndexer.execute(),
     salesIndexer.execute(),
+    paymentsIndexer.execute(),
   ]);
 }
-
-legacyIndex().catch(error => {
-  console.error('Fatal error in indexer:', error);
-  process.exit(1);
-});
 
 index().catch(error => {
   console.error('Fatal error in indexer:', error);

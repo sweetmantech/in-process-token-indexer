@@ -368,28 +368,28 @@ export type Database = {
       };
       in_process_payments: {
         Row: {
-          amount: number | null;
-          block: number | null;
-          buyer: string | null;
-          hash: string | null;
+          amount: number;
+          buyer: string;
           id: string;
-          token: string;
+          moment: string;
+          transaction_hash: string;
+          transferred_at: string;
         };
         Insert: {
-          amount?: number | null;
-          block?: number | null;
-          buyer?: string | null;
-          hash?: string | null;
+          amount: number;
+          buyer: string;
           id?: string;
-          token: string;
+          moment: string;
+          transaction_hash: string;
+          transferred_at: string;
         };
         Update: {
-          amount?: number | null;
-          block?: number | null;
-          buyer?: string | null;
-          hash?: string | null;
+          amount?: number;
+          buyer?: string;
           id?: string;
-          token?: string;
+          moment?: string;
+          transaction_hash?: string;
+          transferred_at?: string;
         };
         Relationships: [
           {
@@ -400,10 +400,10 @@ export type Database = {
             referencedColumns: ['address'];
           },
           {
-            foreignKeyName: 'in_process_payments_token_fkey';
-            columns: ['token'];
+            foreignKeyName: 'in_process_payments_moment_fkey';
+            columns: ['moment'];
             isOneToOne: false;
-            referencedRelation: 'in_process_tokens';
+            referencedRelation: 'in_process_moments';
             referencedColumns: ['id'];
           },
         ];
@@ -579,6 +579,26 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      get_artist_timeline: {
+        Args: {
+          p_artist: string;
+          p_chainid?: number;
+          p_hidden?: boolean;
+          p_limit?: number;
+          p_page?: number;
+          p_type?: string;
+        };
+        Returns: Json;
+      };
+      get_in_process_timeline: {
+        Args: {
+          p_chainid?: number;
+          p_hidden?: boolean;
+          p_limit?: number;
+          p_page?: number;
+        };
+        Returns: Json;
+      };
       get_in_process_tokens: {
         Args: {
           p_addresses?: string[];

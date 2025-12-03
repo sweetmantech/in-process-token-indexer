@@ -22,5 +22,5 @@ export const NETWORKS = [
 ];
 
 export const INDEX_INTERVAL_MS = 1000;
-export const INDEX_INTERVAL_EMPTY_MS = 1000;
+export const INDEX_INTERVAL_EMPTY_MS = 1500;
 export const BATCH_SIZE = 100;
