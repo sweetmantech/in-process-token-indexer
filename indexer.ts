@@ -3,7 +3,7 @@ import { collectionsIndexer } from '@/lib/indexers/collectionsIndexer';
 import { adminsIndexer } from '@/lib/indexers/adminsIndexer';
 import { commentsIndexer } from '@/lib/indexers/commentsIndexer';
 import { salesIndexer } from '@/lib/indexers/salesIndexer';
-import { paymentsIndexer } from './lib/indexers/paymentsIndexer';
+import { paymentsIndexer } from '@/lib/indexers/paymentsIndexer';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
