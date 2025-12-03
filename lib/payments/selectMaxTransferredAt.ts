@@ -1,0 +1,37 @@
+import { selectPayments } from '@/lib/supabase/in_process_payments/selectPayments';
+
+/**
+ * Gets the maximum transferred_at timestamp from in_process_payments table.
+ * Used for incremental indexing to determine the starting point for fetching new records.
+ * @returns Maximum transferred_at timestamp in milliseconds (epoch), or null if no records exist.
+ */
+export async function selectMaxTransferredAt(): Promise<number | null> {
+  try {
+    const data = await selectPayments({
+      order: { column: 'transferred_at', ascending: false },
+      limit: 1,
+    });
+
+    if (!data || data.length === 0 || !data[0]?.transferred_at) {
+      return null;
+    }
+
+    // Convert ISO string to milliseconds timestamp
+    return new Date(data[0].transferred_at).getTime();
+  } catch (error) {
+    // If no records found, return null (not an error)
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      error.code === 'PGRST116'
+    ) {
+      return null;
+    }
+    console.error(
+      '❌ Failed to fetch max transferred_at from in_process_payments:',
+      error
+    );
+    return null;
+  }
+}
