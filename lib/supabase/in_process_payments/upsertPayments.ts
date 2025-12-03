@@ -20,6 +20,7 @@ export async function upsertPayments(
     .select();
 
   if (error) {
+    console.log('ziad here', payments);
     console.error('❌ Failed to upsert payments:', error);
     throw error;
   }
