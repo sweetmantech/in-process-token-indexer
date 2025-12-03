@@ -1,7 +1,7 @@
 import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
 import { InProcess_ERC20RewardsDeposit_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
-import { getMomentIdMapForPayments } from './getMomentIdMapForPayments';
+import { getMomentIdMap } from '../moments/getMomentIdMap';
 
 /**
  * Maps Envio InProcess_ERC20RewardsDeposit_t entities from GraphQL
@@ -21,7 +21,7 @@ export async function mapPaymentsToSupabase(
   const mappedPayments: Array<
     Database['public']['Tables']['in_process_payments']['Insert']
   > = [];
-  const momentIdMap = await getMomentIdMapForPayments(deposits);
+  const momentIdMap = await getMomentIdMap(deposits);
 
   for (const deposit of deposits) {
     const tripletKey = `${deposit.collection.toLowerCase()}:${deposit.chain_id}:${deposit.token_id}`;
@@ -31,7 +31,6 @@ export async function mapPaymentsToSupabase(
       const amount = deposit.amount ? parseFloat(deposit.amount) : 0;
       if (amount > 0) {
         mappedPayments.push({
-          id: deposit.id,
           transaction_hash: deposit.transaction_hash,
           buyer: deposit.spender.toLowerCase(),
           moment: momentId,
