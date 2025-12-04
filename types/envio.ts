@@ -9,6 +9,7 @@ export type InProcess_Collections_t = {
   readonly created_at: number;
   readonly default_admin: string;
   readonly id: string;
+  readonly name: string;
   readonly payout_recipient: string;
   readonly transaction_hash: string;
   readonly updated_at: number;

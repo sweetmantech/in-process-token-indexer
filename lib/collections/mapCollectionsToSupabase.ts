@@ -16,6 +16,7 @@ export function mapCollectionsToSupabase(
 ): Array<Database['public']['Tables']['in_process_collections']['Insert']> {
   return collections.map(c => ({
     address: c.address,
+    name: c.name,
     uri: c.uri,
     default_admin: c.default_admin,
     payout_recipient: c.payout_recipient,
