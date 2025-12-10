@@ -34,7 +34,6 @@ export async function mapPaymentsToSupabase(
         mappedPayments.push({
           transaction_hash: deposit.transaction_hash,
           buyer: deposit.spender.toLowerCase(),
-          currency: deposit.currency.toLowerCase(),
           moment: momentId,
           amount,
           transferred_at: toSupabaseTimestamp(deposit.transferred_at),
