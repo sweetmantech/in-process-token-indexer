@@ -89,7 +89,7 @@ export interface SalesQueryResult {
   pageInfo: PageInfo;
 }
 
-export type InProcess_ERC20RewardsDeposit_t = {
+export type InProcess_Payments_t = {
   readonly id: string;
   readonly collection: string;
   readonly currency: string;
@@ -103,6 +103,6 @@ export type InProcess_ERC20RewardsDeposit_t = {
 };
 
 export interface PaymentsQueryResult {
-  entities: InProcess_ERC20RewardsDeposit_t[];
+  entities: InProcess_Payments_t[];
   pageInfo: PageInfo;
 }

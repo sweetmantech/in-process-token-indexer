@@ -1,17 +1,17 @@
 import { mapPaymentsToSupabase } from './mapPaymentsToSupabase';
 import { upsertPayments } from '@/lib/supabase/in_process_payments/upsertPayments';
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
-import type { InProcess_ERC20RewardsDeposit_t } from '@/types/envio';
+import type { InProcess_Payments_t } from '@/types/envio';
 
 const BATCH_SIZE = 100;
 
 /**
  * Processes payment deposits in batches for better performance and memory management.
- * @param deposits - Array of InProcess_ERC20RewardsDeposit_t to process.
+ * @param deposits - Array of InProcess_Payments_t to process.
  * @returns Promise that resolves when all batches are processed.
  */
 export async function processPaymentsInBatches(
-  deposits: InProcess_ERC20RewardsDeposit_t[]
+  deposits: InProcess_Payments_t[]
 ): Promise<void> {
   if (deposits.length === 0) {
     console.log('ℹ️  No payments to process');
