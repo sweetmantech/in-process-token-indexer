@@ -2,6 +2,7 @@ import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
 import { InProcess_Payments_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getMomentIdMap } from '../moments/getMomentIdMap';
+import { zeroAddress } from 'viem';
 
 /**
  * Maps Envio InProcess_Payments_t entities from GraphQL
@@ -33,6 +34,7 @@ export async function mapPaymentsToSupabase(
         mappedPayments.push({
           transaction_hash: deposit.transaction_hash,
           buyer: deposit.spender.toLowerCase(),
+          currency: deposit.currency.toLowerCase(),
           moment: momentId,
           amount,
           transferred_at: toSupabaseTimestamp(deposit.transferred_at),

@@ -177,6 +177,7 @@ export type Database = {
           created_at: string;
           default_admin: string;
           id: string;
+          name: string;
           payout_recipient: string;
           updated_at: string;
           uri: string;
@@ -187,6 +188,7 @@ export type Database = {
           created_at: string;
           default_admin: string;
           id?: string;
+          name?: string;
           payout_recipient: string;
           updated_at: string;
           uri: string;
@@ -197,6 +199,7 @@ export type Database = {
           created_at?: string;
           default_admin?: string;
           id?: string;
+          name?: string;
           payout_recipient?: string;
           updated_at?: string;
           uri?: string;
@@ -370,6 +373,7 @@ export type Database = {
         Row: {
           amount: number;
           buyer: string;
+          currency: string;
           id: string;
           moment: string;
           transaction_hash: string;
@@ -378,6 +382,7 @@ export type Database = {
         Insert: {
           amount: number;
           buyer: string;
+          currency: string;
           id?: string;
           moment: string;
           transaction_hash: string;
@@ -386,6 +391,7 @@ export type Database = {
         Update: {
           amount?: number;
           buyer?: string;
+          currency?: string;
           id?: string;
           moment?: string;
           transaction_hash?: string;
@@ -452,128 +458,6 @@ export type Database = {
           },
         ];
       };
-      in_process_token_admins: {
-        Row: {
-          artist_address: string | null;
-          createdAt: string | null;
-          hidden: boolean | null;
-          id: string;
-          token: string | null;
-        };
-        Insert: {
-          artist_address?: string | null;
-          createdAt?: string | null;
-          hidden?: boolean | null;
-          id?: string;
-          token?: string | null;
-        };
-        Update: {
-          artist_address?: string | null;
-          createdAt?: string | null;
-          hidden?: boolean | null;
-          id?: string;
-          token?: string | null;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'in_process_token_admins_artist_address_fkey';
-            columns: ['artist_address'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_artists';
-            referencedColumns: ['address'];
-          },
-          {
-            foreignKeyName: 'in_process_token_admins_token_fkey';
-            columns: ['token'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_tokens';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      in_process_token_fee_recipients: {
-        Row: {
-          artist_address: string;
-          created_at: string;
-          id: string;
-          percentAllocation: number | null;
-          token: string;
-        };
-        Insert: {
-          artist_address: string;
-          created_at?: string;
-          id?: string;
-          percentAllocation?: number | null;
-          token: string;
-        };
-        Update: {
-          artist_address?: string;
-          created_at?: string;
-          id?: string;
-          percentAllocation?: number | null;
-          token?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'in_process_token_fee_recipients_artist_address_fkey';
-            columns: ['artist_address'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_artists';
-            referencedColumns: ['address'];
-          },
-          {
-            foreignKeyName: 'in_process_token_fee_recipients_token_fkey';
-            columns: ['token'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_tokens';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      in_process_tokens: {
-        Row: {
-          address: string;
-          chainId: number;
-          createdAt: string;
-          defaultAdmin: string;
-          hidden: boolean;
-          id: string;
-          payoutRecipient: string | null;
-          tokenId: number;
-          uri: string;
-        };
-        Insert: {
-          address?: string;
-          chainId: number;
-          createdAt: string;
-          defaultAdmin?: string;
-          hidden?: boolean;
-          id?: string;
-          payoutRecipient?: string | null;
-          tokenId: number;
-          uri?: string;
-        };
-        Update: {
-          address?: string;
-          chainId?: number;
-          createdAt?: string;
-          defaultAdmin?: string;
-          hidden?: boolean;
-          id?: string;
-          payoutRecipient?: string | null;
-          tokenId?: number;
-          uri?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'fk_defaultadmin_artist';
-            columns: ['defaultAdmin'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_artists';
-            referencedColumns: ['address'];
-          },
-        ];
-      };
     };
     Views: {
       [_ in never]: never;
@@ -587,6 +471,16 @@ export type Database = {
           p_limit?: number;
           p_page?: number;
           p_type?: string;
+        };
+        Returns: Json;
+      };
+      get_collection_timeline: {
+        Args: {
+          p_chainid?: number;
+          p_collection: string;
+          p_hidden?: boolean;
+          p_limit?: number;
+          p_page?: number;
         };
         Returns: Json;
       };
