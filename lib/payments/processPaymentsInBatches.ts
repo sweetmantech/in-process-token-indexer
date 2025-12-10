@@ -2,8 +2,7 @@ import { mapPaymentsToSupabase } from './mapPaymentsToSupabase';
 import { upsertPayments } from '@/lib/supabase/in_process_payments/upsertPayments';
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 import type { InProcess_Payments_t } from '@/types/envio';
-
-const BATCH_SIZE = 100;
+import { BATCH_SIZE } from '../consts';
 
 /**
  * Processes payment deposits in batches for better performance and memory management.
