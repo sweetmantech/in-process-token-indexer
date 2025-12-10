@@ -42,6 +42,7 @@ The goal is to help you maintain a big picture as well as the progress of the ta
 ### Envio GraphQL Query Patterns
 - **Query Method**: Use `node-fetch` to POST GraphQL queries to Envio endpoint (despite constant name `GRPC_ENDPOINT`, it's actually a GraphQL endpoint)
 - **Entity Names**: Use exact entity names from Envio schema with underscores and capitals (e.g., `InProcess_Collections`, not `InProcessCollections`)
+  - **Payments Entity**: Use `InProcess_Payments` (NOT `InProcess_ERC20RewardsDeposit` - this was renamed in the schema)
 - **Field Names**: Use snake_case field names in GraphQL queries (e.g., `chain_id`, `created_at`, `token_id`)
 - **GraphQL Variables**: Pass `limit`, `offset`, and `minTimestamp` as variables in the query
   - **Type Definition**: `GraphQLQueryParams` interface defines concrete variable types:

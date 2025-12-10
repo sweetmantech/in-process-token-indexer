@@ -1,20 +1,21 @@
 import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
-import { InProcess_ERC20RewardsDeposit_t } from '@/types/envio';
+import { InProcess_Payments_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getMomentIdMap } from '../moments/getMomentIdMap';
+import { zeroAddress } from 'viem';
 
 /**
- * Maps Envio InProcess_ERC20RewardsDeposit_t entities from GraphQL
+ * Maps Envio InProcess_Payments_t entities from GraphQL
  * to the Supabase schema for upserting.
  * - Resolves collection+chain_id+token_id to moment ID.
  * - Converts amount from string to number.
  * - Converts transferred_at from chain timestamp to ISO timestamp.
  *
- * @param deposits - Array of InProcess_ERC20RewardsDeposit_t from Envio.
+ * @param deposits - Array of InProcess_Payments_t from Envio.
  * @returns Promise of objects formatted for Supabase upsert.
  */
 export async function mapPaymentsToSupabase(
-  deposits: InProcess_ERC20RewardsDeposit_t[]
+  deposits: InProcess_Payments_t[]
 ): Promise<
   Array<Database['public']['Tables']['in_process_payments']['Insert']>
 > {
@@ -33,6 +34,7 @@ export async function mapPaymentsToSupabase(
         mappedPayments.push({
           transaction_hash: deposit.transaction_hash,
           buyer: deposit.spender.toLowerCase(),
+          currency: deposit.currency.toLowerCase(),
           moment: momentId,
           amount,
           transferred_at: toSupabaseTimestamp(deposit.transferred_at),

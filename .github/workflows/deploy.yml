@@ -40,29 +40,29 @@ jobs:
             echo "Connected to Droplet"
             echo "🔍 Checking disk usage before cleanup..."
             df -h
-            
+
             echo "🧹 Cleaning up disk space..."
-            
+
             # Clean npm cache
             echo "📦 Cleaning npm cache..."
             npm cache clean --force || true
             rm -rf ~/.npm/_logs/* || true
             rm -rf ~/.npm/_cacache/* || true
-            
+
             # Clean PM2 logs
             echo "📋 Cleaning PM2 logs..."
             pm2 flush || true
             rm -rf ~/.pm2/logs/*.log || true
-            
+
             # Clean temporary files
             echo "🧹 Cleaning temporary files..."
             rm -rf /tmp/* || true
             rm -rf /var/tmp/* || true
-            
+
             echo "✅ Cleanup complete!"
             echo "📊 Disk usage after cleanup:"
             df -h
-            
+
             # Create app directory if it doesn't exist
             mkdir -p ~/in-process-token-indexer
             cd ~/in-process-token-indexer

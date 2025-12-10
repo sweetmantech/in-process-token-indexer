@@ -19,7 +19,7 @@ The Envio indexer defines these entities in `schema.graphql`:
 - `InProcess_Sales` - Sale configuration data
 - `InProcess_Admins` - Admin permissions for moments
 - `InProcess_Moment_Comments` - Comments on moments
-- `InProcess_ERC20RewardsDeposit` - Payment/reward deposits
+- `InProcess_Payments` - Payment/reward deposits
 
 ## Complete GraphQL Schema
 
@@ -87,7 +87,7 @@ type InProcess_Moment_Comments {
   transaction_hash: String!
 }
 
-type InProcess_ERC20RewardsDeposit {
+type InProcess_Payments {
   id: ID!
   collection: String!
   currency: String!
@@ -169,17 +169,17 @@ export type InProcess_Moment_Comments_t = {
   readonly transaction_hash: string;
 };
 
-export type InProcess_ERC20RewardsDeposit_t = {
-  readonly amount: string;
-  readonly block_number: number;
-  readonly chain_id: number;
+export type InProcess_Payments_t = {
+  readonly id: string;
   readonly collection: string;
   readonly currency: string;
-  readonly id: string;
+  readonly token_id: number;
   readonly recipient: string;
   readonly spender: string;
-  readonly token_id: number;
+  readonly amount: string;
+  readonly chain_id: number;
   readonly transaction_hash: string;
+  readonly transferred_at: number;
 };
 ```
 
@@ -249,7 +249,7 @@ query MyQuery($limit: Int, $offset: Int, $chainId: Int) {
 ### DON'T:
 - ❌ **DO NOT** touch or modify files in the `legacy/` directory
 - ❌ **DO NOT** reference legacy code patterns - they use old naming conventions
-- ❌ **DO NOT** use old entity names like `ERC20Minter_ERC20RewardsDeposit` (use `InProcess_ERC20RewardsDeposit` instead)
+- ❌ **DO NOT** use old entity names like `ERC20Minter_ERC20RewardsDeposit` or `InProcess_ERC20RewardsDeposit` (use `InProcess_Payments` instead)
 - ❌ **DO NOT** use old field names like `blockNumber` (use `block_number` from schema)
 
 ## Networks
