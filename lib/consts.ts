@@ -24,8 +24,3 @@ export const NETWORKS = [
 export const INDEX_INTERVAL_MS = 1000;
 export const INDEX_INTERVAL_EMPTY_MS = 1500;
 export const BATCH_SIZE = 100;
-
-export const CDP_API_KEY_ID = process.env.CDP_API_KEY_ID!;
-export const CDP_API_KEY_SECRET = process.env.CDP_API_KEY_SECRET!;
-export const CDP_WALLET_SECRET = process.env.CDP_WALLET_SECRET!;
-export const CDP_PAYMASTER_KEY = process.env.CDP_PAYMASTER_KEY!;
