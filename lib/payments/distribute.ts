@@ -5,7 +5,6 @@ import { getSplitCall } from '@/lib/viem/getSplitCall';
 import { getOrCreateSmartWallet } from '@/lib/coinbase/getOrCreateSmartWallet';
 import { baseSepolia } from 'viem/chains';
 import { sendUserOperation } from '@/lib/coinbase/sendUserOperation';
-
 export async function distribute(deposits: InProcess_Payments_t[]) {
   let totalCnt = 0;
   for (const deposit of deposits) {
