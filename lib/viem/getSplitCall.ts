@@ -15,7 +15,7 @@ export async function getSplitCall({
   chainId,
 }: {
   splitAddress: Address;
-  tokenAddress?: Address;
+  tokenAddress: Address;
   smartAccount: EvmSmartAccount;
   chainId: number;
 }) {
