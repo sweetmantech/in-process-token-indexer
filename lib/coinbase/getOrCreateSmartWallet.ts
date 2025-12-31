@@ -1,7 +1,7 @@
 import cdp from './client';
 import { EvmSmartAccount } from '@coinbase/cdp-sdk';
 import { type Address } from 'viem';
-import { deterministicAccountName } from './deterministricAccountName';
+import { deterministicAccountName } from './deterministicAccountName';
 
 export async function getOrCreateSmartWallet({
   address,
