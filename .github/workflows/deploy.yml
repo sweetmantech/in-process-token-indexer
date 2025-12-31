@@ -90,14 +90,6 @@ jobs:
             echo "Git status:"
             git status
 
-            # Echo .env file contents
-            echo "📄 .env file contents:"
-            if [ -f .env ]; then
-              cat .env
-            else
-              echo "⚠️  .env file not found"
-            fi
-
             # Remove old node_modules to free space before install
             echo "🗑️  Removing old node_modules..."
             rm -rf node_modules || true
