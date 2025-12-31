@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
 import { Hash, OneOf } from 'viem';
 import cdp from '@/lib/coinbase/client';
 import { Call } from '@coinbase/coinbase-sdk/dist/types/calls';
 import getPublicClient from '@/lib/viem/getPublicClient';
 import { base, baseSepolia } from 'viem/chains';
-
-dotenv.config();
+import { CDP_PAYMASTER_KEY } from '../consts';
 
 type EvmUserOperationNetwork = 'base-sepolia' | 'base';
 
@@ -24,7 +22,7 @@ export async function sendUserOperation({
   const sendResult = await cdp.evm.sendUserOperation({
     smartAccount,
     network,
-    paymasterUrl: `https://api.developer.coinbase.com/rpc/v1/${network}/${process.env.CDP_PAYMASTER_KEY}`,
+    paymasterUrl: `https://api.developer.coinbase.com/rpc/v1/${network}/${CDP_PAYMASTER_KEY}`,
     calls,
   });
 

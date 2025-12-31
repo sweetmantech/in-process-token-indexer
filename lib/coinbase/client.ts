@@ -1,12 +1,14 @@
 import { CdpClient } from '@coinbase/cdp-sdk';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import {
+  CDP_API_KEY_ID,
+  CDP_API_KEY_SECRET,
+  CDP_WALLET_SECRET,
+} from '../consts';
 
 const cdp = new CdpClient({
-  apiKeyId: process.env.CDP_API_KEY_ID,
-  apiKeySecret: process.env.CDP_API_KEY_SECRET,
-  walletSecret: process.env.CDP_WALLET_SECRET,
+  apiKeyId: CDP_API_KEY_ID,
+  apiKeySecret: CDP_API_KEY_SECRET,
+  walletSecret: CDP_WALLET_SECRET,
 });
 
 export default cdp;
