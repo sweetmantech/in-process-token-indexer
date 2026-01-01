@@ -3,7 +3,7 @@ import {
   CDP_API_KEY_ID,
   CDP_API_KEY_SECRET,
   CDP_WALLET_SECRET,
-} from '@/lib/consts';
+} from '../consts';
 
 const cdp = new CdpClient({
   apiKeyId: CDP_API_KEY_ID,
