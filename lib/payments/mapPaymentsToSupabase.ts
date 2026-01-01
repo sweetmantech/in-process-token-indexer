@@ -2,6 +2,7 @@ import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
 import { InProcess_Payments_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getMomentIdMap } from '../moments/getMomentIdMap';
+import { zeroAddress } from 'viem';
 
 /**
  * Maps Envio InProcess_Payments_t entities from GraphQL
