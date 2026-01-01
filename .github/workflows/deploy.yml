@@ -94,17 +94,9 @@ jobs:
             echo "Git status:"
             git status
 
-            # Check for error.log.txt
-            echo "📄 Checking for error.log.txt..."
-            if [ -f error.log.txt ]; then
-              echo "✅ error.log.txt exists. Contents:"
-              cat error.log.txt
-            else
-              echo "⚠️  error.log.txt does not exist. Creating it..."
-              touch error.log.txt
-              echo "✅ Created error.log.txt. Contents:"
-              cat error.log.txt
-            fi
+            # Remove error.log.txt if it exists
+            echo "🗑️  Removing error.log.txt..."
+            rm -f error.log.txt || true
 
             # Remove old node_modules to free space before install
             echo "🗑️  Removing old node_modules..."
