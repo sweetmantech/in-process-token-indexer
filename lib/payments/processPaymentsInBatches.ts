@@ -3,6 +3,7 @@ import { upsertPayments } from '@/lib/supabase/in_process_payments/upsertPayment
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 import type { InProcess_Payments_t } from '@/types/envio';
 import { BATCH_SIZE } from '../consts';
+import { distribute } from './distribute';
 
 /**
  * Processes payment deposits in batches for better performance and memory management.
@@ -33,6 +34,7 @@ export async function processPaymentsInBatches(
         `🔄 Processing batch ${batchNumber}/${totalBatches} (${batch.length} payment(s))`
       );
 
+      await distribute(batch);
       const mappedPayments = await mapPaymentsToSupabase(batch);
 
       if (mappedPayments.length > 0) {
