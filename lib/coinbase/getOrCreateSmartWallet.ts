@@ -17,9 +17,9 @@ export async function getOrCreateSmartWallet({
       `🔍 Starting getOrCreateSmartWallet - address: ${address}, accountName: ${accountName}`
     );
 
-    // const evmAccount = await cdp.evm.getOrCreateAccount({
-    //   name: accountName,
-    // });
+    const evmAccount = await cdp.evm.getOrCreateAccount({
+      name: accountName,
+    });
 
     // Log success
     // await writeErrorToFile(
