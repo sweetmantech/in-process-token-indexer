@@ -7,14 +7,14 @@ export async function getOrCreateSmartWallet({
   address,
 }: {
   address: Address;
-}): Promise<EvmSmartAccount> {
-  console.log('ziad here', deterministicAccountName(address))
+}) {
   const evmAccount = await cdp.evm.getOrCreateAccount({
     name: deterministicAccountName(address),
   });
-  const smartAccount = await cdp.evm.getOrCreateSmartAccount({
-    name: evmAccount.name as string,
-    owner: evmAccount,
-  });
-  return smartAccount;
+  // const smartAccount = await cdp.evm.getOrCreateSmartAccount({
+  //   name: evmAccount.name as string,
+  //   owner: evmAccount,
+  // });
+  // return smartAccount;
+  return 1
 }
