@@ -20,7 +20,7 @@ export async function distribute(deposits: InProcess_Payments_t[]) {
           address: deposit.spender as Address,
         });
 
-        console.log('ziad here', smartAccount.address)
+        console.log('ziad here', smartAccount.address);
         const splitCall = await getSplitCall({
           splitAddress: recipient as Address,
           tokenAddress: deposit.currency as Address,

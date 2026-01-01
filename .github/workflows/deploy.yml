@@ -18,11 +18,16 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
 
       - name: Debug Secrets
         run: |
@@ -43,11 +48,10 @@ jobs:
 
             echo "🧹 Cleaning up disk space..."
 
-            # Clean npm cache
-            echo "📦 Cleaning npm cache..."
-            npm cache clean --force || true
-            rm -rf ~/.npm/_logs/* || true
-            rm -rf ~/.npm/_cacache/* || true
+            # Clean pnpm cache
+            echo "📦 Cleaning pnpm cache..."
+            pnpm store prune || true
+            rm -rf ~/.pnpm-store/* || true
 
             # Clean PM2 logs
             echo "📋 Cleaning PM2 logs..."
@@ -94,11 +98,17 @@ jobs:
             echo "🗑️  Removing old node_modules..."
             rm -rf node_modules || true
 
+            # Install pnpm if not available
+            if ! command -v pnpm &> /dev/null; then
+              echo "📦 Installing pnpm..."
+              npm install -g pnpm@8
+            fi
+
             # Install dependencies
-            npm install
+            pnpm install
 
             # Build the application
-            npm run build
+            pnpm run build
 
             # Restart the application
             pm2 restart ecosystem.config.cjs --update-env
