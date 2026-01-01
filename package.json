@@ -17,6 +17,8 @@
   "license": "ISC",
   "dependencies": {
     "@0xsplits/splits-sdk": "^6.1.0",
+    "@coinbase/cdp-sdk": "^1.40.1",
+    "@coinbase/coinbase-sdk": "^0.25.0",
     "@supabase/supabase-js": "^2.50.0",
     "@zoralabs/protocol-deployments": "^0.3.2",
     "axios": "^1.7.7",
