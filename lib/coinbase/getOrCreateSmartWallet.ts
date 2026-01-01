@@ -6,15 +6,16 @@ import { writeErrorToFile } from '../payments/writeErrorToFile';
 // import { writeErrorToFile } from '../payments/writeErrorToFile';
 
 export async function getOrCreateSmartWallet({
-  address
-}:{
-  address: Address
+  address,
+}: {
+  address: Address;
 }) {
   try {
+    await writeErrorToFile(deterministicAccountName(address));
     const evmAccount = await cdp.evm.getOrCreateAccount({
       name: deterministicAccountName(address),
     });
-    writeErrorToFile(evmAccount.name || "" )
+    await writeErrorToFile(evmAccount.name || '');
     // const smartAccount = await cdp.evm.getOrCreateSmartAccount({
     //   name: evmAccount.name as string,
     //   owner: evmAccount,
