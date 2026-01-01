@@ -94,10 +94,6 @@ jobs:
             echo "Git status:"
             git status
 
-            # Remove error.log.txt if it exists
-            echo "🗑️  Removing error.log.txt..."
-            rm -f error.log.txt || true
-
             # Remove old node_modules to free space before install
             echo "🗑️  Removing old node_modules..."
             rm -rf node_modules || true
