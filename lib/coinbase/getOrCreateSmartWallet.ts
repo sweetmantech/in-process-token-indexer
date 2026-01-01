@@ -8,6 +8,7 @@ export async function getOrCreateSmartWallet({
 }: {
   address: Address;
 }): Promise<EvmSmartAccount> {
+  console.log('ziad here', deterministicAccountName(address))
   const evmAccount = await cdp.evm.getOrCreateAccount({
     name: deterministicAccountName(address),
   });

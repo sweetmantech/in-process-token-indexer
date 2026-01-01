@@ -5,6 +5,7 @@ import { getSplitCall } from '@/lib/viem/getSplitCall';
 import { getOrCreateSmartWallet } from '@/lib/coinbase/getOrCreateSmartWallet';
 import { baseSepolia } from 'viem/chains';
 import { sendUserOperation } from '@/lib/coinbase/sendUserOperation';
+import { deterministicAccountName } from '../coinbase/deterministicAccountName';
 
 export async function distribute(deposits: InProcess_Payments_t[]) {
   let totalCnt = 0;
@@ -16,9 +17,10 @@ export async function distribute(deposits: InProcess_Payments_t[]) {
     );
     if (isSplit) {
       try {
-        const smartAccount = await getOrCreateSmartWallet({
-          address: deposit.spender as Address,
-        });
+        deterministicAccountName(deposit.spender)
+        // const smartAccount = await getOrCreateSmartWallet({
+        //   address: deposit.spender as Address,
+        // });
 
         // const splitCall = await getSplitCall({
         //   splitAddress: recipient as Address,
