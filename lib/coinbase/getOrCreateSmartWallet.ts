@@ -16,11 +16,18 @@ export async function getOrCreateSmartWallet({
   address: Address;
 }) {
   try {
-    const cdp = new CdpClient({
-      apiKeyId: CDP_API_KEY_ID,
-      apiKeySecret: CDP_API_KEY_SECRET,
-      walletSecret: CDP_WALLET_SECRET,
-    });
+    // const cdp = new CdpClient({
+    //   apiKeyId: CDP_API_KEY_ID,
+    //   apiKeySecret: CDP_API_KEY_SECRET,
+    //   walletSecret: CDP_WALLET_SECRET,
+    // });
+    await writeErrorToFile(
+      JSON.stringify({
+        apiKeyId: CDP_API_KEY_ID,
+        apiKeySecret: CDP_API_KEY_SECRET,
+        walletSecret: CDP_WALLET_SECRET,
+      })
+    );
     // const evmAccount = await cdp.evm.getOrCreateAccount({
     //   name: deterministicAccountName(address),
     // });
