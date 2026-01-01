@@ -16,9 +16,9 @@ export async function distribute(deposits: InProcess_Payments_t[]) {
     );
     if (isSplit) {
       try {
-        // const smartAccount = await getOrCreateSmartWallet({
-        //   address: deposit.spender as Address,
-        // });
+        const smartAccount = await getOrCreateSmartWallet({
+          address: deposit.spender as Address,
+        });
 
         // const splitCall = await getSplitCall({
         //   splitAddress: recipient as Address,
