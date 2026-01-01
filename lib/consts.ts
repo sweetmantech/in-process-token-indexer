@@ -9,10 +9,10 @@ export const GRPC_ENDPOINT = `https://indexer.dev.hyperindex.xyz/${INDEXER_ID}/v
 export const SUPABASE_URL: string | undefined = process.env.SUPABASE_URL;
 export const SUPABASE_SERVICE_ROLE_KEY: string | undefined =
   process.env.SUPABASE_SERVICE_ROLE_KEY;
-export const CDP_API_KEY_ID = process.env.CDP_API_KEY_ID as string;
-export const CDP_API_KEY_SECRET = process.env.CDP_API_KEY_SECRET as string;
-export const CDP_WALLET_SECRET = process.env.CDP_WALLET_SECRET as string;
-export const CDP_PAYMASTER_KEY = process.env.CDP_PAYMASTER_KEY as string;
+export const CDP_API_KEY_ID = process.env.CDP_API_KEY_ID!;
+export const CDP_API_KEY_SECRET = process.env.CDP_API_KEY_SECRET!;
+export const CDP_WALLET_SECRET = process.env.CDP_WALLET_SECRET!;
+export const CDP_PAYMASTER_KEY = process.env.CDP_PAYMASTER_KEY!;
 
 export const NETWORKS = [
   {
@@ -28,8 +28,3 @@ export const NETWORKS = [
 export const INDEX_INTERVAL_MS = 1000;
 export const INDEX_INTERVAL_EMPTY_MS = 1500;
 export const BATCH_SIZE = 100;
-
-export const CDP_API_KEY_ID = process.env.CDP_API_KEY_ID!;
-export const CDP_API_KEY_SECRET = process.env.CDP_API_KEY_SECRET!;
-export const CDP_WALLET_SECRET = process.env.CDP_WALLET_SECRET!;
-export const CDP_PAYMASTER_KEY = process.env.CDP_PAYMASTER_KEY!;
