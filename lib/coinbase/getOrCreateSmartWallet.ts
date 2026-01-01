@@ -3,7 +3,7 @@
 import { type Address } from 'viem';
 // import { deterministicAccountName } from './deterministicAccountName';
 // import { writeErrorToFile } from '../payments/writeErrorToFile';
-// import { CdpClient } from '@coinbase/cdp-sdk';
+import { CdpClient } from '@coinbase/cdp-sdk';
 import {
   CDP_API_KEY_ID,
   CDP_API_KEY_SECRET,
@@ -12,11 +12,11 @@ import {
 
 export async function getOrCreateSmartWallet() {
   try {
-    // const cdp = new CdpClient({
-    //   apiKeyId: CDP_API_KEY_ID,
-    //   apiKeySecret: CDP_API_KEY_SECRET,
-    //   walletSecret: CDP_WALLET_SECRET,
-    // });
+    const cdp = new CdpClient({
+      apiKeyId: CDP_API_KEY_ID,
+      apiKeySecret: CDP_API_KEY_SECRET,
+      walletSecret: CDP_WALLET_SECRET,
+    });
     // await writeErrorToFile(
     //   JSON.stringify({
     //     apiKeyId: CDP_API_KEY_ID,
