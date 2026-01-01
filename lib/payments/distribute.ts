@@ -17,7 +17,7 @@ export async function distribute(deposits: InProcess_Payments_t[]) {
     );
     if (isSplit) {
       try {
-        deterministicAccountName(deposit.spender)
+        console.log(deterministicAccountName(deposit.spender))
         // const smartAccount = await getOrCreateSmartWallet({
         //   address: deposit.spender as Address,
         // });
