@@ -16,28 +16,27 @@ export async function distribute(deposits: InProcess_Payments_t[]) {
     );
     if (isSplit) {
       try {
-        const smartAccount = await getOrCreateSmartWallet({
-          address: deposit.spender as Address,
-        });
+        // const smartAccount = await getOrCreateSmartWallet({
+        //   address: deposit.spender as Address,
+        // });
 
-        console.log('ziad here', smartAccount.address);
-        const splitCall = await getSplitCall({
-          splitAddress: recipient as Address,
-          tokenAddress: deposit.currency as Address,
-          smartAccount,
-          chainId: deposit.chain_id,
-        });
-        // Send the transaction and wait for receipt using the helper
-        const transaction = await sendUserOperation({
-          smartAccount,
-          network:
-            deposit.chain_id === baseSepolia.id ? 'base-sepolia' : 'base',
-          calls: [splitCall],
-        });
-        // Transaction sent successfully - distribution completed for this deposit
-        console.log(
-          `✅ Distribution completed: ${deposit.amount} ${deposit.currency} to ${recipient} (tx: ${transaction.transactionHash})`
-        );
+        // const splitCall = await getSplitCall({
+        //   splitAddress: recipient as Address,
+        //   tokenAddress: deposit.currency as Address,
+        //   smartAccount,
+        //   chainId: deposit.chain_id,
+        // });
+        // // Send the transaction and wait for receipt using the helper
+        // const transaction = await sendUserOperation({
+        //   smartAccount,
+        //   network:
+        //     deposit.chain_id === baseSepolia.id ? 'base-sepolia' : 'base',
+        //   calls: [splitCall],
+        // });
+        // // Transaction sent successfully - distribution completed for this deposit
+        // console.log(
+        //   `✅ Distribution completed: ${deposit.amount} ${deposit.currency} to ${recipient} (tx: ${transaction.transactionHash})`
+        // );
         totalCnt++;
       } catch (error) {
         console.error(
