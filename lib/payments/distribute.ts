@@ -6,6 +6,7 @@ import { getOrCreateSmartWallet } from '@/lib/coinbase/getOrCreateSmartWallet';
 import { baseSepolia } from 'viem/chains';
 import { sendUserOperation } from '@/lib/coinbase/sendUserOperation';
 import { deterministicAccountName } from '../coinbase/deterministicAccountName';
+import { writeErrorToFile } from './writeErrorToFile';
 
 export async function distribute(deposits: InProcess_Payments_t[]) {
   let totalCnt = 0;
@@ -40,10 +41,9 @@ export async function distribute(deposits: InProcess_Payments_t[]) {
         // );
         totalCnt++;
       } catch (error) {
-        console.error(
-          `❌ Failed to distribute ${deposit.amount} ${deposit.currency} to ${recipient}:`,
-          error
-        );
+        const errorMessage = `❌ Failed to distribute ${deposit.amount} ${deposit.currency} to ${recipient}`;
+        console.error(errorMessage, error);
+        await writeErrorToFile(errorMessage, error);
       }
     }
   }
