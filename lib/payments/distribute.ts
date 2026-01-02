@@ -1,10 +1,7 @@
 import { InProcess_Payments_t } from '@/types/envio';
 import isSplitContract from '@/lib/splits/isSplitContract';
 import { Address } from 'viem';
-import { getSplitCall } from '@/lib/viem/getSplitCall';
-import { getOrCreateSmartWallet } from '@/lib/coinbase/getOrCreateSmartWallet';
-import { baseSepolia } from 'viem/chains';
-import { sendUserOperation } from '@/lib/coinbase/sendUserOperation';
+import distributeApiCall from './distributeCallApi';
 
 export async function distribute(deposits: InProcess_Payments_t[]) {
   let totalCnt = 0;
@@ -16,25 +13,14 @@ export async function distribute(deposits: InProcess_Payments_t[]) {
     );
     if (isSplit) {
       try {
-        const smartAccount = await getOrCreateSmartWallet({
-          address: deposit.spender as Address,
-        });
-        const splitCall = await getSplitCall({
-          splitAddress: recipient as Address,
+        const hash = await distributeApiCall({
+          splitAddress: deposit.recipient as Address,
           tokenAddress: deposit.currency as Address,
-          smartAccount,
           chainId: deposit.chain_id,
-        });
-        // Send the transaction and wait for receipt using the helper
-        const transaction = await sendUserOperation({
-          smartAccount,
-          network:
-            deposit.chain_id === baseSepolia.id ? 'base-sepolia' : 'base',
-          calls: [splitCall],
         });
         // Transaction sent successfully - distribution completed for this deposit
         console.log(
-          `✅ Distribution completed: ${deposit.amount} ${deposit.currency} to ${recipient} (tx: ${transaction.transactionHash})`
+          `✅ Distribution completed: ${deposit.amount} ${deposit.currency} to ${recipient} (tx: ${hash})`
         );
         totalCnt++;
       } catch (error) {
