@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.21.1'
+          node-version: '20'
 
       - name: Install pnpm
         uses: pnpm/action-setup@v2
@@ -98,42 +98,6 @@ jobs:
             echo "🗑️  Removing old node_modules..."
             rm -rf node_modules || true
 
-            # Install nvm if not available
-            echo "📦 Checking nvm installation..."
-            if [ ! -s "$HOME/.nvm/nvm.sh" ]; then
-              echo "📦 Installing nvm..."
-              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
-            fi
-
-            # Source nvm
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-            # Install Node.js 22.21.1 using nvm if not available
-            echo "📦 Checking Node.js version..."
-            if ! command -v node &> /dev/null; then
-              echo "📦 Node.js not found. Installing Node.js 22.21.1 using nvm..."
-              nvm install 22.21.1
-              nvm use 22.21.1
-              nvm alias default 22.21.1
-            else
-              CURRENT_VERSION=$(node -v)
-              if [ "$CURRENT_VERSION" != "v22.21.1" ]; then
-                echo "📦 Node.js version is $CURRENT_VERSION. Installing Node.js 22.21.1 using nvm..."
-                nvm install 22.21.1
-                nvm use 22.21.1
-                nvm alias default 22.21.1
-              else
-                echo "✅ Node.js 22.21.1 is already installed"
-                nvm use 22.21.1
-              fi
-            fi
-            echo "📊 Node.js version:"
-            node -v
-            echo "📊 npm version:"
-            npm -v
-
             # Install pnpm if not available
             if ! command -v pnpm &> /dev/null; then
               echo "📦 Installing pnpm..."
@@ -144,34 +108,7 @@ jobs:
             pnpm install
 
             # Build the application
-            echo "🔨 Building application..."
             pnpm run build
-
-            # Check build result
-            BUILD_EXIT_CODE=$?
-            if [ $BUILD_EXIT_CODE -ne 0 ]; then
-              echo "❌ Build failed with exit code $BUILD_EXIT_CODE"
-              exit 1
-            fi
-
-            # Verify build output exists
-            echo "✅ Verifying build output..."
-            if [ ! -d dist ]; then
-              echo "❌ Build failed: dist directory not found"
-              exit 1
-            fi
-
-            # Check if main entry point exists
-            if [ ! -f dist/indexer.js ]; then
-              echo "❌ Build failed: dist/indexer.js not found"
-              exit 1
-            fi
-
-            echo "✅ Build verification complete"
-            echo "📊 Build output size:"
-            du -sh dist || true
-            echo "📁 Build output contents:"
-            ls -lah dist/ | head -20 || true
 
             # Restart the application
             pm2 restart ecosystem.config.cjs --update-env
