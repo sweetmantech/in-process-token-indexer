@@ -4,6 +4,7 @@ import { adminsIndexer } from '@/lib/indexers/adminsIndexer';
 import { commentsIndexer } from '@/lib/indexers/commentsIndexer';
 import { salesIndexer } from '@/lib/indexers/salesIndexer';
 import { paymentsIndexer } from '@/lib/indexers/paymentsIndexer';
+import { airdropsIndexer } from '@/lib/indexers/airdropsIndexer';
 
 // Handle graceful shutdown
 process.on('SIGTERM', () => {
@@ -24,6 +25,7 @@ async function index(): Promise<void> {
     commentsIndexer.execute(),
     salesIndexer.execute(),
     paymentsIndexer.execute(),
+    airdropsIndexer.execute(),
   ]);
 }
 
