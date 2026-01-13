@@ -106,3 +106,18 @@ export interface PaymentsQueryResult {
   entities: InProcess_Payments_t[];
   pageInfo: PageInfo;
 }
+
+export type InProcess_Airdrops_t = {
+  readonly id: string;
+  readonly recipient: string;
+  readonly collection: string;
+  readonly token_id: number;
+  readonly amount: number;
+  readonly chain_id: number;
+  readonly updated_at: number;
+};
+
+export interface AirdropsQueryResult {
+  entities: InProcess_Airdrops_t[];
+  pageInfo: PageInfo;
+}

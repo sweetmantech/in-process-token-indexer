@@ -100,6 +100,16 @@ type InProcess_Payments {
   transferred_at: Int!
 }
 
+type InProcess_Airdrops {
+  id: ID!
+  recipient: String!
+  collection: String!
+  token_id: Int!
+  amount: Int!
+  chain_id: Int!
+  updated_at: Int!
+}
+
 
 ```
 
@@ -180,6 +190,16 @@ export type InProcess_Payments_t = {
   readonly chain_id: number;
   readonly transaction_hash: string;
   readonly transferred_at: number;
+};
+
+export type InProcess_Airdrops_t = {
+  readonly amount: number; 
+  readonly chain_id: number; 
+  readonly collection: string; 
+  readonly id: id; 
+  readonly recipient: string; 
+  readonly token_id: number; 
+  readonly updated_at: number
 };
 ```
 

@@ -76,6 +76,45 @@ export type Database = {
           },
         ];
       };
+      in_process_airdrops: {
+        Row: {
+          amount: number;
+          artist_address: string;
+          id: string;
+          moment: string;
+          updated_at: string;
+        };
+        Insert: {
+          amount: number;
+          artist_address: string;
+          id?: string;
+          moment?: string;
+          updated_at: string;
+        };
+        Update: {
+          amount?: number;
+          artist_address?: string;
+          id?: string;
+          moment?: string;
+          updated_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'in_process_airdrops_artist_address_fkey';
+            columns: ['artist_address'];
+            isOneToOne: false;
+            referencedRelation: 'in_process_artists';
+            referencedColumns: ['address'];
+          },
+          {
+            foreignKeyName: 'in_process_airdrops_moment_fkey';
+            columns: ['moment'];
+            isOneToOne: false;
+            referencedRelation: 'in_process_moments';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       in_process_api_keys: {
         Row: {
           artist_address: string | null;
@@ -104,6 +143,38 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: 'in_process_api_keys_artist_address_fkey';
+            columns: ['artist_address'];
+            isOneToOne: false;
+            referencedRelation: 'in_process_artists';
+            referencedColumns: ['address'];
+          },
+        ];
+      };
+      in_process_artist_phones: {
+        Row: {
+          artist_address: string;
+          created_at: string;
+          id: string;
+          phone_number: string;
+          verified: boolean;
+        };
+        Insert: {
+          artist_address: string;
+          created_at?: string;
+          id?: string;
+          phone_number: string;
+          verified?: boolean;
+        };
+        Update: {
+          artist_address?: string;
+          created_at?: string;
+          id?: string;
+          phone_number?: string;
+          verified?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'in_process_artist_phones_artist_address_fkey';
             columns: ['artist_address'];
             isOneToOne: false;
             referencedRelation: 'in_process_artists';
