@@ -286,6 +286,13 @@ When syncing data to Supabase:
 - Ensure proper data type conversions (BigInt → string, timestamps, etc.)
 - Implement proper error handling and retry logic
 
+### Entity-Specific Mapping Notes
+
+**InProcess_Airdrops**:
+- `recipient` (from Envio) → `recipient` (in Supabase, NOT `artist_address`)
+- `collection` + `chain_id` + `token_id` → `moment` (UUID in Supabase)
+- `updated_at` (chain timestamp) → ISO timestamp
+
 ## Architecture Notes
 
 - The `legacy/` directory will be removed after completing the new architecture
