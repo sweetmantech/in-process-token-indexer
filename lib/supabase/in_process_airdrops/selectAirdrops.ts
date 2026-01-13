@@ -1,5 +1,5 @@
 import { supabase } from '@/lib/supabase/client';
-import type { Database } from '@/lib/supabase/types';
+import { InProcessAirdrop } from '@/types/supabase';
 
 interface SelectAirdropsOptions {
   order?: { column: string; ascending: boolean };
@@ -13,7 +13,7 @@ interface SelectAirdropsOptions {
  */
 export async function selectAirdrops(
   options: SelectAirdropsOptions = {}
-): Promise<Array<Database['public']['Tables']['in_process_airdrops']['Row']>> {
+): Promise<InProcessAirdrop[]> {
   const { order, limit } = options;
 
   let query = supabase
@@ -37,5 +37,5 @@ export async function selectAirdrops(
     throw error;
   }
 
-  return data || [];
+  return (data as InProcessAirdrop[]) || [];
 }

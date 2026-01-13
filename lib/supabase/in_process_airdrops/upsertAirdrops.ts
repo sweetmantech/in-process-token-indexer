@@ -18,7 +18,7 @@ export async function upsertAirdrops(
     const { data, error } = await supabase
       .from('in_process_airdrops')
       .upsert(airdrops, {
-        onConflict: 'id',
+        onConflict: 'moment,artist_address',
         ignoreDuplicates: false,
       })
       .select();
