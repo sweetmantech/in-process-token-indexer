@@ -19,7 +19,7 @@ export async function processAirdropsInBatches(
       const mappedAirdrops = await mapAirdropsToSupabase(batch);
 
       const artistAddresses = [
-        ...new Set(mappedAirdrops.map(airdrop => airdrop.artist_address)),
+        ...new Set(mappedAirdrops.map(airdrop => airdrop.recipient)),
       ];
       await ensureArtists(artistAddresses);
 

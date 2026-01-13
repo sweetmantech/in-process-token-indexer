@@ -7,7 +7,7 @@ import { getMomentIdMap } from '@/lib/moments/getMomentIdMap';
  * Maps Envio InProcess_Airdrops_t entities from GraphQL
  * to the Supabase schema for upserting.
  * - Resolves collection+chain_id+token_id to moment ID.
- * - Maps recipient address to artist_address.
+ * - Maps recipient address to recipient.
  * - Converts updated_at from chain timestamp to ISO timestamp.
  *
  * @param airdrops - Array of InProcess_Airdrops_t from Envio.
@@ -27,7 +27,7 @@ export async function mapAirdropsToSupabase(
       }
       return {
         moment: momentId,
-        artist_address: airdrop.recipient.toLowerCase(),
+        recipient: airdrop.recipient.toLowerCase(),
         amount: airdrop.amount,
         updated_at: toSupabaseTimestamp(airdrop.updated_at),
       };
