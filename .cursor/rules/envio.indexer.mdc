@@ -196,10 +196,10 @@ export type InProcess_Airdrops_t = {
   readonly amount: number; 
   readonly chain_id: number; 
   readonly collection: string; 
-  readonly id: id; 
+  readonly id: string; 
   readonly recipient: string; 
   readonly token_id: number; 
-  readonly updated_at: number
+  readonly updated_at: number;
 };
 ```
 
