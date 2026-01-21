@@ -16,8 +16,6 @@ export async function sendMessage(chatId: number, msg: string) {
   try {
     await bot.sendMessage(chatId, msg);
   } catch (error) {
-    throw Error(
-      '❌ Failed to send connect Telegram message to chatId ${chatId}:'
-    );
+    throw Error('❌ Failed to send message to chatId ${chatId}:');
   }
 }
