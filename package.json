@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "dev": "tsx indexer.ts",
+    "dev": "nodemon --exec tsx indexer.ts",
     "start": "node --no-warnings ./dist/indexer.js",
     "build": "NODE_OPTIONS=--max-old-space-size=512 tsc && tsc-alias",
     "test": "echo \"No tests specified\" && exit 0",
@@ -24,13 +24,15 @@
     "dotenv": "^16.4.5",
     "node-cache": "^5.1.2",
     "node-fetch": "^2.7.0",
-    "nodemon": "^3.1.11",
+    "node-telegram-bot-api": "^0.67.0",
     "prettier": "^3.6.2",
     "viem": "^2.21.1"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
     "@types/node-fetch": "^2.6.13",
+    "@types/node-telegram-bot-api": "^0.64.13",
+    "nodemon": "^3.1.11",
     "tsc-alias": "^1.8.10",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
