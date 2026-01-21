@@ -1,18 +1,18 @@
+import { Address } from 'viem';
 import TelegramBot from 'node-telegram-bot-api';
 import uploadMetadata from './uploadMetadata';
-import { Address } from 'viem';
-import { createMomentApi } from '../api/createMomentApi';
 import getCreateParameter from '../getCreateParameter';
+import { createMomentApi } from '../api/createMomentApi';
 
-const processPhoto = async (
+const processVideo = async (
   artistAddress: Address,
-  photos: TelegramBot.PhotoSize[],
+  video: TelegramBot.Video,
   text: string
 ) => {
-  if (!photos || photos.length === 0) return;
-
+  if (!video) return;
   const { uri, name } = await uploadMetadata({
-    photoId: photos[photos.length - 1].file_id,
+    photoId: video.thumb?.file_id,
+    videoId: video.file_id,
     text,
   });
   const parameters = await getCreateParameter(artistAddress, name, uri);
@@ -20,4 +20,4 @@ const processPhoto = async (
   return result;
 };
 
-export default processPhoto;
+export default processVideo;
