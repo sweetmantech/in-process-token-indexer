@@ -5,7 +5,7 @@ import { selectArtist } from '@/lib/supabase/in_process_artists/selectArtist';
  * Checks if an artist is registered and sends a connect Telegram message if not found.
  * @param chatId - The Telegram chat ID to send messages to.
  * @param telegramUsername - The Telegram username to check.
- * @returns True if artist is NOT found and a connect Telegram message was sent, false if artist exists.
+ * @returns True if artist is NOT found and a connect Telegram message was sent successfully, false if artist exists, bot is unavailable, or message sending fails.
  */
 export async function sendConnectTelegramMsg(
   chatId: number,
