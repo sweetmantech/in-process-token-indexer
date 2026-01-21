@@ -11,9 +11,28 @@ export function runBot(): TelegramBot {
     const sender = msg.chat.username;
     if (!sender) return;
 
-    const isSent = await sendConnectTelegramMsg(chatId, sender);
-    if (isSent) {
-      return;
+    try {
+      const isSent = await sendConnectTelegramMsg(chatId, sender);
+      if (isSent) {
+        return;
+      }
+    } catch (error) {
+      console.error(
+        `❌ Error handling message from chatId ${chatId}, sender ${sender}:`,
+        error
+      );
+      // Optionally notify the sender about the error
+      try {
+        bot.sendMessage(
+          chatId,
+          'Sorry, an error occurred while processing your message. Please try again later.'
+        );
+      } catch (sendError) {
+        console.error(
+          `❌ Failed to send error notification to chatId ${chatId}:`,
+          sendError
+        );
+      }
     }
   });
 

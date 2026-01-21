@@ -9,11 +9,24 @@ let bot: TelegramBot | null = null;
 
 /**
  * Creates and sets the global bot instance.
+ * Stops any existing bot instance before creating a new one to avoid duplicate polling connections.
  * @returns The Telegram bot instance.
  */
 export function setBot(): TelegramBot {
+  // Stop existing bot instance if it exists
+  if (bot) {
+    console.log(
+      '🛑 Stopping existing bot instance before re-initialization...'
+    );
+    bot.stopPolling();
+    bot = null;
+  }
+
+  // Validate API key before creating bot
   if (!TELEGRAM_BOT_API_KEY) {
-    console.error('❌ TELEGRAM_BOT_TOKEN is not set in environment variables');
+    console.error(
+      '❌ TELEGRAM_BOT_API_KEY is not set in environment variables'
+    );
     process.exit(1);
   }
 
