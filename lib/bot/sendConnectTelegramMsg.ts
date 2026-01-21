@@ -17,13 +17,24 @@ export async function sendConnectTelegramMsg(
 
   if (!artist) {
     const bot = getBot();
-    if (bot) {
-      bot.sendMessage(
+    if (!bot) {
+      console.error('❌ Bot instance is not available');
+      return false;
+    }
+
+    try {
+      await bot.sendMessage(
         chatId,
         'Welcome to In Process! To get started please visit https://inprocess.world/manage and link your telegram account.'
       );
+      return true;
+    } catch (error) {
+      console.error(
+        `❌ Failed to send connect Telegram message to chatId ${chatId}:`,
+        error
+      );
+      return false;
     }
-    return true;
   }
 
   return false;
