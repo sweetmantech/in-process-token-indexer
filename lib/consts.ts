@@ -14,6 +14,8 @@ export const CDP_API_KEY_SECRET = process.env.CDP_API_KEY_SECRET!;
 export const CDP_WALLET_SECRET = process.env.CDP_WALLET_SECRET!;
 export const CDP_PAYMASTER_KEY = process.env.CDP_PAYMASTER_KEY!;
 
+export const TELEGRAM_BOT_API_KEY = process.env.TELEGRAM_BOT_API_KEY;
+
 export const NETWORKS = [
   {
     id: base.id,
