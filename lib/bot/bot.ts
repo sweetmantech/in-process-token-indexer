@@ -37,8 +37,11 @@ export function setBot(): TelegramBot {
 
 /**
  * Gets the global bot instance.
- * @returns The Telegram bot instance, or null if not initialized.
+ * @returns The Telegram bot instance.
  */
-export function getBot(): TelegramBot | null {
+export function getBot(): TelegramBot {
+  if (!bot) {
+    throw new Error('❌ Bot instance is not available');
+  }
   return bot;
 }
