@@ -30,7 +30,19 @@ export function runBot(): TelegramBot {
     const photo = msg.photo;
     const text = msg?.text || '';
     const caption = msg?.caption || '';
-    if (photo) processPhoto(artist.address as Address, photo, caption || text);
+    if (photo) {
+      const result = await processPhoto(
+        artist.address as Address,
+        photo,
+        caption || text
+      );
+      if (result) {
+        await sendMessage(
+          chatId,
+          `Moment created! https://inprocess.world/sms/base:${result.contractAddress}/${result.tokenId}`
+        );
+      }
+    }
   });
 
   console.log('✅ Telegram bot started and listening for messages...');

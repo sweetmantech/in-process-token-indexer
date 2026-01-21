@@ -13,7 +13,7 @@ export interface CreateMomentResult {
 export async function createMomentApi(
   parameters: CreateMomentParameters
 ): Promise<CreateMomentResult> {
-  const response = await fetch(`${IN_PROCESS_API}/api/moment/create`, {
+  const response = await fetch(`${IN_PROCESS_API}/moment/create`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify(parameters),

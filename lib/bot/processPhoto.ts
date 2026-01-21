@@ -33,7 +33,7 @@ const processPhoto = async (
     account: artistAddress,
   };
   const result = await createMomentApi(momentCreateParameters);
-  console.log('result', result);
+  return result;
 };
 
 export default processPhoto;
