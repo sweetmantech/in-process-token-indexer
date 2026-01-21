@@ -13,6 +13,7 @@ const uploadMetadata = async ({
   video?: TelegramBot.Video;
   text?: string;
 }) => {
+  if (!photoId && !videoId) throw new Error('No photo or video provided');
   let imageUri = '';
   let animationUri = '';
   let contentMimeType = '';
