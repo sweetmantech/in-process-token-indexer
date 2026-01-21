@@ -9,7 +9,7 @@ const processPhoto = async (
   photos: TelegramBot.PhotoSize[],
   text: string
 ) => {
-  if (!photos) return;
+  if (!photos || photos.length === 0) return;
 
   const { uri, name } = await uploadMetadata(photos[photos.length - 1], text);
   const momentCreateParameters = {
