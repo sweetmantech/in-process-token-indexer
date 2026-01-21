@@ -1,21 +1,42 @@
 import { uploadJson } from '../uploadJson';
-import { getBlob } from './getBlob';
 import uploadToArweave from '../uploadToArweave';
 import TelegramBot from 'node-telegram-bot-api';
+import uploadFile from './uploadFile';
 
-const uploadMetadata = async (photo: TelegramBot.PhotoSize, text: string) => {
-  const { blob, mimeType } = await getBlob(photo.file_id);
+const uploadMetadata = async ({
+  photoId,
+  videoId,
+  text,
+}: {
+  photoId?: string;
+  videoId?: string;
+  video?: TelegramBot.Video;
+  text?: string;
+}) => {
+  let imageUri = '';
+  let animationUri = '';
+  let contentMimeType = '';
+
+  if (photoId) {
+    const { file, mimeType } = await uploadFile(photoId);
+    imageUri = await uploadToArweave(file);
+    contentMimeType = mimeType;
+  }
+  if (videoId) {
+    const { file, mimeType } = await uploadFile(videoId);
+    animationUri = await uploadToArweave(file);
+    contentMimeType = mimeType;
+  }
+
   const name = text || `photo-${Date.now()}`;
-  const buffer = Buffer.from(await blob.arrayBuffer());
-  const file = new File([buffer], name, { type: mimeType });
-  const mediaUri = await uploadToArweave(file);
 
   const arweaveUri = await uploadJson({
     name,
-    image: mediaUri,
+    image: imageUri,
+    ...(animationUri && { animation_url: animationUri }),
     content: {
-      mime: mimeType,
-      uri: mediaUri,
+      mime: contentMimeType,
+      uri: animationUri || imageUri,
     },
   });
 
