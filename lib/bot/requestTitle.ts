@@ -1,7 +1,11 @@
 import { getBot } from './bot';
 import TelegramBot from 'node-telegram-bot-api';
 import { Address } from 'viem';
-import { PendingMedia, setPendingMedia } from './pendingMediaState';
+import {
+  PendingMedia,
+  setPendingMedia,
+  clearPendingMedia,
+} from './pendingMediaState';
 
 /**
  * Handles media without caption by creating pending media state
@@ -24,16 +28,22 @@ export async function requestTitle(
   };
   setPendingMedia(pendingMedia);
 
-  const bot = getBot();
-  await bot.sendMessage(
-    chatId,
-    '📝 Please send the **title** for your moment:',
-    {
-      parse_mode: 'Markdown',
-      reply_markup: {
-        force_reply: true,
-        input_field_placeholder: 'Enter title...',
-      },
-    }
-  );
+  try {
+    const bot = getBot();
+    await bot.sendMessage(
+      chatId,
+      '📝 Please send the **title** for your moment:',
+      {
+        parse_mode: 'Markdown',
+        reply_markup: {
+          force_reply: true,
+          input_field_placeholder: 'Enter title...',
+        },
+      }
+    );
+  } catch (error) {
+    clearPendingMedia(chatId);
+    console.error('❌ Failed to send title request message:', error);
+    throw error;
+  }
 }
