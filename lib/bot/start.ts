@@ -23,7 +23,7 @@ export function runBot(): TelegramBot {
       );
       // Optionally notify the sender about the error
       try {
-        bot.sendMessage(
+        await bot.sendMessage(
           chatId,
           'Sorry, an error occurred while processing your message. Please try again later.'
         );
