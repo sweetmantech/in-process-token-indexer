@@ -68,7 +68,11 @@ export function runBot(): TelegramBot {
         photo,
         video
       );
-    }
+    } else
+      await sendMessage(
+        chatId,
+        'Please send a photo or video with a caption or text.'
+      );
   });
 
   console.log('✅ Telegram bot started and listening for messages...');
