@@ -1,35 +1,34 @@
-import Arweave from 'arweave';
-import { ARWEAVE_KEY } from './consts';
+import FormData from 'form-data';
+import fetch from 'node-fetch';
 
-const arweave = Arweave.init({
-  host: 'arweave.net',
-  port: 443,
-  protocol: 'https',
-  timeout: 20000,
-  logging: false,
-});
+export const uploadToArweave = async (file: File): Promise<string> => {
+  try {
+    // Convert File to Buffer
+    const buffer = Buffer.from(await file.arrayBuffer());
 
-const uploadToArweave = async (file: File): Promise<string> => {
-  const buffer = await file.arrayBuffer();
+    // Create FormData using form-data package for Node.js
+    const formData = new FormData();
+    formData.append('file', buffer, {
+      filename: 'file',
+      contentType: file.type,
+    });
 
-  const transaction = await arweave.createTransaction(
-    {
-      data: buffer,
-    },
-    ARWEAVE_KEY
-  );
-  transaction.addTag('Content-Type', file.type);
-  await arweave.transactions.sign(transaction, ARWEAVE_KEY);
-  const uploader = await arweave.transactions.getUploader(transaction);
+    const res = await fetch('https://inprocess.world/api/arweave', {
+      method: 'POST',
+      body: formData,
+      headers: formData.getHeaders(),
+    });
 
-  while (!uploader.isComplete) {
-    console.log(
-      `${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`
-    );
-    await uploader.uploadChunk();
+    if (!res.ok) {
+      throw new Error(`❌ Upload failed: ${res.status} ${res.statusText}`);
+    }
+
+    const arweaveURI = await res.json();
+    return arweaveURI;
+  } catch (error) {
+    console.error('❌ Error uploading to Arweave:', error);
+    throw error;
   }
-
-  return `ar://${transaction.id}`;
 };
 
 export default uploadToArweave;
