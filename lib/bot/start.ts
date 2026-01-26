@@ -4,12 +4,12 @@ import { sendMessage } from './sendMessage';
 import { selectArtist } from '@/lib/supabase/in_process_artists/selectArtist';
 import processMedia from './processMedia';
 import { Address } from 'viem';
-import { getPendingMedia, PendingMediaType } from './pendingMediaState';
 import { requestTitle } from './requestTitle';
 import { processPendingMedia } from './processPendingMedia';
+import { getPendingMedia } from './getPendingMedia';
 
-export function runBot(): TelegramBot {
-  const bot = setBot();
+export async function runBot(): Promise<TelegramBot> {
+  const bot = await setBot();
 
   bot.on('message', async msg => {
     const chatId = msg.chat.id;
@@ -38,18 +38,38 @@ export function runBot(): TelegramBot {
     const hasCaptionOrText = !!(caption || text);
 
     // Check for pending state - if waiting for title input, process it
-    const pending = getPendingMedia(chatId);
-    if (pending?.waitingFor === 'title') {
-      if (hasCaptionOrText) {
+    // Get pending media from Telegram reply chain
+    // This should be checked FIRST before checking for new media
+    const pending = await getPendingMedia(msg, artist.address as Address);
+    if (pending) {
+      // If we have pending media with title already set (waitingFor === null), process it
+      if (pending.waitingFor === null && pending.title) {
         await sendMessage(
           chatId,
           '⏳ In Process will post your moment. Please wait a few seconds...'
         );
-        pending.title = caption || text;
-        pending.waitingFor = null;
         await processPendingMedia(pending);
+        return;
       }
-      return;
+      // If we're still waiting for title (waitingFor === 'title')
+      if (pending.waitingFor === 'title') {
+        if (hasCaptionOrText) {
+          await sendMessage(
+            chatId,
+            '⏳ In Process will post your moment. Please wait a few seconds...'
+          );
+          pending.title = caption || text;
+          pending.waitingFor = null;
+          await processPendingMedia(pending);
+        } else {
+          // User replied but with no text, ask again
+          await sendMessage(
+            chatId,
+            '📝 Please send the title as text (not a photo or video).'
+          );
+        }
+        return;
+      }
     }
 
     if (photo || video) {
@@ -61,13 +81,8 @@ export function runBot(): TelegramBot {
         await processMedia(artist.address as Address, msg);
         return;
       }
-      await requestTitle(
-        artist.address as Address,
-        chatId,
-        (photo ? 'photo' : 'video') as PendingMediaType,
-        photo,
-        video
-      );
+      // Request title by replying to the media message
+      await requestTitle(chatId, msg.message_id, photo, video);
     } else
       await sendMessage(
         chatId,

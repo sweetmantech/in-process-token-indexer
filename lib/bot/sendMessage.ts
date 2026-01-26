@@ -15,7 +15,9 @@ export async function sendMessage(chatId: number, msg: string) {
 
   try {
     await bot.sendMessage(chatId, msg);
+    return true;
   } catch (error) {
-    throw Error('❌ Failed to send message to chatId ${chatId}:');
+    console.error(`❌ Failed to send message to chatId ${chatId}:`, error);
+    throw error;
   }
 }

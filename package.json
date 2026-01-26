@@ -8,7 +8,8 @@
     "dev": "nodemon --exec tsx indexer.ts",
     "start": "node --no-warnings ./dist/indexer.js",
     "build": "NODE_OPTIONS=--max-old-space-size=512 tsc && tsc-alias",
-    "test": "echo \"No tests specified\" && exit 0",
+    "test": "vitest",
+    "test:run": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -35,9 +36,12 @@
     "@types/node": "^24.10.1",
     "@types/node-fetch": "^2.6.13",
     "@types/node-telegram-bot-api": "^0.64.13",
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
     "nodemon": "^3.1.11",
     "tsc-alias": "^1.8.10",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }
