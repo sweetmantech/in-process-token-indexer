@@ -8,7 +8,8 @@
     "dev": "nodemon --exec tsx indexer.ts",
     "start": "node --no-warnings ./dist/indexer.js",
     "build": "NODE_OPTIONS=--max-old-space-size=512 tsc && tsc-alias",
-    "test": "echo \"No tests specified\" && exit 0",
+    "test": "vitest",
+    "test:run": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
