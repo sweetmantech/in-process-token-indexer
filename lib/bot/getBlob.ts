@@ -12,6 +12,9 @@ export async function getBlob(
   fileId: string
 ): Promise<{ blob: fetch.Blob; mimeType: string }> {
   const bot = getBot();
+  if (!bot) {
+    throw new Error('❌ Bot instance is not available');
+  }
 
   try {
     // Get file info from Telegram

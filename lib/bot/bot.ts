@@ -12,13 +12,17 @@ let bot: TelegramBot | null = null;
  * Stops any existing bot instance before creating a new one to avoid duplicate polling connections.
  * @returns The Telegram bot instance.
  */
-export function setBot(): TelegramBot {
+export async function setBot(): Promise<TelegramBot> {
   // Stop existing bot instance if it exists
   if (bot) {
     console.log(
       '🛑 Stopping existing bot instance before re-initialization...'
     );
-    bot.stopPolling();
+    try {
+      await bot.stopPolling();
+    } catch (error) {
+      console.log('⚠️ Error stopping existing bot polling:', error);
+    }
     bot = null;
   }
 
@@ -32,16 +36,20 @@ export function setBot(): TelegramBot {
 
   bot = new TelegramBot(TELEGRAM_BOT_API_KEY, { polling: true });
 
+  // Handle polling errors to prevent crashes
+  bot.on('polling_error', error => {
+    console.error('❌ Telegram polling error:', error.message);
+    // Don't exit on polling errors - they might be temporary
+    // The bot will automatically retry
+  });
+
   return bot;
 }
 
 /**
  * Gets the global bot instance.
- * @returns The Telegram bot instance.
+ * @returns The Telegram bot instance, or null if not initialized.
  */
-export function getBot(): TelegramBot {
-  if (!bot) {
-    throw new Error('❌ Bot instance is not available');
-  }
+export function getBot(): TelegramBot | null {
   return bot;
 }
