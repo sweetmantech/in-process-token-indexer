@@ -19,13 +19,13 @@ const uploadMetadata = async ({
   let contentMimeType = '';
 
   if (photoId) {
-    const { file, mimeType } = await uploadFile(photoId);
-    imageUri = await uploadToArweave(file);
+    const { buffer, mimeType } = await uploadFile(photoId);
+    imageUri = await uploadToArweave(buffer, mimeType);
     contentMimeType = mimeType;
   }
   if (videoId) {
-    const { file, mimeType } = await uploadFile(videoId);
-    animationUri = await uploadToArweave(file);
+    const { buffer, mimeType } = await uploadFile(videoId);
+    animationUri = await uploadToArweave(buffer, mimeType);
     contentMimeType = mimeType;
   }
 

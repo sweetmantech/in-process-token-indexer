@@ -1,35 +1,49 @@
-import Arweave from 'arweave';
-import { ARWEAVE_KEY } from './consts';
+import FormData from 'form-data';
+import axios from 'axios';
 
-const arweave = Arweave.init({
-  host: 'arweave.net',
-  port: 443,
-  protocol: 'https',
-  timeout: 20000,
-  logging: false,
-});
+export const uploadToArweave = async (
+  buffer: Buffer,
+  mimeType: string
+): Promise<string> => {
+  try {
+    console.log('📤 Uploading to Arweave...', mimeType);
+    console.log('📊 Buffer size:', buffer.length, 'bytes');
 
-const uploadToArweave = async (file: File): Promise<string> => {
-  const buffer = await file.arrayBuffer();
+    // Create FormData using form-data package for Node.js
+    const formData = new FormData();
+    formData.append('file', buffer, {
+      filename: 'file',
+      contentType: mimeType,
+    });
 
-  const transaction = await arweave.createTransaction(
-    {
-      data: buffer,
-    },
-    ARWEAVE_KEY
-  );
-  transaction.addTag('Content-Type', file.type);
-  await arweave.transactions.sign(transaction, ARWEAVE_KEY);
-  const uploader = await arweave.transactions.getUploader(transaction);
-
-  while (!uploader.isComplete) {
-    console.log(
-      `${uploader.pctComplete}% complete, ${uploader.uploadedChunks}/${uploader.totalChunks}`
+    const res = await axios.post(
+      'https://inprocess.world/api/arweave',
+      formData,
+      {
+        headers: {
+          ...formData.getHeaders(),
+        },
+        timeout: 60000, // 60 second timeout
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
+      }
     );
-    await uploader.uploadChunk();
-  }
 
-  return `ar://${transaction.id}`;
+    const arweaveURI = res.data;
+    console.log('✅ Arweave URI received:', arweaveURI);
+    return arweaveURI;
+  } catch (error: any) {
+    if (error.code === 'ECONNABORTED') {
+      throw new Error('❌ Upload timeout: Request took longer than 60 seconds');
+    }
+    if (error.response) {
+      throw new Error(
+        `❌ Upload failed: ${error.response.status} ${error.response.statusText} - ${JSON.stringify(error.response.data)}`
+      );
+    }
+    console.error('❌ Error uploading to Arweave:', error);
+    throw error;
+  }
 };
 
 export default uploadToArweave;
