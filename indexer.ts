@@ -38,15 +38,15 @@ process.on('SIGINT', async () => {
 async function index(): Promise<void> {
   await runBot();
 
-  // await Promise.all([
-  //   collectionsIndexer.execute(),
-  //   momentsIndexer.execute(),
-  //   adminsIndexer.execute(),
-  //   commentsIndexer.execute(),
-  //   salesIndexer.execute(),
-  //   paymentsIndexer.execute(),
-  //   airdropsIndexer.execute(),
-  // ]);
+  await Promise.all([
+    collectionsIndexer.execute(),
+    momentsIndexer.execute(),
+    adminsIndexer.execute(),
+    commentsIndexer.execute(),
+    salesIndexer.execute(),
+    paymentsIndexer.execute(),
+    airdropsIndexer.execute(),
+  ]);
 }
 
 index().catch(error => {
