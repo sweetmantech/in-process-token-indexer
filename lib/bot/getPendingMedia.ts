@@ -2,8 +2,9 @@ import TelegramBot from 'node-telegram-bot-api';
 import { Address } from 'viem';
 import { PendingMedia, PendingMediaType } from './pendingMediaState';
 import { getBot } from './bot';
+import { decodeMediaInfo } from './decodeMediaInfo';
 
-const MEDIA_INFO_REGEX = /(?:\[)?MEDIA:(photo|video):([^\s\n\]]+)(?:\])?/;
+const MEDIA_INFO_REGEX = /MEDIA:(photo|video):([^\s\n]+)/;
 
 /**
  * Checks if the incoming message is a reply to a title request and extracts pending media info.
@@ -36,19 +37,37 @@ export async function getPendingMedia(
   // Check if this looks like our title request message
   const isTitleRequest =
     repliedText.includes('📝') &&
-    (repliedText.includes('title') || repliedText.includes('moment')) &&
-    repliedText.includes('MEDIA:');
+    (repliedText.includes('title') || repliedText.includes('moment'));
 
   if (!isTitleRequest) {
     return undefined;
   }
 
-  // Extract media info from the title request message
-  const mediaMatch = repliedText.match(MEDIA_INFO_REGEX);
+  // Extract and decode media info from zero-width character encoding
+  // Search for zero-width characters (U+200B, U+200C, U+200D)
+  const ZERO_WIDTH_CHARS = /[\u200B\u200C\u200D]+/;
+  const zeroWidthMatch = repliedText.match(ZERO_WIDTH_CHARS);
+
+  if (!zeroWidthMatch) {
+    console.log(
+      '⚠️ Title request found but no encoded media info embedded in message'
+    );
+    return undefined;
+  }
+
+  // Decode the zero-width character sequence
+  const decodedMediaInfo = decodeMediaInfo(zeroWidthMatch[0]);
+  if (!decodedMediaInfo) {
+    console.log('⚠️ Failed to decode media info from zero-width characters');
+    return undefined;
+  }
+
+  // Extract media info from decoded text
+  const mediaMatch = decodedMediaInfo.match(MEDIA_INFO_REGEX);
   if (!mediaMatch) {
     console.log(
-      '⚠️ Title request found but no media info embedded in:',
-      repliedText
+      '⚠️ Decoded text does not match MEDIA: pattern:',
+      decodedMediaInfo
     );
     return undefined;
   }
@@ -108,7 +127,8 @@ export async function getPendingMedia(
       type: pendingType,
       photo,
       video,
-      waitingFor: 'title',
+      title: msg.text,
+      waitingFor: null,
     };
 
     return pendingMedia;

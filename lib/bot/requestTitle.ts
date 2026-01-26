@@ -1,5 +1,6 @@
 import { getBot } from './bot';
 import TelegramBot from 'node-telegram-bot-api';
+import { encodeMediaInfo } from './encodeMediaInfo';
 
 /**
  * Handles media without caption by requesting title input from the user.
@@ -35,10 +36,11 @@ export async function requestTitle(
       throw new Error('❌ No media file ID found');
     }
 
-    // Embed media info in message (hidden from user, at end of message)
-    // Format: MEDIA:type:fileId (no brackets to avoid markdown parsing)
+    // Embed media info in message using zero-width character encoding (truly hidden from user)
+    // Format: MEDIA:type:fileId encoded with zero-width characters
     const mediaInfo = `MEDIA:${mediaData.type}:${mediaData.fileId}`;
-    const messageText = `📝 Please send the **title** for your moment:\n${mediaInfo}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const messageText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     await bot.sendMessage(chatId, messageText, {
       parse_mode: 'Markdown',
