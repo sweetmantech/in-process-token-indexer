@@ -3,6 +3,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import { getPendingMedia } from '@/lib/bot/getPendingMedia';
 import { getBot } from '@/lib/bot/bot';
 import { Address } from 'viem';
+import { encodeMediaInfo } from '@/lib/bot/encodeMediaInfo';
 
 // Mock the bot module
 vi.mock('@/lib/bot/bot', () => ({
@@ -94,7 +95,9 @@ describe('getPendingMedia', () => {
   });
 
   it('should return PendingMedia for photo when reply to valid title request', async () => {
-    const titleRequestText = `📝 Please send the **title** for your moment:\nMEDIA:photo:${mockFileId}`;
+    const mediaInfo = `MEDIA:photo:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     mockBot.getFile.mockResolvedValue({
       file_id: mockFileId,
@@ -120,7 +123,7 @@ describe('getPendingMedia', () => {
     expect(result?.type).toBe('photo');
     expect(result?.artistAddress).toBe(mockArtistAddress);
     expect(result?.chatId).toBe(mockChatId);
-    expect(result?.waitingFor).toBe('title');
+    expect(result?.waitingFor).toBe('title'); // No text in reply, so still waiting
     expect(result?.photo).toBeDefined();
     expect(result?.photo?.[0]?.file_id).toBe(mockFileId);
     expect(result?.video).toBeUndefined();
@@ -128,7 +131,9 @@ describe('getPendingMedia', () => {
   });
 
   it('should return PendingMedia for video when reply to valid title request', async () => {
-    const titleRequestText = `📝 Please send the **title** for your moment:\nMEDIA:video:${mockFileId}`;
+    const mediaInfo = `MEDIA:video:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     mockBot.getFile.mockResolvedValue({
       file_id: mockFileId,
@@ -154,15 +159,17 @@ describe('getPendingMedia', () => {
     expect(result?.type).toBe('video');
     expect(result?.artistAddress).toBe(mockArtistAddress);
     expect(result?.chatId).toBe(mockChatId);
-    expect(result?.waitingFor).toBe('title');
+    expect(result?.waitingFor).toBe('title'); // No text in reply, so still waiting
     expect(result?.video).toBeDefined();
     expect(result?.video?.file_id).toBe(mockFileId);
     expect(result?.photo).toBeUndefined();
     expect(mockBot.getFile).toHaveBeenCalledWith(mockFileId);
   });
 
-  it('should handle media info with brackets in title request', async () => {
-    const titleRequestText = `📝 Please send the **title** for your moment:\n[MEDIA:photo:${mockFileId}]`;
+  it('should return PendingMedia with title when reply includes text', async () => {
+    const mediaInfo = `MEDIA:photo:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     mockBot.getFile.mockResolvedValue({
       file_id: mockFileId,
@@ -174,6 +181,7 @@ describe('getPendingMedia', () => {
       message_id: 2,
       chat: { id: mockChatId, type: 'private' },
       date: Date.now(),
+      text: 'My Title',
       reply_to_message: {
         message_id: 1,
         chat: { id: mockChatId, type: 'private' },
@@ -186,13 +194,17 @@ describe('getPendingMedia', () => {
 
     expect(result).toBeDefined();
     expect(result?.type).toBe('photo');
+    expect(result?.title).toBe('My Title');
+    expect(result?.waitingFor).toBe(null); // Title provided, so not waiting
     expect(result?.photo?.[0]?.file_id).toBe(mockFileId);
   });
 
   it('should return undefined if bot is not available', async () => {
     vi.mocked(getBot).mockReturnValue(null);
 
-    const titleRequestText = `📝 Please send the **title** for your moment:\nMEDIA:photo:${mockFileId}`;
+    const mediaInfo = `MEDIA:photo:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     const msg: TelegramBot.Message = {
       message_id: 2,
@@ -214,7 +226,9 @@ describe('getPendingMedia', () => {
   it('should return undefined if file info cannot be retrieved', async () => {
     mockBot.getFile.mockResolvedValue(null);
 
-    const titleRequestText = `📝 Please send the **title** for your moment:\nMEDIA:photo:${mockFileId}`;
+    const mediaInfo = `MEDIA:photo:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     const msg: TelegramBot.Message = {
       message_id: 2,
@@ -236,7 +250,9 @@ describe('getPendingMedia', () => {
   it('should return undefined if getFile throws an error', async () => {
     mockBot.getFile.mockRejectedValue(new Error('File not found'));
 
-    const titleRequestText = `📝 Please send the **title** for your moment:\nMEDIA:photo:${mockFileId}`;
+    const mediaInfo = `MEDIA:photo:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     const msg: TelegramBot.Message = {
       message_id: 2,
@@ -256,7 +272,9 @@ describe('getPendingMedia', () => {
   });
 
   it('should handle title request with "moment" keyword instead of "title"', async () => {
-    const titleRequestText = `📝 Please send the title for your moment:\nMEDIA:photo:${mockFileId}`;
+    const mediaInfo = `MEDIA:photo:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the title for your moment:\n${encodedMediaInfo}`;
 
     mockBot.getFile.mockResolvedValue({
       file_id: mockFileId,
@@ -283,7 +301,9 @@ describe('getPendingMedia', () => {
   });
 
   it('should correctly reconstruct photo object with file properties', async () => {
-    const titleRequestText = `📝 Please send the **title** for your moment:\nMEDIA:photo:${mockFileId}`;
+    const mediaInfo = `MEDIA:photo:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     mockBot.getFile.mockResolvedValue({
       file_id: mockFileId,
@@ -315,7 +335,9 @@ describe('getPendingMedia', () => {
   });
 
   it('should correctly reconstruct video object with file properties', async () => {
-    const titleRequestText = `📝 Please send the **title** for your moment:\nMEDIA:video:${mockFileId}`;
+    const mediaInfo = `MEDIA:video:${mockFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
 
     mockBot.getFile.mockResolvedValue({
       file_id: mockFileId,

@@ -45,20 +45,31 @@ export async function getPendingMedia(
 
   // Extract and decode media info from zero-width character encoding
   // Search for zero-width characters (U+200B, U+200C, U+200D)
-  const ZERO_WIDTH_CHARS = /[\u200B\u200C\u200D]+/;
-  const zeroWidthMatch = repliedText.match(ZERO_WIDTH_CHARS);
+  // Use global match to find all sequences, then try to decode each one
+  const ZERO_WIDTH_CHARS = /[\u200B\u200C\u200D]+/g;
+  const zeroWidthMatches = repliedText.match(ZERO_WIDTH_CHARS);
 
-  if (!zeroWidthMatch) {
+  if (!zeroWidthMatches || zeroWidthMatches.length === 0) {
     console.log(
       '⚠️ Title request found but no encoded media info embedded in message'
     );
     return undefined;
   }
 
-  // Decode the zero-width character sequence
-  const decodedMediaInfo = decodeMediaInfo(zeroWidthMatch[0]);
+  // Try to decode each zero-width sequence to find the valid MEDIA: pattern
+  let decodedMediaInfo: string | null = null;
+  for (const zeroWidthSeq of zeroWidthMatches) {
+    const decoded = decodeMediaInfo(zeroWidthSeq);
+    if (decoded && decoded.match(MEDIA_INFO_REGEX)) {
+      decodedMediaInfo = decoded;
+      break;
+    }
+  }
+
   if (!decodedMediaInfo) {
-    console.log('⚠️ Failed to decode media info from zero-width characters');
+    console.log(
+      '⚠️ Failed to decode valid media info from zero-width characters'
+    );
     return undefined;
   }
 
@@ -127,8 +138,8 @@ export async function getPendingMedia(
       type: pendingType,
       photo,
       video,
-      title: msg.text,
-      waitingFor: null,
+      title: msg.text || undefined,
+      waitingFor: msg.text ? null : 'title',
     };
 
     return pendingMedia;

@@ -41,23 +41,35 @@ export async function runBot(): Promise<TelegramBot> {
     // Get pending media from Telegram reply chain
     // This should be checked FIRST before checking for new media
     const pending = await getPendingMedia(msg, artist.address as Address);
-    if (pending?.waitingFor === 'title') {
-      if (hasCaptionOrText) {
+    if (pending) {
+      // If we have pending media with title already set (waitingFor === null), process it
+      if (pending.waitingFor === null && pending.title) {
         await sendMessage(
           chatId,
           '⏳ In Process will post your moment. Please wait a few seconds...'
         );
-        pending.title = caption || text;
-        pending.waitingFor = null;
         await processPendingMedia(pending);
-      } else {
-        // User replied but with no text, ask again
-        await sendMessage(
-          chatId,
-          '📝 Please send the title as text (not a photo or video).'
-        );
+        return;
       }
-      return;
+      // If we're still waiting for title (waitingFor === 'title')
+      if (pending.waitingFor === 'title') {
+        if (hasCaptionOrText) {
+          await sendMessage(
+            chatId,
+            '⏳ In Process will post your moment. Please wait a few seconds...'
+          );
+          pending.title = caption || text;
+          pending.waitingFor = null;
+          await processPendingMedia(pending);
+        } else {
+          // User replied but with no text, ask again
+          await sendMessage(
+            chatId,
+            '📝 Please send the title as text (not a photo or video).'
+          );
+        }
+        return;
+      }
     }
 
     if (photo || video) {

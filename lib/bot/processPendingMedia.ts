@@ -1,4 +1,3 @@
-import { Address } from 'viem';
 import processPhoto from './processPhoto';
 import processVideo from './processVideo';
 import { sendMessage } from './sendMessage';
