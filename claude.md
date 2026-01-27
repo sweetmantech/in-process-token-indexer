@@ -64,7 +64,7 @@ Tests are in `tests/` directory using Vitest. Run `pnpm test` to execute.
 
 ## Envio GraphQL Schema
 
-This project maps data from Envio GraphQL to Supabase. Reference project: `/home/kcethdev/Documents/GitHub/in_process_indexers`
+This project maps data from Envio GraphQL to Supabase. Reference project: [sweetmantech/in_process_indexers](https://github.com/sweetmantech/in_process_indexers)
 
 ### Entities
 
