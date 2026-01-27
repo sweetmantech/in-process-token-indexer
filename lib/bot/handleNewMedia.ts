@@ -17,7 +17,8 @@ export async function handleNewMedia({
   const { photo, video, caption, text } = getMetadataFromMsg(msg);
   const chatId = msg.chat.id;
   const hasCaptionOrText = !!(caption || text);
-  if (photo || video) {
+  const hasPhoto = photo && photo.length > 0;
+  if (hasPhoto || video) {
     if (hasCaptionOrText) {
       await sendMessage(
         chatId,
