@@ -1,49 +1,34 @@
-import FormData from 'form-data';
-import axios from 'axios';
+import Arweave from 'arweave';
+import { ARWEAVE_KEY } from './consts';
+
+const arweave = Arweave.init({
+  host: 'arweave.net',
+  port: 443,
+  protocol: 'https',
+});
 
 export const uploadToArweave = async (
   buffer: Buffer,
   mimeType: string
 ): Promise<string> => {
-  try {
-    console.log('📤 Uploading to Arweave...', mimeType);
-    console.log('📊 Buffer size:', buffer.length, 'bytes');
+  console.log('📤 Uploading to Arweave...', mimeType);
+  console.log('📊 Buffer size:', buffer.length, 'bytes');
 
-    // Create FormData using form-data package for Node.js
-    const formData = new FormData();
-    formData.append('file', buffer, {
-      filename: 'file',
-      contentType: mimeType,
-    });
+  const transaction = await arweave.createTransaction({ data: buffer });
+  transaction.addTag('Content-Type', mimeType);
 
-    const res = await axios.post(
-      'https://inprocess.world/api/arweave',
-      formData,
-      {
-        headers: {
-          ...formData.getHeaders(),
-        },
-        timeout: 60000, // 60 second timeout
-        maxContentLength: Infinity,
-        maxBodyLength: Infinity,
-      }
+  await arweave.transactions.sign(transaction, ARWEAVE_KEY);
+  const response = await arweave.transactions.post(transaction);
+
+  if (response.status !== 200) {
+    throw new Error(
+      `❌ Upload failed: ${response.status} ${response.statusText}`
     );
-
-    const arweaveURI = res.data;
-    console.log('✅ Arweave URI received:', arweaveURI);
-    return arweaveURI;
-  } catch (error: any) {
-    if (error.code === 'ECONNABORTED') {
-      throw new Error('❌ Upload timeout: Request took longer than 60 seconds');
-    }
-    if (error.response) {
-      throw new Error(
-        `❌ Upload failed: ${error.response.status} ${error.response.statusText} - ${JSON.stringify(error.response.data)}`
-      );
-    }
-    console.error('❌ Error uploading to Arweave:', error);
-    throw error;
   }
+
+  const arweaveURI = `ar://${transaction.id}`;
+  console.log('✅ Arweave URI received:', arweaveURI);
+  return arweaveURI;
 };
 
 export default uploadToArweave;
