@@ -14,7 +14,7 @@ A Node.js indexer for the In Process protocol on Base/Base Sepolia networks with
 
 ## Project Structure
 
-```
+```text
 ├── lib/
 │   ├── indexers/       # IndexFactory base class + entity indexers
 │   ├── bot/            # Telegram bot handlers and media processing
