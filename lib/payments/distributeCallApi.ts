@@ -1,4 +1,5 @@
 import { Address } from 'viem';
+import { IN_PROCESS_API } from '../consts';
 
 const distributeApiCall = async ({
   splitAddress,
@@ -10,7 +11,7 @@ const distributeApiCall = async ({
   chainId: number;
 }) => {
   try {
-    const response = await fetch(`https://inprocess.world/api/distribute`, {
+    const response = await fetch(`${IN_PROCESS_API}/distribute`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

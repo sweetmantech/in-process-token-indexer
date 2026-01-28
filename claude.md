@@ -197,6 +197,7 @@ query MyQuery($limit: Int, $offset: Int, $chainId: Int) {
 Pass container objects instead of multiple derived values. Extract what you need inside the function.
 
 **Bad:**
+
 ```typescript
 function handleMedia({ chatId, photo, video, caption, text, hasCaptionOrText }) {
   // many params derived from msg
@@ -205,6 +206,7 @@ handleMedia({ chatId: msg.chat.id, photo: msg.photo, ... });
 ```
 
 **Good:**
+
 ```typescript
 function handleMedia({ msg }) {
   const { photo, video, caption, text } = getMetadataFromMsg(msg);
@@ -215,6 +217,7 @@ handleMedia({ msg });
 ```
 
 Benefits:
+
 - Fewer parameters to pass
 - Caller doesn't need to know internal requirements
 - Easier to add/remove extracted fields without changing caller
