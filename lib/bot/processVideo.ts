@@ -27,22 +27,11 @@ const processVideo = async (
     artistAddress
   );
   const result = await createMomentApi(parameters);
-  const momentMessageId = await logMessage(
-    [
-      {
-        type: 'text',
-        text: `✅ Moment created! https://inprocess.world/sms/base:${result.contractAddress}/${result.tokenId}`,
-      },
-    ],
-    'assistant',
-    artistAddress
-  );
-  if (momentMessageId)
-    processMessageMoment({
-      messageId: momentMessageId,
-      collectionAddress: result.contractAddress,
-      tokenId: result.tokenId.toString(),
-    });
+  processMessageMoment({
+    collectionAddress: result.contractAddress.toLowerCase(),
+    tokenId: result.tokenId.toString(),
+    artistAddress,
+  });
   return result;
 };
 

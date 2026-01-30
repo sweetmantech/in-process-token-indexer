@@ -1,16 +1,30 @@
 import { sleep } from '../sleep';
 import insertMessageMoment from '../supabase/in_process_message_moment/insertMessageMoment';
 import { selectMoments } from '../supabase/in_process_moments/selectMoments';
+import { logMessage } from './logMessage';
 
 const processMessageMoment = async ({
-  messageId,
   collectionAddress,
   tokenId,
+  artistAddress,
 }: {
-  messageId: string;
   collectionAddress: string;
   tokenId: string;
+  artistAddress: string;
 }) => {
+  const messageId = await logMessage(
+    [
+      {
+        type: 'text',
+        text: `✅ Moment created! https://inprocess.world/sms/base:${collectionAddress}/${tokenId}`,
+      },
+    ],
+    'assistant',
+    artistAddress
+  );
+
+  if (!messageId) return;
+
   while (true) {
     const moments = await selectMoments({
       collectionAddresses: [collectionAddress],
