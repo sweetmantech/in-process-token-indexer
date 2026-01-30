@@ -1,10 +1,10 @@
 import { supabase } from '../client';
-import { Database } from '../types';
+import { TablesInsert } from '../types';
 
 const upsertMessageMoment = async ({
   message,
   moment,
-}: Database['public']['Tables']['in_process_message_moment']['Insert']) => {
+}: TablesInsert<'in_process_message_moment'>) => {
   const { data, error } = await supabase
     .from('in_process_message_moment')
     .upsert(
