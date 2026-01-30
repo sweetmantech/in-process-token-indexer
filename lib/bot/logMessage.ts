@@ -1,6 +1,6 @@
-import insertMetadata from '../supabase/in_process_message_metadata/insertMetadata';
-import insertMessage from '../supabase/in_process_messages/insertMessage';
-import { Json } from '../supabase/types';
+import insertMessageMetadata from '@/lib/supabase/in_process_message_metadata/insertMessageMetadata';
+import insertMessage from '@/lib/supabase/in_process_messages/insertMessage';
+import { Json } from '@/lib/supabase/types';
 
 type MessagePart = {
   type: string;
@@ -13,7 +13,7 @@ export async function logMessage(
   role: 'user' | 'assistant',
   artistAddress?: string
 ) {
-  const { data: metadata } = await insertMetadata({
+  const { data: metadata } = await insertMessageMetadata({
     client: 'telegram',
     artist_address: artistAddress,
   });

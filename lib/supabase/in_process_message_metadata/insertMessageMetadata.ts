@@ -1,10 +1,10 @@
 import { supabase } from '../client';
-import { Database } from '../types';
+import { TablesInsert } from '../types';
 
-const insertMetadata = async ({
+const insertMessageMetadata = async ({
   artist_address,
   client,
-}: Database['public']['Tables']['in_process_message_metadata']['Insert']) => {
+}: TablesInsert<'in_process_message_metadata'>) => {
   const { data, error } = await supabase
     .from('in_process_message_metadata')
     .insert({
@@ -19,4 +19,4 @@ const insertMetadata = async ({
   return { error: null, data };
 };
 
-export default insertMetadata;
+export default insertMessageMetadata;

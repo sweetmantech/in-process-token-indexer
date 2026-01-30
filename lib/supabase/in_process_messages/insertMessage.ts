@@ -1,11 +1,11 @@
 import { supabase } from '../client';
-import { Database } from '../types';
+import { TablesInsert } from '../types';
 
 const insertMessage = async ({
   metadata,
   parts,
   role,
-}: Database['public']['Tables']['in_process_messages']['Insert']) => {
+}: TablesInsert<'in_process_messages'>) => {
   const { data, error } = await supabase
     .from('in_process_messages')
     .insert({
