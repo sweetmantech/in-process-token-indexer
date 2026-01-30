@@ -3,6 +3,7 @@ import processPhoto from './processPhoto';
 import { sendMessage } from './sendMessage';
 import processVideo from './processVideo';
 import TelegramBot from 'node-telegram-bot-api';
+import { CreateMomentResult } from '../api/createMomentApi';
 
 const processMedia = async (
   artistAddress: Address,
@@ -14,26 +15,14 @@ const processMedia = async (
   const caption = msg?.caption || '';
   const chatId = msg.chat.id;
 
-  if (photo) {
-    const result = await processPhoto(artistAddress, photo, caption || text);
-    if (result) {
-      await sendMessage(
-        chatId,
-        `✅ Moment created! https://inprocess.world/sms/base:${result.contractAddress}/${result.tokenId}`
-      );
-    }
-    return result;
-  }
+  let result: CreateMomentResult | undefined;
 
-  if (video) {
-    const result = await processVideo(artistAddress, video, caption || text);
-    if (result) {
-      await sendMessage(
-        chatId,
-        `✅ Moment created! https://inprocess.world/sms/base:${result.contractAddress}/${result.tokenId}`
-      );
-    }
-    return result;
+  if (photo) result = await processPhoto(artistAddress, photo, caption || text);
+  if (video) result = await processVideo(artistAddress, video, caption || text);
+
+  if (result) {
+    const successMessage = `✅ Moment created! https://inprocess.world/sms/base:${result.contractAddress}/${result.tokenId}`;
+    await sendMessage(chatId, successMessage);
   }
 
   return undefined;

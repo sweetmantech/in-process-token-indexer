@@ -6,6 +6,7 @@ import { Address } from 'viem';
 import { getPendingMedia } from './getPendingMedia';
 import { handlePendingMedia } from './handlePendingMedia';
 import { handleNewMedia } from './handleNewMedia';
+import { logMessage } from './logMessage';
 
 export async function runBot(): Promise<TelegramBot> {
   const bot = await setBot();
@@ -23,11 +24,17 @@ export async function runBot(): Promise<TelegramBot> {
       });
 
       if (!artist) {
-        await sendMessage(
-          chatId,
-          'Welcome to In Process! To get started please visit https://inprocess.world/manage and link your telegram account.'
+        const welcomeMessage =
+          'Welcome to In Process! To get started please visit https://inprocess.world/manage and link your telegram account.';
+        await logMessage(
+          [
+            { type: 'text', text: `From: @${sender}` },
+            { type: 'text', text: msg.text || msg.caption || '' },
+          ],
+          'user'
         );
-
+        await sendMessage(chatId, welcomeMessage);
+        await logMessage([{ type: 'text', text: welcomeMessage }], 'assistant');
         return;
       }
 
