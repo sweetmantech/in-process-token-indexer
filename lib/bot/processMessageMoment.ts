@@ -1,6 +1,6 @@
 import { sleep } from '../sleep';
-import insertMessageMoment from '../supabase/in_process_message_moment/insertMessageMoment';
-import { selectMoments } from '../supabase/in_process_moments/selectMoments';
+import upsertMessageMoment from '@/lib/supabase/in_process_message_moment/upsertMessageMoment';
+import { selectMoments } from '@/lib/supabase/in_process_moments/selectMoments';
 import { logMessage } from './logMessage';
 
 const processMessageMoment = async ({
@@ -32,7 +32,7 @@ const processMessageMoment = async ({
     });
     const moment = moments?.[0];
     if (moment) {
-      await insertMessageMoment({
+      await upsertMessageMoment({
         message: messageId,
         moment: moment.id,
       });
