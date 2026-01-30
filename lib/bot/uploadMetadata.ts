@@ -45,6 +45,8 @@ const uploadMetadata = async ({
     uri: arweaveUri,
     name,
     mimeType: contentMimeType,
+    imageUri,
+    animationUri,
   };
 };
 

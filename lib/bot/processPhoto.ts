@@ -13,7 +13,7 @@ const processPhoto = async (
 ) => {
   if (!photos || photos.length === 0) return;
 
-  const { uri, name, mimeType } = await uploadMetadata({
+  const { uri, name, mimeType, imageUri } = await uploadMetadata({
     photoId: photos[photos.length - 1].file_id,
     text,
   });
@@ -21,7 +21,7 @@ const processPhoto = async (
   await logMessage(
     [
       { type: 'text', text },
-      { type: 'image', url: uri, mimeType },
+      { type: 'file', url: imageUri, mediaType: mimeType },
     ],
     'user',
     artistAddress
@@ -40,7 +40,7 @@ const processPhoto = async (
   if (momentMessageId)
     processMessageMoment({
       messageId: momentMessageId,
-      collectionAddress: result.contractAddress,
+      collectionAddress: result.contractAddress.toLowerCase(),
       tokenId: result.tokenId.toString(),
     });
   return result;

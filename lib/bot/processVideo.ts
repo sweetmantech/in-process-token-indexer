@@ -12,7 +12,7 @@ const processVideo = async (
   text: string
 ) => {
   if (!video) return;
-  const { uri, name, mimeType } = await uploadMetadata({
+  const { uri, name, mimeType, animationUri } = await uploadMetadata({
     photoId: video.thumb?.file_id,
     videoId: video.file_id,
     text,
@@ -21,7 +21,7 @@ const processVideo = async (
   await logMessage(
     [
       { type: 'text', text },
-      { type: 'video', url: uri, mimeType },
+      { type: 'file', url: animationUri, mediaType: mimeType },
     ],
     'user',
     artistAddress
