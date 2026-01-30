@@ -3,6 +3,8 @@ import uploadMetadata from './uploadMetadata';
 import { Address } from 'viem';
 import { createMomentApi } from '../api/createMomentApi';
 import getCreateParameter from '../getCreateParameter';
+import { logMessage } from './logMessage';
+import processMessageMoment from './processMessageMoment';
 
 const processPhoto = async (
   artistAddress: Address,
@@ -11,12 +13,36 @@ const processPhoto = async (
 ) => {
   if (!photos || photos.length === 0) return;
 
-  const { uri, name } = await uploadMetadata({
+  const { uri, name, mimeType } = await uploadMetadata({
     photoId: photos[photos.length - 1].file_id,
     text,
   });
   const parameters = await getCreateParameter(artistAddress, name, uri);
+  await logMessage(
+    [
+      { type: 'text', text },
+      { type: 'image', url: uri, mimeType },
+    ],
+    'user',
+    artistAddress
+  );
   const result = await createMomentApi(parameters);
+  const momentMessageId = await logMessage(
+    [
+      {
+        type: 'text',
+        text: `✅ Moment created! https://inprocess.world/sms/base:${result.contractAddress}/${result.tokenId}`,
+      },
+    ],
+    'assistant',
+    artistAddress
+  );
+  if (momentMessageId)
+    processMessageMoment({
+      messageId: momentMessageId,
+      collectionAddress: result.contractAddress,
+      tokenId: result.tokenId.toString(),
+    });
   return result;
 };
 
