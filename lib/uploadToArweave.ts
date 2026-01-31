@@ -21,9 +21,7 @@ export const uploadToArweave = async (
   const response = await arweave.transactions.post(transaction);
 
   if (response.status !== 200) {
-    throw new Error(
-      `❌ Upload failed: ${response.status} ${response.statusText}`
-    );
+    throw new Error(`Upload failed: ${response.status} ${response.statusText}`);
   }
 
   const arweaveURI = `ar://${transaction.id}`;
