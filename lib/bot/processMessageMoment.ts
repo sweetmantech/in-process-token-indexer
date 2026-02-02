@@ -1,7 +1,5 @@
-import { sleep } from '../sleep';
-import upsertMessageMoment from '@/lib/supabase/in_process_message_moment/upsertMessageMoment';
-import { selectMoments } from '@/lib/supabase/in_process_moments/selectMoments';
 import { logMessage } from './logMessage';
+import { tasks } from '@trigger.dev/sdk';
 
 const processMessageMoment = async ({
   collectionAddress,
@@ -25,21 +23,9 @@ const processMessageMoment = async ({
 
   if (!messageId) return;
 
-  while (true) {
-    const moments = await selectMoments({
-      collectionAddresses: [collectionAddress],
-      tokenIds: [Number(tokenId)],
-    });
-    const moment = moments?.[0];
-    if (moment) {
-      await upsertMessageMoment({
-        message: messageId,
-        moment: moment.id,
-      });
-      break;
-    }
-    await sleep(3000);
-  }
+  await tasks.trigger('process-message-moment', {
+    messageId,
+  });
 };
 
 export default processMessageMoment;
