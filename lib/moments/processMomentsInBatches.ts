@@ -2,6 +2,7 @@ import { InProcess_Moments_t } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapMomentsToSupabase } from '@/lib/moments/mapMomentsToSupabase';
 import { upsertMoments } from '@/lib/supabase/in_process_moments/upsertMoments';
+import { emitMomentUpdated } from '@/lib/socket/emitMomentUpdated';
 
 export async function processMomentsInBatches(
   moments: InProcess_Moments_t[]
@@ -14,6 +15,7 @@ export async function processMomentsInBatches(
       const mappedMoments = await mapMomentsToSupabase(batch);
 
       await upsertMoments(mappedMoments);
+      emitMomentUpdated(batch);
 
       totalProcessed += mappedMoments.length;
       console.log(
