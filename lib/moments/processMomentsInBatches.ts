@@ -3,6 +3,7 @@ import { BATCH_SIZE } from '@/lib/consts';
 import { mapMomentsToSupabase } from '@/lib/moments/mapMomentsToSupabase';
 import { upsertMoments } from '@/lib/supabase/in_process_moments/upsertMoments';
 import { emitMomentUpdated } from '@/lib/socket/emitMomentUpdated';
+import { emitMomentsCountUpdated } from '@/lib/socket/emitMomentsCountUpdated';
 
 export async function processMomentsInBatches(
   moments: InProcess_Moments_t[]
@@ -29,7 +30,8 @@ export async function processMomentsInBatches(
     }
   }
 
-  if (totalProcessed > 0)
+  if (totalProcessed > 0) {
+    emitMomentsCountUpdated();
     console.log(`✅  Completed processing: ${totalProcessed} moments`);
-  else console.log(`ℹ️  No moments to process`);
+  } else console.log(`ℹ️  No moments to process`);
 }
