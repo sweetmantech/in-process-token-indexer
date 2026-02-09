@@ -37,7 +37,7 @@ describe('processMomentsInBatches', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(mapMomentsToSupabase).mockResolvedValue([]);
-    vi.mocked(upsertMoments).mockResolvedValue(undefined);
+    vi.mocked(upsertMoments).mockResolvedValue([] as any);
   });
 
   it('calls emitMomentUpdated after upsertMoments with the original batch', async () => {
