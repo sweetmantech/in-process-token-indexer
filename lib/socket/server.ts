@@ -3,6 +3,8 @@ import { Server } from 'socket.io';
 let io: Server | null = null;
 
 export function startSocketServer(): Server {
+  if (io) return io;
+
   const port = Number(process.env.SOCKET_PORT) || 3000;
 
   io = new Server(port, {
