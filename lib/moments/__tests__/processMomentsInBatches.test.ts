@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { InProcess_Moments_t } from '@/types/envio';
 
+vi.mock('@/lib/consts', () => ({
+  BATCH_SIZE: 100,
+}));
 vi.mock('@/lib/moments/mapMomentsToSupabase', () => ({
   mapMomentsToSupabase: vi.fn(),
 }));
