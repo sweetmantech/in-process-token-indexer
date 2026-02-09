@@ -1,4 +1,4 @@
-import { selectComments } from '@/lib/supabase/in_process_moment_comments/selectComments';
+import { selectMax } from '@/lib/supabase/in_process_moment_comments/selectMax';
 
 /**
  * Gets the maximum commented_at timestamp from in_process_moment_comments table.
@@ -6,20 +6,11 @@ import { selectComments } from '@/lib/supabase/in_process_moment_comments/select
  * @returns Maximum commented_at timestamp in milliseconds (epoch), or null if no records exist.
  */
 export async function selectMaxCommentedAt(): Promise<number | null> {
-  try {
-    const data = await selectComments({
-      order: { column: 'commented_at', ascending: false },
-      limit: 1,
-    });
+  const maxCommentedAt = await selectMax('commented_at');
 
-    if (!data || data.length === 0 || !data[0]?.commented_at) {
-      return null;
-    }
-
-    // Convert ISO string to milliseconds timestamp
-    return new Date(data[0].commented_at).getTime();
-  } catch (error) {
-    console.error('❌ Error selecting max commented_at:', error);
-    throw error;
+  if (!maxCommentedAt) {
+    return null;
   }
+
+  return new Date(maxCommentedAt).getTime();
 }
