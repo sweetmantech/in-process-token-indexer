@@ -7,6 +7,7 @@ import { paymentsIndexer } from '@/lib/indexers/paymentsIndexer';
 import { airdropsIndexer } from '@/lib/indexers/airdropsIndexer';
 import { runBot } from '@/lib/bot/start';
 import { getBot } from '@/lib/bot/bot';
+import { startSocketServer } from '@/lib/socket/server';
 
 // Handle graceful shutdown
 process.on('SIGTERM', async () => {
@@ -36,6 +37,7 @@ process.on('SIGINT', async () => {
 });
 
 async function index(): Promise<void> {
+  startSocketServer();
   await runBot();
 
   await Promise.all([

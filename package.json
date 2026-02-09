@@ -30,6 +30,7 @@
     "node-fetch": "^2.7.0",
     "node-telegram-bot-api": "^0.67.0",
     "prettier": "^3.6.2",
+    "socket.io": "^4.8.3",
     "viem": "^2.21.1"
   },
   "devDependencies": {
