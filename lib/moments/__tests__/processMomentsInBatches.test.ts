@@ -2,8 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { InProcess_Moments_t } from '@/types/envio';
 
 vi.mock('@/lib/consts', () => ({
-  BATCH_SIZE: 100,
+  BATCH_SIZE: 3,
 }));
+
+const BATCH_SIZE = 3;
 vi.mock('@/lib/moments/mapMomentsToSupabase', () => ({
   mapMomentsToSupabase: vi.fn(),
 }));
@@ -62,17 +64,26 @@ describe('processMomentsInBatches', () => {
     expect(emitMomentUpdated).not.toHaveBeenCalled();
   });
 
-  it('emits for each batch separately', async () => {
-    // BATCH_SIZE is 100, so 2 moments = 1 batch
-    const moments = [makeMoment('1'), makeMoment('2')];
+  it('emits for each batch separately when moments exceed BATCH_SIZE', async () => {
+    const totalMoments = BATCH_SIZE * 2 + 1;
+    const moments = Array.from({ length: totalMoments }, (_, i) =>
+      makeMoment(String(i))
+    );
     vi.mocked(mapMomentsToSupabase).mockResolvedValue([
       { mapped: true },
     ] as any);
 
     await processMomentsInBatches(moments);
 
-    expect(emitMomentUpdated).toHaveBeenCalledTimes(1);
-    expect(emitMomentUpdated).toHaveBeenCalledWith(moments);
+    const expectedBatches = Math.ceil(totalMoments / BATCH_SIZE);
+    expect(emitMomentUpdated).toHaveBeenCalledTimes(expectedBatches);
+
+    const batch1 = moments.slice(0, BATCH_SIZE);
+    const batch2 = moments.slice(BATCH_SIZE, BATCH_SIZE * 2);
+    const batch3 = moments.slice(BATCH_SIZE * 2);
+    expect(emitMomentUpdated).toHaveBeenNthCalledWith(1, batch1);
+    expect(emitMomentUpdated).toHaveBeenNthCalledWith(2, batch2);
+    expect(emitMomentUpdated).toHaveBeenNthCalledWith(3, batch3);
   });
 
   it('handles empty moments array without emitting', async () => {
