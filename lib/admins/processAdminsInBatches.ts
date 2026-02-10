@@ -5,6 +5,7 @@ import { mapAdminsForDeletion } from './mapAdminsForDeletion';
 import { upsertAdmins } from '@/lib/supabase/in_process_admins/upsertAdmins';
 import { deleteAdmins } from '@/lib/supabase/in_process_admins/deleteAdmins';
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
+import { emitAdminUpdated } from '@/lib/socket/emitAdminUpdated';
 
 /**
  * Processes admins in batches with permission-based logic:
@@ -38,6 +39,8 @@ export async function processAdminsInBatches(
         await upsertAdmins(mappedAdmins);
         totalUpserted += mappedAdmins.length;
       }
+
+      emitAdminUpdated(batch);
 
       const batchNum = Math.floor(i / BATCH_SIZE) + 1;
       console.log(
