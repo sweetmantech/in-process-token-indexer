@@ -73,6 +73,74 @@ describe('emitAdminUpdated', () => {
     });
   });
 
+  it('deduplicates collection events by address and chainId', () => {
+    vi.mocked(getIO).mockReturnValue({ emit: mockEmit } as any);
+
+    emitAdminUpdated([
+      makeAdmin({
+        admin: '0xadmin1',
+        collection: '0xaaa',
+        token_id: 0,
+        chain_id: 1,
+      }),
+      makeAdmin({
+        admin: '0xadmin2',
+        collection: '0xaaa',
+        token_id: 0,
+        chain_id: 1,
+      }),
+      makeAdmin({
+        admin: '0xadmin3',
+        collection: '0xaaa',
+        token_id: 0,
+        chain_id: 1,
+      }),
+    ]);
+
+    expect(mockEmit).toHaveBeenCalledTimes(1);
+    expect(mockEmit).toHaveBeenCalledWith('collection:admin:updated', {
+      collectionAddress: '0xaaa',
+      chainId: 1,
+    });
+  });
+
+  it('deduplicates moment events by address, tokenId, and chainId', () => {
+    vi.mocked(getIO).mockReturnValue({ emit: mockEmit } as any);
+
+    emitAdminUpdated([
+      makeAdmin({
+        admin: '0xadmin1',
+        collection: '0xaaa',
+        token_id: 5,
+        chain_id: 1,
+      }),
+      makeAdmin({
+        admin: '0xadmin2',
+        collection: '0xaaa',
+        token_id: 5,
+        chain_id: 1,
+      }),
+      makeAdmin({
+        admin: '0xadmin3',
+        collection: '0xaaa',
+        token_id: 10,
+        chain_id: 1,
+      }),
+    ]);
+
+    expect(mockEmit).toHaveBeenCalledTimes(2);
+    expect(mockEmit).toHaveBeenNthCalledWith(1, 'moment:admin:updated', {
+      collectionAddress: '0xaaa',
+      tokenId: 5,
+      chainId: 1,
+    });
+    expect(mockEmit).toHaveBeenNthCalledWith(2, 'moment:admin:updated', {
+      collectionAddress: '0xaaa',
+      tokenId: 10,
+      chainId: 1,
+    });
+  });
+
   it('emits nothing for an empty array', () => {
     vi.mocked(getIO).mockReturnValue({ emit: mockEmit } as any);
 
