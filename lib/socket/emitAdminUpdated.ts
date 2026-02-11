@@ -23,5 +23,4 @@ export function emitAdminUpdated(admins: InProcess_Admins_t[]): void {
       ...(isMoment && { tokenId: admin.token_id }),
     });
   }
-  console.log('ziad here', seen)
 }
