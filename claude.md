@@ -173,7 +173,7 @@ query MyQuery($limit: Int, $offset: Int, $chainId: Int) {
   InProcess_Collections(
     limit: $limit
     offset: $offset
-    order_by: { created_at: desc }
+    order_by: { created_at: asc }
     where: { chain_id: { _eq: $chainId } }
   ) {
     id
