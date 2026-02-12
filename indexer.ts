@@ -38,18 +38,18 @@ process.on('SIGINT', async () => {
 });
 
 async function index(): Promise<void> {
-  // startSocketServer();
-  // await runBot();
+  startSocketServer();
+  await runBot();
 
   await Promise.all([
-    // collectionsIndexer.execute(),
-    // momentsIndexer.execute(),
-    // adminsIndexer.execute(),
-    // commentsIndexer.execute(),
-    // salesIndexer.execute(),
+    collectionsIndexer.execute(),
+    momentsIndexer.execute(),
+    adminsIndexer.execute(),
+    commentsIndexer.execute(),
+    salesIndexer.execute(),
     paymentsIndexer.execute(),
-    // airdropsIndexer.execute(),
-    // collectorsIndexer.execute(),
+    airdropsIndexer.execute(),
+    collectorsIndexer.execute(),
   ]);
 }
 
