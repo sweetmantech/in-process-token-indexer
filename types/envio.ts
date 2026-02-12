@@ -121,3 +121,19 @@ export interface AirdropsQueryResult {
   entities: InProcess_Airdrops_t[];
   pageInfo: PageInfo;
 }
+
+export type InProcess_Collectors_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly token_id: number;
+  readonly amount: number;
+  readonly chain_id: number;
+  readonly collector: string;
+  readonly transaction_hash: string;
+  readonly collected_at: number;
+};
+
+export interface CollectorsQueryResult {
+  entities: InProcess_Collectors_t[];
+  pageInfo: PageInfo;
+}
