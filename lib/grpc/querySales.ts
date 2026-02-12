@@ -2,7 +2,7 @@ import { queryGraphQL } from '@/lib/grpc/queryGraphQL';
 import type { InProcess_Sales_t, SalesQueryResult } from '@/types/envio';
 
 const SALES_QUERY = `query GetInProcess_Sales($limit: Int, $offset: Int, $minTimestamp: Int) {
-  InProcess_Sales(limit: $limit, offset: $offset, order_by: { created_at: desc }, where: { created_at: { _gt: $minTimestamp }}) {
+  InProcess_Sales(limit: $limit, offset: $offset, order_by: { created_at: asc }, where: { created_at: { _gt: $minTimestamp }}) {
     id collection token_id sale_start sale_end max_tokens_per_address price_per_token funds_recipient currency chain_id transaction_hash created_at
   }
 }`;

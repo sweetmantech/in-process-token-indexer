@@ -2,7 +2,7 @@ import { queryGraphQL } from '@/lib/grpc/queryGraphQL';
 import type { InProcess_Payments_t, PaymentsQueryResult } from '@/types/envio';
 
 const PAYMENTS_QUERY = `query GetInProcess_Payments($limit: Int, $offset: Int, $minTimestamp: Int) {
-  InProcess_Payments(limit: $limit, offset: $offset, order_by: { transferred_at: desc }, where: { transferred_at: { _gt: $minTimestamp }}) {
+  InProcess_Payments(limit: $limit, offset: $offset, order_by: { transferred_at: asc }, where: { transferred_at: { _gt: $minTimestamp }}) {
     id collection currency token_id recipient spender amount chain_id transaction_hash transferred_at
   }
 }`;

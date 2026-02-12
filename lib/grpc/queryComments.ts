@@ -5,7 +5,7 @@ import type {
 } from '@/types/envio';
 
 const MOMENT_COMMENTS_QUERY = `query GetInProcess_Moment_Comments($limit: Int, $offset: Int, $minTimestamp: Int) {
-  InProcess_Moment_Comments(limit: $limit, offset: $offset, order_by: { commented_at: desc }, where: { commented_at: { _gt: $minTimestamp }}) {
+  InProcess_Moment_Comments(limit: $limit, offset: $offset, order_by: { commented_at: asc }, where: { commented_at: { _gt: $minTimestamp }}) {
     id collection sender token_id comment chain_id commented_at transaction_hash
   }
 }`;

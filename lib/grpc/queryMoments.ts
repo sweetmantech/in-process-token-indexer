@@ -2,7 +2,7 @@ import { queryGraphQL } from '@/lib/grpc/queryGraphQL';
 import type { InProcess_Moments_t, MomentsQueryResult } from '@/types/envio';
 
 const MOMENTS_QUERY = `query GetInProcess_Moments($limit: Int, $offset: Int, $minTimestamp: Int) {
-  InProcess_Moments(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { updated_at: { _gt: $minTimestamp } }) {
+  InProcess_Moments(limit: $limit, offset: $offset, order_by: { updated_at: asc }, where: { updated_at: { _gt: $minTimestamp } }) {
     id collection token_id uri max_supply chain_id created_at updated_at transaction_hash
   }
 }`;
