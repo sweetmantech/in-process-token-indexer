@@ -5,7 +5,7 @@ import type {
 } from '@/types/envio';
 
 const COLLECTIONS_QUERY = `query GetInProcess_Collections($limit: Int, $offset: Int, $minTimestamp: Int) {
-  InProcess_Collections(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { updated_at: { _gt: $minTimestamp } }) {
+  InProcess_Collections(limit: $limit, offset: $offset, order_by: { updated_at: asc }, where: { updated_at: { _gt: $minTimestamp } }) {
     id address name uri default_admin payout_recipient chain_id created_at updated_at transaction_hash
   }
 }`;

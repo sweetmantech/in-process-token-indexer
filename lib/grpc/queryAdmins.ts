@@ -2,7 +2,7 @@ import { queryGraphQL } from '@/lib/grpc/queryGraphQL';
 import type { InProcess_Admins_t, AdminsQueryResult } from '@/types/envio';
 
 const ADMINS_QUERY = `query GetInProcess_Admins($limit: Int, $offset: Int, $minTimestamp: Int) {
-  InProcess_Admins(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { updated_at: { _gt: $minTimestamp }}) {
+  InProcess_Admins(limit: $limit, offset: $offset, order_by: { updated_at: asc }, where: { updated_at: { _gt: $minTimestamp }}) {
     id admin collection token_id chain_id permission updated_at
   }
 }`;

@@ -5,6 +5,7 @@ import { commentsIndexer } from '@/lib/indexers/commentsIndexer';
 import { salesIndexer } from '@/lib/indexers/salesIndexer';
 import { paymentsIndexer } from '@/lib/indexers/paymentsIndexer';
 import { airdropsIndexer } from '@/lib/indexers/airdropsIndexer';
+import { collectorsIndexer } from '@/lib/indexers/collectorsIndexer';
 import { runBot } from '@/lib/bot/start';
 import { getBot } from '@/lib/bot/bot';
 import { startSocketServer } from '@/lib/socket/server';
@@ -37,17 +38,18 @@ process.on('SIGINT', async () => {
 });
 
 async function index(): Promise<void> {
-  startSocketServer();
-  await runBot();
+  // startSocketServer();
+  // await runBot();
 
   await Promise.all([
-    collectionsIndexer.execute(),
-    momentsIndexer.execute(),
-    adminsIndexer.execute(),
-    commentsIndexer.execute(),
-    salesIndexer.execute(),
+    // collectionsIndexer.execute(),
+    // momentsIndexer.execute(),
+    // adminsIndexer.execute(),
+    // commentsIndexer.execute(),
+    // salesIndexer.execute(),
     paymentsIndexer.execute(),
-    airdropsIndexer.execute(),
+    // airdropsIndexer.execute(),
+    // collectorsIndexer.execute(),
   ]);
 }
 

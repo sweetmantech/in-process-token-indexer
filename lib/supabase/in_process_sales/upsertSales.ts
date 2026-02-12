@@ -18,7 +18,7 @@ export async function upsertSales(
     const { data, error } = await supabase
       .from('in_process_sales')
       .upsert(sales, {
-        onConflict: 'id',
+        onConflict: 'moment',
         ignoreDuplicates: false,
       })
       .select();

@@ -153,6 +153,17 @@ type InProcess_Airdrops {
   chain_id: Int!
   updated_at: Int!
 }
+
+type InProcess_Collectors {
+  id: ID!
+  collection: String!
+  token_id: Int!
+  amount: Int!
+  chain_id: Int!
+  collector: String!
+  transaction_hash: String!
+  collected_at: Int!
+}
 ```
 
 ### Query Pattern

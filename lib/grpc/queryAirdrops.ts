@@ -2,7 +2,7 @@ import { queryGraphQL } from '@/lib/grpc/queryGraphQL';
 import type { InProcess_Airdrops_t, AirdropsQueryResult } from '@/types/envio';
 
 const AIRDROPS_QUERY = `query GetInProcess_Airdrops($limit: Int, $offset: Int, $minTimestamp: Int) {
-  InProcess_Airdrops(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { updated_at: { _gt: $minTimestamp }}) {
+  InProcess_Airdrops(limit: $limit, offset: $offset, order_by: { updated_at: asc }, where: { updated_at: { _gt: $minTimestamp }}) {
     id recipient collection token_id amount chain_id updated_at
   }
 }`;
