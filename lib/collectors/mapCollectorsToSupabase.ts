@@ -29,7 +29,7 @@ export async function mapCollectorsToSupabase(
         moment: momentId,
         collector: collector.collector.toLowerCase(),
         amount: collector.amount,
-        transaction_hash: collector.transaction_hash,
+        transaction_hash: collector.transaction_hash.toLowerCase(),
         collected_at: toSupabaseTimestamp(collector.collected_at),
       };
     })
