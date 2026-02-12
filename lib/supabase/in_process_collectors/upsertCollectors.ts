@@ -22,7 +22,7 @@ export async function upsertCollectors(
     const { data, error } = await supabase
       .from('in_process_collectors')
       .upsert(collectors, {
-        onConflict: 'moment,collector,transaction_hash',
+        onConflict: 'id',
         ignoreDuplicates: false,
       })
       .select();

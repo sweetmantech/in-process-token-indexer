@@ -35,12 +35,5 @@ export async function mapCollectorsToSupabase(
     })
     .filter(collector => collector !== undefined);
 
-  // Deduplicate by onConflict key (moment, collector, transaction_hash)
-  const seen = new Set<string>();
-  return mappedCollectors.filter(c => {
-    const key = `${c.moment}:${c.collector}:${c.transaction_hash}`;
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
+  return mappedCollectors;
 }
