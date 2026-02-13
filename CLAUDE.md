@@ -16,10 +16,10 @@ A Node.js indexer for the In Process protocol on Base/Base Sepolia networks with
 
 ```text
 ├── lib/
-│   ├── indexers/       # IndexFactory base class + entity indexers
+│   ├── indexers/       # Indexer configs + combined execution engine
 │   ├── bot/            # Telegram bot handlers and media processing
 │   ├── supabase/       # Database operations by table
-│   ├── grpc/           # Hyperindex GraphQL queries
+│   ├── grpc/           # Combined GraphQL query builder + gRPC client
 │   ├── api/            # External API calls
 │   └── viem/           # Blockchain client setup
 ├── types/              # TypeScript type definitions
@@ -41,18 +41,22 @@ pnpm format           # Format code with Prettier
 
 ## Architecture
 
-- **IndexFactory Pattern:** Base class handling pagination, incremental indexing, and batch processing
-- **Data Flow:** Envio GraphQL → IndexFactory → Supabase
+- **Combined Query Pattern:** Single GraphQL request fetches all 8 entity types per polling cycle. Each indexer is a plain `IndexConfig` object with a `queryFragment`, `dataPath`, `processBatchFn`, and `selectMaxTimestampFn`. The `executeIndexers()` loop builds one combined query, dispatches results in parallel, and drops completed entities from pagination.
+- **Data Flow:** Envio GraphQL → executeIndexers → processBatchFn → Supabase
 - **Telegram Bot:** Media uploads → Arweave storage → Moment creation
 - **Networks:** Base (8453), Base Sepolia (84532)
 
 ## Key Files
 
-- `indexer.ts` - Entry point, starts bot and all indexers
-- `lib/indexers/IndexFactory.ts` - Core indexing logic with pagination
+- `indexer.ts` - Entry point, starts bot and executeIndexers
+- `lib/indexers/executeIndexers.ts` - Combined indexing loop with per-entity pagination
+- `lib/indexers/indexers.ts` - Central registry of all indexer configs
+- `lib/grpc/buildQuery.ts` - Builds combined GraphQL query from indexer fragments
+- `lib/grpc/queryGrpc.ts` - Single gRPC query function
 - `lib/bot/start.ts` - Telegram message handler
 - `lib/bot/processMedia.ts` - Media upload orchestration
 - `lib/consts.ts` - Environment config and constants
+- `types/factory.ts` - IndexConfig type definition
 
 ## Environment Variables
 
@@ -166,23 +170,23 @@ type InProcess_Collectors {
 }
 ```
 
-### Query Pattern
+### Query Pattern (Combined)
+
+All entities are queried in a single request with per-entity pagination variables:
 
 ```graphql
-query MyQuery($limit: Int, $offset: Int, $chainId: Int) {
-  InProcess_Collections(
-    limit: $limit
-    offset: $offset
-    order_by: { created_at: asc }
-    where: { chain_id: { _eq: $chainId } }
-  ) {
-    id
-    address
-    name
-    # ... other fields
+query GetAll($limit: Int, $offset_collections: Int, $minTimestamp_collections: Int, $offset_moments: Int, $minTimestamp_moments: Int, ...) {
+  InProcess_Collections(limit: $limit, offset: $offset_collections, order_by: {updated_at: asc}, where: {updated_at: {_gt: $minTimestamp_collections}}) {
+    id address name ...
   }
+  InProcess_Moments(limit: $limit, offset: $offset_moments, order_by: {updated_at: asc}, where: {updated_at: {_gt: $minTimestamp_moments}}) {
+    id collection token_id ...
+  }
+  ...
 }
 ```
+
+Each indexer defines its own `queryFragment` in its config file (e.g., `lib/indexers/collectionsIndexer.ts`).
 
 **Note:** BigInt fields (max_supply, sale_start, etc.) are returned as strings from GraphQL.
 
@@ -238,3 +242,26 @@ Benefits:
 - `InProcess_Airdrops.recipient` → Supabase `recipient` (NOT `artist_address`)
 - `collection` + `chain_id` + `token_id` → `moment` UUID in Supabase
 - Chain timestamps → ISO timestamps
+
+### Timestamp Field Mapping (Envio → Supabase)
+
+Envio and Supabase use **different column names** for the same timestamp values. This is intentional — not a bug.
+
+| Entity      | Envio Field      | Supabase Field   | Mapping Function                        |
+| ----------- | ---------------- | ---------------- | --------------------------------------- |
+| Admins      | `updated_at`     | `granted_at`     | `toSupabaseTimestamp(admin.updated_at)` |
+| Airdrops    | `updated_at`     | `updated_at`     | direct                                  |
+| Collections | `updated_at`     | `updated_at`     | direct                                  |
+| Collectors  | `collected_at`   | `collected_at`   | direct                                  |
+| Comments    | `commented_at`   | `commented_at`   | direct                                  |
+| Moments     | `updated_at`     | `updated_at`     | direct                                  |
+| Payments    | `transferred_at` | `transferred_at` | direct                                  |
+| Sales       | `created_at`     | `created_at`     | direct                                  |
+
+The incremental indexing flow for each entity:
+
+1. `selectMaxTimestampFn()` reads max timestamp from **Supabase** (e.g., `granted_at` for admins)
+2. `toEnvioTimestamp()` converts it back to chain timestamp format
+3. `queryFragment` filters **Envio** by the corresponding field (e.g., `updated_at` for admins)
+
+The Admins entity is the only one where Envio and Supabase column names differ (`updated_at` → `granted_at`). This is consistent because `selectMaxGrantedAt` reads the Supabase column that stores the same value queried from Envio's `updated_at`.
