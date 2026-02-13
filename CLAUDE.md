@@ -265,3 +265,12 @@ The incremental indexing flow for each entity:
 3. `queryFragment` filters **Envio** by the corresponding field (e.g., `updated_at` for admins)
 
 The Admins entity is the only one where Envio and Supabase column names differ (`updated_at` → `granted_at`). This is consistent because `selectMaxGrantedAt` reads the Supabase column that stores the same value queried from Envio's `updated_at`.
+
+## Supabase Egress Optimization
+
+Minimize Supabase egress usage with these practices:
+
+- **Select only needed fields** — avoid `select('*')` in queries; specify only the columns you need
+- **Reduce query frequency** — use caches (e.g., in-memory max timestamp cache) to eliminate redundant reads
+- **Don't return rows on upsert/insert** — configure upsert/insert queries to not return the entire row unless the response is actually used (avoid `.select()` after `.upsert()` when not needed)
+- **Optimize manual backups** — when running backups through Supavisor, exclude unneeded tables and reduce backup frequency

@@ -20,10 +20,10 @@ export async function processCollectionsInBatches(
       );
       await ensureArtists(artistAddresses);
 
-      const upsertedCollections = await upsertCollections(mappedCollections);
+      await upsertCollections(mappedCollections);
       emitCollectionUpdated(batch);
 
-      totalProcessed += upsertedCollections.length;
+      totalProcessed += mappedCollections.length;
       console.log(
         `📚 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} collections`
       );

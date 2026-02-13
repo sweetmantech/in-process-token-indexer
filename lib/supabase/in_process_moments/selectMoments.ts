@@ -1,5 +1,4 @@
 import { supabase } from '@/lib/supabase/client';
-import { InProcessMoment } from '@/types/supabase';
 
 interface SelectMomentsOptions {
   collectionAddresses?: string[];
@@ -8,19 +7,27 @@ interface SelectMomentsOptions {
   limit?: number;
 }
 
+export interface SelectMomentsResult {
+  id: string;
+  token_id: number;
+  collection: { address: string; chain_id: number };
+}
+
 /**
  * Queries moments from Supabase.
  * @param options - Query options including collectionAddresses, tokenIds, order, and limit.
- * @returns Array of moment records. If collectionAddresses and tokenIds are provided, returns moments with collection data.
+ * @returns Array of moment records with collection address and chain_id.
  */
 export async function selectMoments(
   options: SelectMomentsOptions = {}
-): Promise<InProcessMoment[]> {
+): Promise<SelectMomentsResult[]> {
   const { collectionAddresses = [], tokenIds = [], order, limit } = options;
 
   let query = supabase
     .from('in_process_moments')
-    .select('*, collection:in_process_collections!inner(*)');
+    .select(
+      'id, token_id, collection:in_process_collections!inner(address, chain_id)'
+    );
   // If collectionAddresses and tokenIds are provided, use the join query
   if (collectionAddresses.length > 0) {
     query = query.in('collection.address', collectionAddresses);
@@ -47,5 +54,5 @@ export async function selectMoments(
     throw error;
   }
 
-  return (data as InProcessMoment[]) || [];
+  return (data as SelectMomentsResult[]) || [];
 }

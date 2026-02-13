@@ -9,21 +9,19 @@ import type { Database } from '@/lib/supabase/types';
  */
 export async function upsertArtists(
   artists: Database['public']['Tables']['in_process_artists']['Insert'][]
-): Promise<Database['public']['Tables']['in_process_artists']['Row'][]> {
-  if (!artists.length) return [];
+): Promise<void> {
+  if (!artists.length) return;
 
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('in_process_artists')
-      .upsert(artists, { onConflict: 'address' })
-      .select();
+      .upsert(artists, { onConflict: 'address' });
 
     if (error) {
       console.error('❌ upsertArtists: Supabase error:', error);
       throw error;
     }
-    console.log(`💾 upsertArtists: Upserted ${data?.length ?? 0} artists`);
-    return data ?? [];
+    console.log(`💾 upsertArtists: Upserted ${artists.length} artists`);
   } catch (err) {
     console.error('❌ upsertArtists: Exception during upsert:', err);
     throw err;

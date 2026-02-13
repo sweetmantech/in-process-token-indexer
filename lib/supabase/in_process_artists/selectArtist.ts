@@ -1,4 +1,3 @@
-import { Database } from '@/lib/supabase/types';
 import { supabase } from '@/lib/supabase/client';
 
 interface SelectArtistParams {
@@ -12,12 +11,12 @@ interface SelectArtistParams {
  */
 export async function selectArtist(
   param: SelectArtistParams
-): Promise<Database['public']['Tables']['in_process_artists']['Row'] | null> {
+): Promise<{ address: string } | null> {
   const { telegram_username } = param;
 
   const { data, error } = await supabase
     .from('in_process_artists')
-    .select('*')
+    .select('address')
     .eq('telegram_username', telegram_username)
     .maybeSingle();
 

@@ -10,29 +10,25 @@ export async function upsertComments(
   comments: Array<
     Database['public']['Tables']['in_process_moment_comments']['Insert']
   >
-): Promise<
-  Array<Database['public']['Tables']['in_process_moment_comments']['Row']>
-> {
+): Promise<void> {
   if (comments.length === 0) {
     console.log('ℹ️  No moment comments to upsert');
-    return [];
+    return;
   }
 
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('in_process_moment_comments')
       .upsert(comments, {
         onConflict: 'id',
         ignoreDuplicates: false,
-      })
-      .select();
+      });
 
     if (error) {
       throw error;
     }
 
-    console.log(`✅ Upserted ${data?.length || 0} comment(s)`);
-    return data || [];
+    console.log(`✅ Upserted ${comments.length} comment(s)`);
   } catch (error) {
     console.error(`❌ Failed to upsert comments:`, error);
     throw error;

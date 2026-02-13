@@ -10,29 +10,25 @@ export async function upsertFeeRecipients(
   feeRecipients: Array<
     Database['public']['Tables']['in_process_moment_fee_recipients']['Insert']
   >
-): Promise<
-  Array<Database['public']['Tables']['in_process_moment_fee_recipients']['Row']>
-> {
+): Promise<void> {
   if (feeRecipients.length === 0) {
     console.log('ℹ️  No fee recipients to upsert');
-    return [];
+    return;
   }
 
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('in_process_moment_fee_recipients')
       .upsert(feeRecipients, {
         onConflict: 'moment,artist_address',
         ignoreDuplicates: false,
-      })
-      .select();
+      });
 
     if (error) {
       throw error;
     }
 
-    console.log(`✅ Upserted ${data?.length || 0} fee recipient(s)`);
-    return data || [];
+    console.log(`✅ Upserted ${feeRecipients.length} fee recipient(s)`);
   } catch (error) {
     console.error(`❌ Failed to upsert fee recipients:`, error);
     throw error;
