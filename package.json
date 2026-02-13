@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon --exec tsx indexer.ts",
     "start": "node --no-warnings ./dist/indexer.js",
-    "build": "NODE_OPTIONS=--max-old-space-size=512 tsc && tsc-alias",
+    "build": "NODE_OPTIONS=--max-old-space-size=2048 tsc && tsc-alias",
     "test": "vitest",
     "test:run": "vitest run",
     "format": "prettier --write .",
