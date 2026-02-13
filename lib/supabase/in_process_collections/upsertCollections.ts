@@ -13,18 +13,15 @@ export async function upsertCollections(
   collections: Array<
     Database['public']['Tables']['in_process_collections']['Insert']
   >
-): Promise<
-  Array<Database['public']['Tables']['in_process_collections']['Row']>
-> {
+): Promise<void> {
   if (!collections.length) {
     console.log('ℹ️ No collections to upsert');
-    return [];
+    return;
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('in_process_collections')
-    .upsert(collections, { onConflict: 'address, chain_id' })
-    .select();
+    .upsert(collections, { onConflict: 'address, chain_id' });
 
   if (error) {
     console.error(`❌ upsertCollections error:`, error);
@@ -32,7 +29,6 @@ export async function upsertCollections(
   }
 
   console.log(
-    `✅ upsertCollections: Upserted ${data?.length || 0} collections`
+    `✅ upsertCollections: Upserted ${collections.length} collections`
   );
-  return data || [];
 }

@@ -8,22 +8,20 @@ import { Database } from '@/lib/supabase/types';
  */
 export async function upsertPayments(
   payments: Array<Database['public']['Tables']['in_process_payments']['Insert']>
-): Promise<Array<Database['public']['Tables']['in_process_payments']['Row']>> {
+): Promise<void> {
   if (payments.length === 0) {
     console.log('ℹ️  No payments to upsert');
-    return [];
+    return;
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('in_process_payments')
-    .upsert(payments, { onConflict: 'transaction_hash, buyer, moment' })
-    .select();
+    .upsert(payments, { onConflict: 'transaction_hash, buyer, moment' });
 
   if (error) {
     console.error('❌ Failed to upsert payments:', error);
     throw error;
   }
 
-  console.log(`✅ Successfully upserted ${data?.length || 0} payment(s)`);
-  return data || [];
+  console.log(`✅ Successfully upserted ${payments.length} payment(s)`);
 }

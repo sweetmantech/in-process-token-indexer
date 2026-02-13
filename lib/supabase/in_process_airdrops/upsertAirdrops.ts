@@ -8,27 +8,25 @@ import type { Database } from '@/lib/supabase/types';
  */
 export async function upsertAirdrops(
   airdrops: Array<Database['public']['Tables']['in_process_airdrops']['Insert']>
-): Promise<Array<Database['public']['Tables']['in_process_airdrops']['Row']>> {
+): Promise<void> {
   if (airdrops.length === 0) {
     console.log('ℹ️  No airdrops to upsert');
-    return [];
+    return;
   }
 
   try {
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('in_process_airdrops')
       .upsert(airdrops, {
         onConflict: 'moment,recipient',
         ignoreDuplicates: false,
-      })
-      .select();
+      });
 
     if (error) {
       throw error;
     }
 
-    console.log(`✅ Upserted ${data?.length || 0} airdrop(s)`);
-    return data || [];
+    console.log(`✅ Upserted ${airdrops.length} airdrop(s)`);
   } catch (error) {
     console.error(`❌ Failed to upsert airdrops:`, error);
     throw error;

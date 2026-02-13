@@ -28,7 +28,7 @@ export async function deleteAdmins(
       .from('in_process_admins')
       .delete()
       .or(orConditions)
-      .select();
+      .select('id');
 
     if (error) {
       throw error;

@@ -1,4 +1,3 @@
-import { Database } from '@/lib/supabase/types';
 import { supabase } from '@/lib/supabase/client';
 
 interface SelectCollectionsOptions {
@@ -14,8 +13,10 @@ interface SelectCollectionsOptions {
  */
 export async function selectCollections(
   options: SelectCollectionsOptions = {}
-): Promise<Database['public']['Tables']['in_process_collections']['Row'][]> {
-  let query = supabase.from('in_process_collections').select('*');
+): Promise<{ id: string; address: string; chain_id: number }[]> {
+  let query = supabase
+    .from('in_process_collections')
+    .select('id, address, chain_id');
 
   if (options.addresses && options.addresses.length > 0) {
     query = query.in('address', options.addresses);

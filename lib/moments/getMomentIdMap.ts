@@ -6,7 +6,6 @@ import {
   InProcess_Airdrops_t,
   InProcess_Collectors_t,
 } from '@/types/envio';
-import { InProcessMoment } from '@/types/supabase';
 import { selectMoments } from '@/lib/supabase/in_process_moments/selectMoments';
 
 /**
@@ -35,10 +34,10 @@ export async function getMomentIdMap(
     );
     const tokenIds = entities.map(entity => Number(entity.token_id));
 
-    const data = (await selectMoments({
+    const data = await selectMoments({
       collectionAddresses,
       tokenIds,
-    })) as InProcessMoment[];
+    });
 
     const momentMap = new Map<string, string>();
 

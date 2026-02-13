@@ -8,27 +8,23 @@ import { Database } from '@/lib/supabase/types';
  */
 export async function upsertAdmins(
   admins: Array<Database['public']['Tables']['in_process_admins']['Insert']>
-): Promise<Array<Database['public']['Tables']['in_process_admins']['Row']>> {
+): Promise<void> {
   if (admins.length === 0) {
     console.log('ℹ️  No admins to upsert');
-    return [];
+    return;
   }
 
   try {
-    const { data, error } = await supabase
-      .from('in_process_admins')
-      .upsert(admins, {
-        onConflict: 'collection,artist_address,token_id',
-        ignoreDuplicates: false,
-      })
-      .select();
+    const { error } = await supabase.from('in_process_admins').upsert(admins, {
+      onConflict: 'collection,artist_address,token_id',
+      ignoreDuplicates: false,
+    });
 
     if (error) {
       throw error;
     }
 
-    console.log(`✅ Upserted ${data?.length || 0} admin(s)`);
-    return data || [];
+    console.log(`✅ Upserted ${admins.length} admin(s)`);
   } catch (error) {
     console.error(`❌ Failed to upsert admins:`, error);
     throw error;
