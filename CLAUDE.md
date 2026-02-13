@@ -242,3 +242,26 @@ Benefits:
 - `InProcess_Airdrops.recipient` → Supabase `recipient` (NOT `artist_address`)
 - `collection` + `chain_id` + `token_id` → `moment` UUID in Supabase
 - Chain timestamps → ISO timestamps
+
+### Timestamp Field Mapping (Envio → Supabase)
+
+Envio and Supabase use **different column names** for the same timestamp values. This is intentional — not a bug.
+
+| Entity      | Envio Field      | Supabase Field   | Mapping Function                        |
+| ----------- | ---------------- | ---------------- | --------------------------------------- |
+| Admins      | `updated_at`     | `granted_at`     | `toSupabaseTimestamp(admin.updated_at)` |
+| Airdrops    | `updated_at`     | `updated_at`     | direct                                  |
+| Collections | `updated_at`     | `updated_at`     | direct                                  |
+| Collectors  | `collected_at`   | `collected_at`   | direct                                  |
+| Comments    | `commented_at`   | `commented_at`   | direct                                  |
+| Moments     | `updated_at`     | `updated_at`     | direct                                  |
+| Payments    | `transferred_at` | `transferred_at` | direct                                  |
+| Sales       | `created_at`     | `created_at`     | direct                                  |
+
+The incremental indexing flow for each entity:
+
+1. `selectMaxTimestampFn()` reads max timestamp from **Supabase** (e.g., `granted_at` for admins)
+2. `toEnvioTimestamp()` converts it back to chain timestamp format
+3. `queryFragment` filters **Envio** by the corresponding field (e.g., `updated_at` for admins)
+
+The Admins entity is the only one where Envio and Supabase column names differ (`updated_at` → `granted_at`). This is consistent because `selectMaxGrantedAt` reads the Supabase column that stores the same value queried from Envio's `updated_at`.
