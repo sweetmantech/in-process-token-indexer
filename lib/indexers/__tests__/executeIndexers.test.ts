@@ -58,7 +58,7 @@ describe('executeIndexers', () => {
     stopAfterOneCycle();
   });
 
-  it('calls selectMaxTimestampFn for all indexers', async () => {
+  it('calls selectMaxTimestampFn once on startup (cached)', async () => {
     const admins = makeIndexer('admins', 'InProcess_Admins');
     const moments = makeIndexer('moments', 'InProcess_Moments');
     testIndexers = [admins, moments];
@@ -67,6 +67,7 @@ describe('executeIndexers', () => {
 
     await executeIndexers().catch(() => {});
 
+    // Called once on startup, not again during empty cycle
     expect(admins.selectMaxTimestampFn).toHaveBeenCalledOnce();
     expect(moments.selectMaxTimestampFn).toHaveBeenCalledOnce();
   });
@@ -80,6 +81,24 @@ describe('executeIndexers', () => {
     await executeIndexers().catch(() => {});
 
     expect(admins.processBatchFn).toHaveBeenCalledWith([{ id: '1' }]);
+  });
+
+  it('refreshes cached timestamp only for indexers with new data', async () => {
+    const admins = makeIndexer('admins', 'InProcess_Admins');
+    const moments = makeIndexer('moments', 'InProcess_Moments');
+    testIndexers = [admins, moments];
+
+    mockQueryGrpc.mockResolvedValueOnce({
+      InProcess_Admins: [{ id: '1' }],
+      InProcess_Moments: [],
+    });
+
+    await executeIndexers().catch(() => {});
+
+    // 1 startup + 1 refresh after data
+    expect(admins.selectMaxTimestampFn).toHaveBeenCalledTimes(2);
+    // 1 startup only (no data, no refresh)
+    expect(moments.selectMaxTimestampFn).toHaveBeenCalledOnce();
   });
 
   it('paginates when entity count equals PAGE_LIMIT', async () => {
