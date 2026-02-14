@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nodemon --exec tsx indexer.ts",
     "start": "node --no-warnings ./dist/indexer.js",
-    "build": "swc lib types indexer.ts -d dist --strip-leading-paths",
+    "build": "swc lib types indexer.ts -d dist",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
