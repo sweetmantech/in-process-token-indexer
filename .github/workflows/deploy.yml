@@ -112,13 +112,4 @@ jobs:
             pnpm run build
 
             # Restart the application
-            if [ -f .env ]; then
-              set -a; source .env; set +a
-            else
-              echo "⚠️ .env not found — restarting with existing PM2 environment"
-            fi
-            if pm2 describe in-process-token-indexer > /dev/null 2>&1; then
-              pm2 restart ecosystem.config.cjs --update-env
-            else
-              pm2 start ecosystem.config.cjs
-            fi
+            pm2 restart ecosystem.config.cjs --update-env
