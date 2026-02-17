@@ -4,7 +4,7 @@ import {
   PAGE_LIMIT,
 } from '@/lib/consts';
 import { sleep } from '@/lib/sleep';
-import { toEnvioTimestamp } from '@/lib/toEnvioTimestamp';
+import { toEnvioTimestamp } from '@/lib/indexers/toEnvioTimestamp';
 import { buildQuery } from '@/lib/grpc/buildQuery';
 import { queryGrpc } from '@/lib/grpc/queryGrpc';
 import { indexers } from '@/lib/indexers/indexers';
