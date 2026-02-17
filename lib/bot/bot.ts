@@ -71,7 +71,6 @@ export async function setBot(): Promise<TelegramBot> {
 
   return bot;
 }
-
 /**
  * Gets the global bot instance.
  * @returns The Telegram bot instance, or null if not initialized.
