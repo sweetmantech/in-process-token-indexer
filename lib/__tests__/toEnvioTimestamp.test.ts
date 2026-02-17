@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { toEnvioTimestamp } from '@/lib/indexers/toEnvioTimestamp';
+import { toEnvioTimestamp } from '@/lib/toEnvioTimestamp';
 
 describe('toEnvioTimestamp', () => {
   it('converts milliseconds to seconds', () => {
