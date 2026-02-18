@@ -95,6 +95,10 @@ jobs:
             echo "Git status:"
             git status
 
+            # Remove all PM2 processes before touching any files
+            echo "🛑 Removing all PM2 processes..."
+            pm2 delete all || true
+
             # Remove old build output and node_modules to ensure clean install
             echo "🗑️  Removing old dist and node_modules..."
             rm -rf dist
@@ -115,6 +119,7 @@ jobs:
             # Start the application with fresh build
             echo "🚀 Starting PM2 process..."
             pm2 startOrRestart ecosystem.config.cjs --update-env
+            pm2 save
 
             # Verify the application is still running after startup
             echo "⏳ Waiting for application to stabilize..."
