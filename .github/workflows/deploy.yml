@@ -95,10 +95,14 @@ jobs:
             echo "Git status:"
             git status
 
+            # Stop the running process before touching any files
+            echo "🛑 Stopping PM2 process..."
+            pm2 stop in-process-token-indexer || true
+
             # Remove old build output and node_modules to ensure clean install
             echo "🗑️  Removing old dist and node_modules..."
-            rm -rf dist || true
-            rm -rf node_modules || true
+            rm -rf dist
+            rm -rf node_modules
 
             # Install pnpm if not available
             if ! command -v pnpm &> /dev/null; then
@@ -112,5 +116,6 @@ jobs:
             # Build the application
             pnpm run build
 
-            # Restart the application
-            pm2 restart ecosystem.config.cjs --update-env
+            # Start the application with fresh build
+            echo "🚀 Starting PM2 process..."
+            pm2 startOrRestart ecosystem.config.cjs --update-env
