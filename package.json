@@ -34,11 +34,6 @@
     "socket.io": "^4.8.3",
     "viem": "^2.21.1"
   },
-  "pnpm": {
-    "overrides": {
-      "superjson": "^1.13.3"
-    }
-  },
   "devDependencies": {
     "@swc/cli": "^0.8.0",
     "@swc/core": "^1.15.11",
