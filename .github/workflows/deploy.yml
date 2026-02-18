@@ -42,7 +42,6 @@ jobs:
           username: ${{ secrets.DROPLET_USER }}
           password: ${{ secrets.DROPLET_PASSWORD }}
           script: |
-            set -e
             echo "Connected to Droplet"
             echo "🔍 Checking disk usage before cleanup..."
             df -h
@@ -113,5 +112,4 @@ jobs:
             pnpm run build
 
             # Restart the application
-            pm2 startOrRestart ecosystem.config.cjs --update-env
-            pm2 save
+            pm2 restart ecosystem.config.cjs --update-env
