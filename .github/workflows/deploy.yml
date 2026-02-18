@@ -95,9 +95,9 @@ jobs:
             echo "Git status:"
             git status
 
-            # Remove all PM2 processes before touching any files
-            echo "🛑 Removing all PM2 processes..."
-            pm2 delete all || true
+            # Stop the running process before touching any files
+            echo "🛑 Stopping PM2 process..."
+            pm2 stop in-process-token-indexer || true
 
             # Remove old build output and node_modules to ensure clean install
             echo "🗑️  Removing old dist and node_modules..."
