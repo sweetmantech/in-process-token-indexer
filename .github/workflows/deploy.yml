@@ -119,12 +119,3 @@ jobs:
             # Start the application with fresh build
             echo "🚀 Starting PM2 process..."
             pm2 startOrRestart ecosystem.config.cjs --update-env
-            pm2 save
-
-            # Verify the application is still running after startup
-            echo "⏳ Waiting for application to stabilize..."
-            sleep 10
-            echo "📊 PM2 status after startup:"
-            pm2 status
-            echo "📋 Recent application logs:"
-            pm2 logs in-process-token-indexer --lines 30 --nostream || true
