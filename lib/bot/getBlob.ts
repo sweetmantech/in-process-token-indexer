@@ -25,8 +25,6 @@ export async function getBlob(
     // Get MIME type from file extension
     const mimeType = getMimeType(file.file_path);
 
-    console.log('ziad here', mimeType)
-
     // Construct download URL
     const fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_API_KEY}/${file.file_path}`;
 
