@@ -1,5 +1,5 @@
 import { getBot } from './bot';
-import { TELEGRAM_BOT_API_KEY } from '@/lib/consts';
+import { TELEGRAM_BOT_API_KEY, TELEGRAM_LOCAL_API_URL } from '@/lib/consts';
 import fetch from 'node-fetch';
 import getMimeType from './getMimeType';
 
@@ -26,7 +26,7 @@ export async function getBlob(
     const mimeType = getMimeType(file.file_path);
 
     // Construct download URL
-    const fileUrl = `https://api.telegram.org/file/bot${TELEGRAM_BOT_API_KEY}/${file.file_path}`;
+    const fileUrl = `${TELEGRAM_LOCAL_API_URL}/file/bot${TELEGRAM_BOT_API_KEY}/${file.file_path}`;
 
     // Download the file
     console.log(

@@ -1,7 +1,6 @@
 import TelegramBot from 'node-telegram-bot-api';
 import { Address } from 'viem';
 import { PendingMedia, PendingMediaType } from './pendingMediaState';
-import { getBot } from './bot';
 import { decodeMediaInfo } from './decodeMediaInfo';
 
 const MEDIA_INFO_REGEX = /MEDIA:(photo|video):([^\s\n]+)/;
@@ -87,48 +86,20 @@ export async function getPendingMedia(
   const pendingType: PendingMediaType = type === 'photo' ? 'photo' : 'video';
 
   try {
-    const bot = getBot();
-    if (!bot) {
-      console.error('❌ Bot instance is not available');
-      return undefined;
-    }
-
-    // Get file info to reconstruct photo/video objects
-    const file = await bot.getFile(fileId);
-    if (!file) {
-      console.log('⚠️ Could not get file info for fileId:', fileId);
-      return undefined;
-    }
-
     const chatId = msg.chat.id;
 
-    // Reconstruct photo or video object from file ID
-    // For photos, we need PhotoSize array, for videos we need Video object
     let photo: TelegramBot.PhotoSize[] | undefined;
     let video: TelegramBot.Video | undefined;
 
     if (pendingType === 'photo') {
-      // Create a PhotoSize object with the file_id
-      // processPhoto uses photos[photos.length - 1], so we just need one entry
-      photo = [
-        {
-          file_id: fileId,
-          file_unique_id: file.file_unique_id || '',
-          width: 0, // Dimensions not critical for processing
-          height: 0,
-          file_size: file.file_size,
-        },
-      ];
+      photo = [{ file_id: fileId, file_unique_id: '', width: 0, height: 0 }];
     } else {
-      // Create a minimal Video object with only required properties
-      // processVideo only uses file_id and thumb.file_id
       video = {
         file_id: fileId,
-        file_unique_id: file.file_unique_id || '',
+        file_unique_id: '',
         width: 0,
         height: 0,
         duration: 0,
-        file_size: file.file_size,
       };
     }
 

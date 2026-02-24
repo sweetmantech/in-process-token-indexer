@@ -18,8 +18,10 @@ const processMedia = async (
   let result: CreateMomentResult | undefined;
 
   try {
-    if (photo) result = await processPhoto(artistAddress, photo, caption || text);
-    if (video) result = await processVideo(artistAddress, video, caption || text);
+    if (photo)
+      result = await processPhoto(artistAddress, photo, caption || text);
+    if (video)
+      result = await processVideo(artistAddress, video, caption || text);
   } catch (error: any) {
     const isTooBig = error?.message?.includes('file is too big');
     const userMessage = isTooBig
