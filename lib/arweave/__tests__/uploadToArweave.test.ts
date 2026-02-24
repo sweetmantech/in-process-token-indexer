@@ -2,15 +2,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 const mockUploadFile = vi.hoisted(() => vi.fn());
 
-vi.mock('@ardrive/turbo-sdk', () => ({
-  TurboFactory: {
-    authenticated: vi.fn(() => ({ uploadFile: mockUploadFile })),
-  },
-}));
-
-vi.mock('../consts', () => ({
-  ARWEAVE_KEY: { n: 'mock-key' },
-}));
+vi.mock('../client', () => ({ default: { uploadFile: mockUploadFile } }));
 
 import uploadToArweave from '../uploadToArweave';
 
