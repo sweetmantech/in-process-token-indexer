@@ -1,5 +1,5 @@
-import { uploadJson } from '../uploadJson';
-import uploadToArweave from '../uploadToArweave';
+import { uploadJson } from '../arweave/uploadJson';
+import uploadToArweave from '../arweave/uploadToArweave';
 import TelegramBot from 'node-telegram-bot-api';
 import uploadFile from './uploadFile';
 import uploadVideoToMux from '../mux/uploadVideoToMux';

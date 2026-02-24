@@ -39,7 +39,7 @@ const processVideo = async (
     artistAddress,
   });
 
-  tasks.trigger('migrate-mux-to-arweave', {
+  await tasks.trigger('migrate-mux-to-arweave', {
     collectionAddress: result.contractAddress.toLowerCase(),
     tokenId: result.tokenId.toString(),
     artistAddress,

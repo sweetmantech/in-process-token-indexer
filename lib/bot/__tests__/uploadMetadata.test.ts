@@ -6,14 +6,14 @@ const mockUploadVideoToMux = vi.hoisted(() => vi.fn());
 const mockUploadJson = vi.hoisted(() => vi.fn());
 
 vi.mock('@/lib/bot/uploadFile', () => ({ default: mockUploadFile }));
-vi.mock('@/lib/uploadToArweave', () => ({
+vi.mock('@/lib/arweave/uploadToArweave', () => ({
   uploadToArweave: mockUploadToArweave,
   default: mockUploadToArweave,
 }));
 vi.mock('@/lib/mux/uploadVideoToMux', () => ({
   default: mockUploadVideoToMux,
 }));
-vi.mock('@/lib/uploadJson', () => ({ uploadJson: mockUploadJson }));
+vi.mock('@/lib/arweave/uploadJson', () => ({ uploadJson: mockUploadJson }));
 
 import uploadMetadata from '@/lib/bot/uploadMetadata';
 
