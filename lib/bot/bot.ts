@@ -1,5 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { TELEGRAM_BOT_API_KEY, TELEGRAM_LOCAL_API_URL } from '../consts';
+import { TELEGRAM_BOT_API_KEY } from '../consts';
 
 /**
  * Global bot instance that can be accessed from anywhere in the codebase.
@@ -36,7 +36,6 @@ export async function setBot(): Promise<TelegramBot> {
 
   bot = new TelegramBot(TELEGRAM_BOT_API_KEY, {
     polling: true,
-    baseApiUrl: TELEGRAM_LOCAL_API_URL,
   });
 
   // Handle polling errors to prevent crashes

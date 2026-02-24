@@ -15,8 +15,6 @@ export const CDP_WALLET_SECRET = process.env.CDP_WALLET_SECRET!;
 export const CDP_PAYMASTER_KEY = process.env.CDP_PAYMASTER_KEY!;
 
 export const TELEGRAM_BOT_API_KEY = process.env.TELEGRAM_BOT_API_KEY;
-export const TELEGRAM_LOCAL_API_URL =
-  process.env.TELEGRAM_LOCAL_API_URL || 'https://api.telegram.org';
 export const ARWEAVE_KEY = JSON.parse(
   Buffer.from(process.env.ARWEAVE_KEY as string, 'base64').toString()
 );
