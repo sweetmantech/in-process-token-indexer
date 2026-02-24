@@ -1,7 +1,8 @@
-import { uploadJson } from '../uploadJson';
-import uploadToArweave from '../uploadToArweave';
+import { uploadJson } from '../arweave/uploadJson';
+import uploadToArweave from '../arweave/uploadToArweave';
 import TelegramBot from 'node-telegram-bot-api';
 import uploadFile from './uploadFile';
+import uploadVideoToMux from '../mux/uploadVideoToMux';
 
 const uploadMetadata = async ({
   photoId,
@@ -25,11 +26,12 @@ const uploadMetadata = async ({
   }
   if (videoId) {
     const { buffer, mimeType } = await uploadFile(videoId);
-    animationUri = await uploadToArweave(buffer, mimeType);
+    const { playbackUrl } = await uploadVideoToMux(buffer, mimeType);
+    animationUri = playbackUrl;
     contentMimeType = mimeType;
   }
 
-  const name = text || `photo-${Date.now()}`;
+  const name = text || `moment-${Date.now()}`;
 
   const arweaveUri = await uploadJson({
     name,
