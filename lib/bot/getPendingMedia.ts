@@ -2,7 +2,6 @@ import TelegramBot from 'node-telegram-bot-api';
 import { Address } from 'viem';
 import { PendingMedia, PendingMediaType } from './pendingMediaState';
 import { decodeMediaInfo } from './decodeMediaInfo';
-import { getBot } from './bot';
 
 const MEDIA_INFO_REGEX = /MEDIA:(photo|video):([^\s\n]+)/;
 
@@ -86,52 +85,30 @@ export async function getPendingMedia(
   const [, type, fileId] = mediaMatch;
   const pendingType: PendingMediaType = type === 'photo' ? 'photo' : 'video';
 
-  try {
-    const bot = getBot();
-    if (!bot) return undefined;
+  const chatId = msg.chat.id;
 
-    const fileInfo = await bot.getFile(fileId);
-    if (!fileInfo) return undefined;
+  let photo: TelegramBot.PhotoSize[] | undefined;
+  let video: TelegramBot.Video | undefined;
 
-    const chatId = msg.chat.id;
-
-    let photo: TelegramBot.PhotoSize[] | undefined;
-    let video: TelegramBot.Video | undefined;
-
-    if (pendingType === 'photo') {
-      photo = [
-        {
-          file_id: fileInfo.file_id,
-          file_unique_id: fileInfo.file_unique_id,
-          file_size: fileInfo.file_size,
-          width: 0,
-          height: 0,
-        },
-      ];
-    } else {
-      video = {
-        file_id: fileInfo.file_id,
-        file_unique_id: fileInfo.file_unique_id,
-        file_size: fileInfo.file_size,
-        width: 0,
-        height: 0,
-        duration: 0,
-      };
-    }
-
-    const pendingMedia: PendingMedia = {
-      artistAddress,
-      chatId,
-      type: pendingType,
-      photo,
-      video,
-      title: msg.text || undefined,
-      waitingFor: msg.text ? null : 'title',
+  if (pendingType === 'photo') {
+    photo = [{ file_id: fileId, file_unique_id: '', width: 0, height: 0 }];
+  } else {
+    video = {
+      file_id: fileId,
+      file_unique_id: '',
+      width: 0,
+      height: 0,
+      duration: 0,
     };
-
-    return pendingMedia;
-  } catch (error) {
-    console.error('❌ Error getting pending media from Telegram:', error);
-    return undefined;
   }
+
+  return {
+    artistAddress,
+    chatId,
+    type: pendingType,
+    photo,
+    video,
+    title: msg.text || undefined,
+    waitingFor: msg.text ? null : 'title',
+  };
 }
