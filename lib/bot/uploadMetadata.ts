@@ -17,6 +17,7 @@ const uploadMetadata = async ({
   if (!photoId && !videoId) throw new Error('No photo or video provided');
   let imageUri = '';
   let animationUri = '';
+  let downloadUri = '';
   let contentMimeType = '';
 
   if (photoId) {
@@ -26,8 +27,12 @@ const uploadMetadata = async ({
   }
   if (videoId) {
     const { buffer, mimeType } = await uploadFile(videoId);
-    const { playbackUrl } = await uploadVideoToMux(buffer, mimeType);
+    const { playbackUrl, downloadUrl } = await uploadVideoToMux(
+      buffer,
+      mimeType
+    );
     animationUri = playbackUrl;
+    downloadUri = downloadUrl;
     contentMimeType = mimeType;
   }
 
@@ -39,7 +44,7 @@ const uploadMetadata = async ({
     ...(animationUri && { animation_url: animationUri }),
     content: {
       mime: contentMimeType,
-      uri: animationUri || imageUri,
+      uri: downloadUri || animationUri || imageUri,
     },
   });
 

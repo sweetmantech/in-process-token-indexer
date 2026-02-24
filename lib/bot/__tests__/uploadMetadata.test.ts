@@ -119,7 +119,7 @@ describe('uploadMetadata', () => {
       expect(mockUploadToArweave).not.toHaveBeenCalled();
     });
 
-    it('uploads JSON with animation_url set to Mux playback URL', async () => {
+    it('uploads JSON with animation_url as playback URL and content.uri as download URL', async () => {
       await uploadMetadata({ videoId: 'video-id', text: 'caption' });
 
       expect(mockUploadJson).toHaveBeenCalledWith(
@@ -127,7 +127,7 @@ describe('uploadMetadata', () => {
           animation_url: 'https://stream.mux.com/abc.m3u8',
           content: {
             mime: 'video/mp4',
-            uri: 'https://stream.mux.com/abc.m3u8',
+            uri: 'https://download.mux.com/abc.mp4',
           },
         })
       );
