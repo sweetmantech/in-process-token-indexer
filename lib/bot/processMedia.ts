@@ -15,6 +15,16 @@ const processMedia = async (
   const caption = msg?.caption || '';
   const chatId = msg.chat.id;
 
+  const TWENTY_MB = 20 * 1024 * 1024;
+  const fileSize = video?.file_size ?? photo?.[photo.length - 1]?.file_size;
+  if (fileSize && fileSize > TWENTY_MB) {
+    await sendMessage(
+      chatId,
+      'Telegram has a 20MB limit. You can upload larger media here: https://inprocess.world/create'
+    );
+    return undefined;
+  }
+
   let result: CreateMomentResult | undefined;
 
   try {
@@ -25,7 +35,7 @@ const processMedia = async (
   } catch (error: any) {
     const isTooBig = error?.message?.includes('file is too big');
     const userMessage = isTooBig
-      ? '❌ Video is too large. Telegram bots can only download files up to 20MB. Please send a shorter clip.'
+      ? 'Telegram has a 20MB limit. You can upload larger media here: https://inprocess.world/create'
       : '❌ Failed to process your media. Please try again.';
     await sendMessage(chatId, userMessage);
     return undefined;
