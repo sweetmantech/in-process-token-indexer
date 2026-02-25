@@ -4,6 +4,7 @@ import { sendMessage } from './sendMessage';
 import processVideo from './processVideo';
 import TelegramBot from 'node-telegram-bot-api';
 import { CreateMomentResult } from '../api/createMomentApi';
+import isTooBigForTelegram, { TOO_BIG_MESSAGE } from './isTooBigForTelegram';
 
 const processMedia = async (
   artistAddress: Address,
@@ -15,13 +16,8 @@ const processMedia = async (
   const caption = msg?.caption || '';
   const chatId = msg.chat.id;
 
-  const TWENTY_MB = 20 * 1024 * 1024;
-  const fileSize = video?.file_size ?? photo?.[photo.length - 1]?.file_size;
-  if (fileSize && fileSize > TWENTY_MB) {
-    await sendMessage(
-      chatId,
-      'Telegram has a 20MB limit. You can upload larger media here: https://inprocess.world/create'
-    );
+  if (isTooBigForTelegram(video, photo)) {
+    await sendMessage(chatId, TOO_BIG_MESSAGE);
     return undefined;
   }
 
@@ -35,7 +31,7 @@ const processMedia = async (
   } catch (error: any) {
     const isTooBig = error?.message?.includes('file is too big');
     const userMessage = isTooBig
-      ? 'Telegram has a 20MB limit. You can upload larger media here: https://inprocess.world/create'
+      ? TOO_BIG_MESSAGE
       : '❌ Failed to process your media. Please try again.';
     await sendMessage(chatId, userMessage);
     return undefined;
