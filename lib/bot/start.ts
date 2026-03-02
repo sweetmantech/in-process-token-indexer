@@ -38,6 +38,14 @@ export async function runBot(): Promise<TelegramBot> {
         return;
       }
 
+      if (msg.text === '/start') {
+        const chatId = msg.chat.id;
+        const welcomeMessage = `Hello, ${artist.username || sender}, Welcome to In Process!`;
+        await sendMessage(chatId, welcomeMessage);
+        await logMessage([{ type: 'text', text: welcomeMessage }], 'assistant');
+        return;
+      }
+
       const pending = await getPendingMedia(msg, artist.address as Address);
       if (pending) {
         const handled = await handlePendingMedia({ pending, msg });

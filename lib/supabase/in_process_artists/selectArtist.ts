@@ -11,12 +11,12 @@ interface SelectArtistParams {
  */
 export async function selectArtist(
   param: SelectArtistParams
-): Promise<{ address: string } | null> {
+): Promise<{ address: string; username: string | null } | null> {
   const { telegram_username } = param;
 
   const { data, error } = await supabase
     .from('in_process_artists')
-    .select('address')
+    .select('address, username')
     .eq('telegram_username', telegram_username)
     .maybeSingle();
 
