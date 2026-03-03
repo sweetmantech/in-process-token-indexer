@@ -40,7 +40,7 @@ export async function runBot(): Promise<TelegramBot> {
 
       if (msg.text === '/start') {
         const chatId = msg.chat.id;
-        const welcomeMessage = `Hello ${artist.username || sender}, welcome to In Process! Your telegram has been verified! You can now text photos and captions to post them on In Process.`;
+        const welcomeMessage = `Hello ${artist.username || sender}, welcome to In Process! Your telegram has been verified! You can now send photos and captions to post them on In Process.`;
         await sendMessage(chatId, welcomeMessage);
         await logMessage([{ type: 'text', text: welcomeMessage }], 'assistant');
         return;
