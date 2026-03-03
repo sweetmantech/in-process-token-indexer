@@ -95,7 +95,7 @@ describe('runBot - /start command', () => {
 
       expect(mockSendMessage).toHaveBeenCalledWith(
         mockChatId,
-        `Hello, ${mockArtist.username}, Welcome to In Process!`
+        `Hello ${mockArtist.username}, welcome to In Process! Your telegram has been verified! You can now text photos and captions to post them on In Process.`
       );
     });
 
@@ -106,7 +106,7 @@ describe('runBot - /start command', () => {
 
       expect(mockSendMessage).toHaveBeenCalledWith(
         mockChatId,
-        `Hello, ${mockSender}, Welcome to In Process!`
+        `Hello ${mockSender}, welcome to In Process! Your telegram has been verified! You can now text photos and captions to post them on In Process.`
       );
     });
 
@@ -135,7 +135,7 @@ describe('runBot - /start command', () => {
         [
           {
             type: 'text',
-            text: `Hello, ${mockArtist.username}, Welcome to In Process!`,
+            text: `Hello ${mockArtist.username}, welcome to In Process! Your telegram has been verified! You can now text photos and captions to post them on In Process.`,
           },
         ],
         'assistant'
