@@ -13,11 +13,11 @@ import type { IndexConfig } from '@/types/factory';
 export const indexers: IndexConfig<any>[] = [
   collectionsIndexer,
   catalogCollectionsIndexer,
-  momentsIndexer,
-  adminsIndexer,
-  commentsIndexer,
-  salesIndexer,
-  paymentsIndexer,
-  airdropsIndexer,
-  collectorsIndexer,
+  // momentsIndexer,
+  // adminsIndexer,
+  // commentsIndexer,
+  // salesIndexer,
+  // paymentsIndexer,
+  // airdropsIndexer,
+  // collectorsIndexer,
 ];

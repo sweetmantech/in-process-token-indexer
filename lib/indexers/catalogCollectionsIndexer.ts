@@ -1,10 +1,10 @@
-import { processCatalogCollectionsInBatches } from '@/lib/catalog_collections/processCatalogCollectionsInBatches';
 import { selectMaxUpdatedAt } from '@/lib/collections/selectMaxUpdatedAt';
 import type { Catalog_Collections_t } from '@/types/envio';
 import type { IndexConfig } from '@/types/factory';
+import { processCollectionsInBatches } from '../collections/processCollectionsInBatches';
 
 export const catalogCollectionsIndexer: IndexConfig<Catalog_Collections_t> = {
-  processBatchFn: processCatalogCollectionsInBatches,
+  processBatchFn: processCollectionsInBatches,
   selectMaxTimestampFn: selectMaxUpdatedAt,
   indexName: 'catalog_collections',
   dataPath: 'Catalog_Collections',

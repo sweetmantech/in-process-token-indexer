@@ -1,4 +1,4 @@
-import { InProcess_Collections_t } from '@/types/envio';
+import { Catalog_Collections_t, InProcess_Collections_t } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapCollectionsToSupabase } from './mapCollectionsToSupabase';
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
@@ -6,7 +6,7 @@ import { upsertCollections } from '@/lib/supabase/in_process_collections/upsertC
 import { emitCollectionUpdated } from '@/lib/socket/emitCollectionUpdated';
 
 export async function processCollectionsInBatches(
-  collections: InProcess_Collections_t[]
+  collections: InProcess_Collections_t[] | Catalog_Collections_t[]
 ): Promise<void> {
   let totalProcessed = 0;
   for (let i = 0; i < collections.length; i += BATCH_SIZE) {
@@ -16,7 +16,7 @@ export async function processCollectionsInBatches(
 
       // Ensure artists exist in the database
       const artistAddresses = mappedCollections.map(
-        collection => collection.default_admin
+        collection => collection.creator
       );
       await ensureArtists(artistAddresses);
 
