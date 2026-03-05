@@ -1,3 +1,4 @@
+import { catalogCollectionsIndexer } from '@/lib/indexers/catalogCollectionsIndexer';
 import { collectionsIndexer } from '@/lib/indexers/collectionsIndexer';
 import { momentsIndexer } from '@/lib/indexers/momentsIndexer';
 import { adminsIndexer } from '@/lib/indexers/adminsIndexer';
@@ -11,6 +12,7 @@ import type { IndexConfig } from '@/types/factory';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const indexers: IndexConfig<any>[] = [
   collectionsIndexer,
+  catalogCollectionsIndexer,
   momentsIndexer,
   adminsIndexer,
   commentsIndexer,

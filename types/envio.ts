@@ -137,3 +137,15 @@ export interface CollectorsQueryResult {
   entities: InProcess_Collectors_t[];
   pageInfo: PageInfo;
 }
+
+export type Catalog_Collections_t = {
+  readonly id: string;
+  readonly address: string;
+  readonly name: string;
+  readonly creator: string;
+  readonly uri: string;
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly updated_at: number;
+  readonly transaction_hash: string;
+};

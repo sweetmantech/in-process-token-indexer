@@ -168,6 +168,42 @@ type InProcess_Collectors {
   transaction_hash: String!
   collected_at: Int!
 }
+
+type Catalog_Sales {
+  id: ID!
+  collection: String!
+  token_id: Int!
+  price_per_token: BigInt!
+  funds_recipient: String!
+  currency: String!
+  chain_id: Int!
+  created_at: Int!
+  transaction_hash: String!
+}
+
+type Catalog_Moments {
+  id: ID!
+  collection: String!
+  token_id: Int!
+  artist: String!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
+
+type Catalog_Collections {
+  id: ID!
+  address: String!
+  name: String!
+  creator: String!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
 ```
 
 ### Query Pattern (Combined)
