@@ -28,7 +28,7 @@ export async function mapAirdropsToSupabase(
       return {
         moment: momentId,
         recipient: airdrop.recipient.toLowerCase(),
-        amount: airdrop.amount,
+        amount: Number(airdrop.amount),
         updated_at: toSupabaseTimestamp(airdrop.updated_at),
       };
     })

@@ -1,4 +1,4 @@
-import { InProcess_Sales_t } from '@/types/envio';
+import { Primary_Sales_t } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapSalesToSupabase } from './mapSalesToSupabase';
 import { upsertSales } from '@/lib/supabase/in_process_sales/upsertSales';
@@ -6,7 +6,7 @@ import { upsertFeeRecipients } from '@/lib/supabase/in_process_moment_fee_recipi
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 
 export async function processSalesInBatches(
-  sales: InProcess_Sales_t[]
+  sales: Primary_Sales_t[]
 ): Promise<void> {
   let totalProcessed = 0;
 

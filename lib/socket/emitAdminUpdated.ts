@@ -8,7 +8,7 @@ export function emitAdminUpdated(admins: InProcess_Admins_t[]): void {
   const seen = new Set<string>();
 
   for (const admin of admins) {
-    const isMoment = Boolean(admin.token_id);
+    const isMoment = Number(admin.token_id) !== 0;
     const key = isMoment
       ? `${admin.collection}:${admin.token_id}:${admin.chain_id}`
       : `${admin.collection}:${admin.chain_id}`;
@@ -20,7 +20,7 @@ export function emitAdminUpdated(admins: InProcess_Admins_t[]): void {
     io.emit(eventName, {
       collectionAddress: admin.collection,
       chainId: admin.chain_id,
-      ...(isMoment && { tokenId: admin.token_id }),
+      ...(isMoment && { tokenId: Number(admin.token_id) }),
     });
   }
 }

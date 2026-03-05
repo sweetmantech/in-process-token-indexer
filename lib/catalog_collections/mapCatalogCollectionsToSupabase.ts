@@ -10,7 +10,7 @@ export function mapCatalogCollectionsToSupabase(
     name: c.name,
     uri: c.uri,
     default_admin: c.creator,
-    payout_recipient: "",
+    payout_recipient: '',
     chain_id: c.chain_id,
     created_at: toSupabaseTimestamp(c.created_at),
     updated_at: toSupabaseTimestamp(c.updated_at),

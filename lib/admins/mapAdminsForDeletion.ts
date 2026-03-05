@@ -28,7 +28,7 @@ export async function mapAdminsForDeletion(
       }
       return {
         collection: collectionId,
-        token_id: admin.token_id,
+        token_id: Number(admin.token_id),
         artist_address: admin.admin.toLowerCase(),
       };
     })

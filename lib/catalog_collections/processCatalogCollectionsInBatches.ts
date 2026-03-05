@@ -31,6 +31,8 @@ export async function processCatalogCollectionsInBatches(
   }
 
   if (totalProcessed > 0)
-    console.log(`✅  Completed processing: ${totalProcessed} catalog collections`);
+    console.log(
+      `✅  Completed processing: ${totalProcessed} catalog collections`
+    );
   else console.log(`ℹ️  No catalog collections to process`);
 }
