@@ -1,7 +1,9 @@
 import { getIO } from '@/lib/socket/server';
-import { InProcess_Moments_t } from '@/types/envio';
+import { Catalog_Moments_t, InProcess_Moments_t } from '@/types/envio';
 
-export function emitMomentUpdated(moments: InProcess_Moments_t[]): void {
+export function emitMomentUpdated(
+  moments: InProcess_Moments_t[] | Catalog_Moments_t[]
+): void {
   const io = getIO();
   if (!io) return;
 

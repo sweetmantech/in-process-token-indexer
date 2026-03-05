@@ -1,4 +1,5 @@
 import { catalogCollectionsIndexer } from '@/lib/indexers/catalogCollectionsIndexer';
+import { catalogMomentsIndexer } from '@/lib/indexers/catalogMomentsIndexer';
 import { collectionsIndexer } from '@/lib/indexers/collectionsIndexer';
 import { momentsIndexer } from '@/lib/indexers/momentsIndexer';
 import { adminsIndexer } from '@/lib/indexers/adminsIndexer';
@@ -14,6 +15,7 @@ export const indexers: IndexConfig<any>[] = [
   collectionsIndexer,
   catalogCollectionsIndexer,
   momentsIndexer,
+  catalogMomentsIndexer,
   adminsIndexer,
   commentsIndexer,
   salesIndexer,
