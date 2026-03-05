@@ -79,7 +79,6 @@ type InProcess_Collections {
   name: String!
   uri: String!
   default_admin: String!
-  payout_recipient: String!
   chain_id: Int!
   created_at: Int!
   updated_at: Int!

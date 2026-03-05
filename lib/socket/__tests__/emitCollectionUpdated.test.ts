@@ -19,7 +19,6 @@ const makeCollection = (
   created_at: 1000,
   default_admin: '0xadmin',
   name: 'Collection 1',
-  payout_recipient: '0xpayout',
   transaction_hash: '0xabc',
   updated_at: 2000,
   uri: 'ar://abc',

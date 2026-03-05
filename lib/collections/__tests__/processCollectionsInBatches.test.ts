@@ -32,7 +32,6 @@ const makeCollection = (id: string): InProcess_Collections_t => ({
   created_at: 1000,
   default_admin: `0xadmin${id}`,
   name: `Collection ${id}`,
-  payout_recipient: `0xpayout${id}`,
   transaction_hash: `0xhash${id}`,
   updated_at: 2000,
   uri: `ar://${id}`,
