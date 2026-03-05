@@ -1,20 +1,10 @@
 import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
-import { InProcess_Moments_t } from '@/types/envio';
+import { Catalog_Moments_t, InProcess_Moments_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getCollectionIdMap } from '@/lib/collections/getCollectionIdMap';
 
-/**
- * Maps Envio InProcess_Moments_t entities from GraphQL
- * to the Supabase schema for upserting.
- * - Resolves collection address+chain_id to collection ID.
- * - Converts max_supply from string (BigInt) to number.
- * - Serializes all values to primitive types for Supabase.
- *
- * @param moments - Array of InProcess_Moments_t from Envio.
- * @returns Array of objects formatted for Supabase upsert.
- */
 export async function mapMomentsToSupabase(
-  moments: InProcess_Moments_t[]
+  moments: InProcess_Moments_t[] | Catalog_Moments_t[]
 ): Promise<
   Array<Database['public']['Tables']['in_process_moments']['Insert']>
 > {
@@ -35,7 +25,7 @@ export async function mapMomentsToSupabase(
         collection: collectionId,
         token_id: Number(moment.token_id),
         uri: moment.uri,
-        max_supply: Number(moment.max_supply)!,
+        max_supply: 'max_supply' in moment ? Number(moment.max_supply) : 0,
         created_at: toSupabaseTimestamp(moment.created_at)!,
         updated_at: toSupabaseTimestamp(moment.updated_at)!,
       };
