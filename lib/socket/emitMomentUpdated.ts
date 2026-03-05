@@ -8,7 +8,7 @@ export function emitMomentUpdated(moments: InProcess_Moments_t[]): void {
   for (const moment of moments) {
     io.emit('moment:updated', {
       collectionAddress: moment.collection,
-      tokenId: moment.token_id,
+      tokenId: Number(moment.token_id),
       chainId: moment.chain_id,
     });
   }

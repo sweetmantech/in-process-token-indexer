@@ -1,8 +1,8 @@
 import { getIO } from '@/lib/socket/server';
-import { InProcess_Collections_t } from '@/types/envio';
+import { Catalog_Collections_t, InProcess_Collections_t } from '@/types/envio';
 
 export function emitCollectionUpdated(
-  collections: InProcess_Collections_t[]
+  collections: InProcess_Collections_t[] | Catalog_Collections_t[]
 ): void {
   const io = getIO();
   if (!io) return;

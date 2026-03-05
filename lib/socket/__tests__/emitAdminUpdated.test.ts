@@ -16,7 +16,7 @@ const makeAdmin = (
   id: '1',
   admin: '0xadmin',
   collection: '0x1234567890abcdef1234567890abcdef12345678',
-  token_id: 1,
+  token_id: '1',
   chain_id: 8453,
   permission: 2,
   updated_at: 2000,
@@ -40,8 +40,8 @@ describe('emitAdminUpdated', () => {
     vi.mocked(getIO).mockReturnValue({ emit: mockEmit } as any);
 
     const admins = [
-      makeAdmin({ collection: '0xaaa', token_id: 1, chain_id: 1 }),
-      makeAdmin({ collection: '0xbbb', token_id: 2, chain_id: 8453 }),
+      makeAdmin({ collection: '0xaaa', token_id: '1', chain_id: 1 }),
+      makeAdmin({ collection: '0xbbb', token_id: '2', chain_id: 8453 }),
     ];
 
     emitAdminUpdated(admins);
@@ -63,7 +63,7 @@ describe('emitAdminUpdated', () => {
     vi.mocked(getIO).mockReturnValue({ emit: mockEmit } as any);
 
     emitAdminUpdated([
-      makeAdmin({ collection: '0xccc', token_id: 0, chain_id: 1 }),
+      makeAdmin({ collection: '0xccc', token_id: '0', chain_id: 1 }),
     ]);
 
     expect(mockEmit).toHaveBeenCalledTimes(1);
@@ -80,19 +80,19 @@ describe('emitAdminUpdated', () => {
       makeAdmin({
         admin: '0xadmin1',
         collection: '0xaaa',
-        token_id: 0,
+        token_id: '0',
         chain_id: 1,
       }),
       makeAdmin({
         admin: '0xadmin2',
         collection: '0xaaa',
-        token_id: 0,
+        token_id: '0',
         chain_id: 1,
       }),
       makeAdmin({
         admin: '0xadmin3',
         collection: '0xaaa',
-        token_id: 0,
+        token_id: '0',
         chain_id: 1,
       }),
     ]);
@@ -111,19 +111,19 @@ describe('emitAdminUpdated', () => {
       makeAdmin({
         admin: '0xadmin1',
         collection: '0xaaa',
-        token_id: 5,
+        token_id: '5',
         chain_id: 1,
       }),
       makeAdmin({
         admin: '0xadmin2',
         collection: '0xaaa',
-        token_id: 5,
+        token_id: '5',
         chain_id: 1,
       }),
       makeAdmin({
         admin: '0xadmin3',
         collection: '0xaaa',
-        token_id: 10,
+        token_id: '10',
         chain_id: 1,
       }),
     ]);

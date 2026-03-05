@@ -2,7 +2,7 @@ import { Database } from '@/lib/supabase/types';
 import isSplitContract from '@/lib/splits/isSplitContract';
 import { Address } from 'viem';
 import { getSplitRecipients } from '@/lib/splits/getSplitRecipients';
-import { InProcess_Sales_t } from '@/types/envio';
+import { Primary_Sales_t } from '@/types/envio';
 
 /**
  * Gets fee recipients for a sale, handling split contracts.
@@ -14,7 +14,7 @@ import { InProcess_Sales_t } from '@/types/envio';
  * @returns Promise of fee recipient records for Supabase
  */
 export async function getFeeRecipientsForSale(
-  sale: InProcess_Sales_t,
+  sale: Primary_Sales_t,
   momentId: string
 ): Promise<
   Array<

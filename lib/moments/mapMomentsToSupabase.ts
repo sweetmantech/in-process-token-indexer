@@ -33,7 +33,7 @@ export async function mapMomentsToSupabase(
       }
       return {
         collection: collectionId,
-        token_id: moment.token_id,
+        token_id: Number(moment.token_id),
         uri: moment.uri,
         max_supply: Number(moment.max_supply)!,
         created_at: toSupabaseTimestamp(moment.created_at)!,

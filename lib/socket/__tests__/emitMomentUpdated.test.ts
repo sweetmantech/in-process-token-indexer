@@ -15,7 +15,7 @@ const makeMoment = (
 ): InProcess_Moments_t => ({
   id: '1',
   collection: '0x1234567890abcdef1234567890abcdef12345678',
-  token_id: 1,
+  token_id: '1',
   uri: 'ar://abc',
   max_supply: '100',
   chain_id: 8453,
@@ -42,8 +42,8 @@ describe('emitMomentUpdated', () => {
     vi.mocked(getIO).mockReturnValue({ emit: mockEmit } as any);
 
     const moments = [
-      makeMoment({ collection: '0xaaa', token_id: 1, chain_id: 1 }),
-      makeMoment({ collection: '0xbbb', token_id: 2, chain_id: 8453 }),
+      makeMoment({ collection: '0xaaa', token_id: '1', chain_id: 1 }),
+      makeMoment({ collection: '0xbbb', token_id: '2', chain_id: 8453 }),
     ];
 
     emitMomentUpdated(moments);

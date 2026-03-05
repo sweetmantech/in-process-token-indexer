@@ -88,7 +88,7 @@ type InProcess_Collections {
 type InProcess_Moments {
   id: ID!
   collection: String!
-  token_id: Int!
+  token_id: BigInt!
   uri: String!
   max_supply: BigInt!
   chain_id: Int!
@@ -97,16 +97,16 @@ type InProcess_Moments {
   transaction_hash: String!
 }
 
-type InProcess_Sales {
+type Primary_Sales {
   id: ID!
   collection: String!
-  token_id: Int!
-  sale_start: BigInt!
-  sale_end: BigInt!
-  max_tokens_per_address: BigInt!
+  token_id: BigInt!
   price_per_token: BigInt!
   funds_recipient: String!
   currency: String!
+  sale_start: BigInt
+  sale_end: BigInt
+  max_tokens_per_address: BigInt
   chain_id: Int!
   transaction_hash: String!
   created_at: Int!
@@ -116,10 +116,9 @@ type InProcess_Admins {
   id: ID!
   admin: String!
   collection: String!
-  token_id: Int!
+  token_id: BigInt!
   chain_id: Int!
   permission: Int!
-  granted_at: Int!
   updated_at: Int!
 }
 
@@ -127,18 +126,28 @@ type InProcess_Moment_Comments {
   id: ID!
   collection: String!
   sender: String!
-  token_id: Int!
+  token_id: BigInt!
   comment: String
   chain_id: Int!
   commented_at: Int!
   transaction_hash: String!
 }
 
+type InProcess_Airdrops {
+  id: ID!
+  recipient: String!
+  collection: String!
+  token_id: BigInt!
+  amount: BigInt!
+  chain_id: Int!
+  updated_at: Int!
+}
+
 type InProcess_Payments {
   id: ID!
   collection: String!
   currency: String!
-  token_id: Int!
+  token_id: BigInt!
   recipient: String!
   spender: String!
   amount: String!
@@ -147,25 +156,75 @@ type InProcess_Payments {
   transferred_at: Int!
 }
 
-type InProcess_Airdrops {
+type Catalog_Moments {
   id: ID!
-  recipient: String!
   collection: String!
-  token_id: Int!
-  amount: Int!
+  token_id: BigInt!
+  artist: String!
+  uri: String!
   chain_id: Int!
+  created_at: Int!
   updated_at: Int!
+  transaction_hash: String!
+}
+
+type Catalog_Collections {
+  id: ID!
+  address: String!
+  name: String!
+  creator: String!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
 }
 
 type InProcess_Collectors {
   id: ID!
   collection: String!
-  token_id: Int!
-  amount: Int!
+  token_id: BigInt!
+  amount: BigInt!
   chain_id: Int!
   collector: String!
   transaction_hash: String!
   collected_at: Int!
+}
+
+type Catalog_Sales {
+  id: ID!
+  collection: String!
+  token_id: Int!
+  price_per_token: BigInt!
+  funds_recipient: String!
+  currency: String!
+  chain_id: Int!
+  created_at: Int!
+  transaction_hash: String!
+}
+
+type Catalog_Moments {
+  id: ID!
+  collection: String!
+  token_id: Int!
+  artist: String!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
+
+type Catalog_Collections {
+  id: ID!
+  address: String!
+  name: String!
+  creator: String!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
 }
 ```
 

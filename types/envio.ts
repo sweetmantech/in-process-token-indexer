@@ -23,7 +23,7 @@ export interface CollectionsQueryResult {
 export type InProcess_Moments_t = {
   readonly id: string;
   readonly collection: string;
-  readonly token_id: number;
+  readonly token_id: string; // BigInt from GraphQL comes as string
   readonly uri: string;
   readonly max_supply: string; // BigInt from GraphQL comes as string
   readonly chain_id: number;
@@ -41,7 +41,7 @@ export type InProcess_Admins_t = {
   readonly id: string;
   readonly admin: string;
   readonly collection: string;
-  readonly token_id: number;
+  readonly token_id: string; // BigInt from GraphQL comes as string
   readonly chain_id: number;
   readonly permission: number;
   readonly updated_at: number;
@@ -56,7 +56,7 @@ export type InProcess_Moment_Comments_t = {
   readonly id: string;
   readonly collection: string;
   readonly sender: string;
-  readonly token_id: number;
+  readonly token_id: string; // BigInt from GraphQL comes as string
   readonly comment: string | undefined;
   readonly chain_id: number;
   readonly commented_at: number;
@@ -68,13 +68,13 @@ export interface MomentCommentsQueryResult {
   pageInfo: PageInfo;
 }
 
-export type InProcess_Sales_t = {
+export type Primary_Sales_t = {
   readonly id: string;
   readonly collection: string;
-  readonly token_id: number;
-  readonly sale_start: string; // BigInt from GraphQL comes as string
-  readonly sale_end: string; // BigInt from GraphQL comes as string
-  readonly max_tokens_per_address: string; // BigInt from GraphQL comes as string
+  readonly token_id: string; // BigInt from GraphQL comes as string
+  readonly sale_start: string | null; // BigInt, nullable
+  readonly sale_end: string | null; // BigInt, nullable
+  readonly max_tokens_per_address: string | null; // BigInt, nullable
   readonly price_per_token: string; // BigInt from GraphQL comes as string
   readonly funds_recipient: string;
   readonly currency: string;
@@ -83,8 +83,8 @@ export type InProcess_Sales_t = {
   readonly created_at: number;
 };
 
-export interface SalesQueryResult {
-  entities: InProcess_Sales_t[];
+export interface PrimarySalesQueryResult {
+  entities: Primary_Sales_t[];
   pageInfo: PageInfo;
 }
 
@@ -92,7 +92,7 @@ export type InProcess_Payments_t = {
   readonly id: string;
   readonly collection: string;
   readonly currency: string;
-  readonly token_id: number;
+  readonly token_id: string; // BigInt from GraphQL comes as string
   readonly recipient: string;
   readonly spender: string;
   readonly amount: string;
@@ -110,8 +110,8 @@ export type InProcess_Airdrops_t = {
   readonly id: string;
   readonly recipient: string;
   readonly collection: string;
-  readonly token_id: number;
-  readonly amount: number;
+  readonly token_id: string; // BigInt from GraphQL comes as string
+  readonly amount: string; // BigInt from GraphQL comes as string
   readonly chain_id: number;
   readonly updated_at: number;
 };
@@ -124,8 +124,8 @@ export interface AirdropsQueryResult {
 export type InProcess_Collectors_t = {
   readonly id: string;
   readonly collection: string;
-  readonly token_id: number;
-  readonly amount: number;
+  readonly token_id: string; // BigInt from GraphQL comes as string
+  readonly amount: string; // BigInt from GraphQL comes as string
   readonly chain_id: number;
   readonly collector: string;
   readonly transaction_hash: string;
@@ -136,3 +136,39 @@ export interface CollectorsQueryResult {
   entities: InProcess_Collectors_t[];
   pageInfo: PageInfo;
 }
+
+export type Catalog_Collections_t = {
+  readonly id: string;
+  readonly address: string;
+  readonly name: string;
+  readonly creator: string;
+  readonly uri: string;
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly updated_at: number;
+  readonly transaction_hash: string;
+};
+
+export type Catalog_Moments_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly token_id: string; // BigInt from GraphQL comes as string
+  readonly artist: string;
+  readonly uri: string;
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly updated_at: number;
+  readonly transaction_hash: string;
+};
+
+export type Catalog_Sales_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly token_id: number;
+  readonly price_per_token: string; // BigInt from GraphQL comes as string
+  readonly funds_recipient: string;
+  readonly currency: string;
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly transaction_hash: string;
+};

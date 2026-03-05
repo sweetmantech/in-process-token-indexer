@@ -16,8 +16,8 @@ function makeCollector(
   return {
     id: 'c1',
     collection: '0xAbCdEf1234567890AbCdEf1234567890AbCdEf12',
-    token_id: 1,
-    amount: 5,
+    token_id: '1',
+    amount: '5',
     chain_id: 8453,
     collector: '0xCollEcToR1234567890AbCdEf1234567890AbCd',
     transaction_hash:
@@ -114,19 +114,19 @@ describe('mapCollectorsToSupabase', () => {
     const c1 = makeCollector({
       id: 'c1',
       collection: '0xAAA',
-      token_id: 1,
+      token_id: '1',
       chain_id: 8453,
     });
     const c2 = makeCollector({
       id: 'c2',
       collection: '0xBBB',
-      token_id: 2,
+      token_id: '2',
       chain_id: 8453,
     });
     const c3 = makeCollector({
       id: 'c3',
       collection: '0xCCC',
-      token_id: 3,
+      token_id: '3',
       chain_id: 8453,
     });
 
@@ -146,7 +146,7 @@ describe('mapCollectorsToSupabase', () => {
   });
 
   it('should preserve the amount field as-is', async () => {
-    const collector = makeCollector({ amount: 42 });
+    const collector = makeCollector({ amount: '42' });
     const tripletKey = `${collector.collection.toLowerCase()}:${collector.chain_id}:${collector.token_id}`;
 
     mockGetMomentIdMap.mockResolvedValue(

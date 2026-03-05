@@ -30,8 +30,8 @@ function makeCollector(id: string): InProcess_Collectors_t {
   return {
     id,
     collection: '0xabc',
-    token_id: 1,
-    amount: 1,
+    token_id: '1',
+    amount: '1',
     chain_id: 8453,
     collector: '0xcollector',
     transaction_hash: '0xtxhash',

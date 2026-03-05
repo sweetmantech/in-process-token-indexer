@@ -28,7 +28,7 @@ export async function mapCollectorsToSupabase(
       return {
         moment: momentId,
         collector: collector.collector.toLowerCase(),
-        amount: collector.amount,
+        amount: Number(collector.amount),
         transaction_hash: collector.transaction_hash.toLowerCase(),
         collected_at: toSupabaseTimestamp(collector.collected_at),
       };

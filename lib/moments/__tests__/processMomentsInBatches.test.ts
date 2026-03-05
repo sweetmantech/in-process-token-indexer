@@ -24,7 +24,7 @@ import { emitMomentUpdated } from '@/lib/socket/emitMomentUpdated';
 const makeMoment = (id: string): InProcess_Moments_t => ({
   id,
   collection: `0x${id}`,
-  token_id: Number(id),
+  token_id: id,
   uri: `ar://${id}`,
   max_supply: '100',
   chain_id: 8453,

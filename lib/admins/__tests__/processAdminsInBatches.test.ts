@@ -39,7 +39,7 @@ const makeAdmin = (
   id: '1',
   admin: '0xadmin',
   collection: '0xaaa',
-  token_id: 1,
+  token_id: '1',
   chain_id: 8453,
   permission: 2,
   updated_at: 2000,
