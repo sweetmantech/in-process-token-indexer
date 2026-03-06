@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { InProcess_Admins_t } from '@/types/envio';
+import { Catalog_Admins_t, InProcess_Admins_t } from '@/types/envio';
 
 vi.mock('@/lib/consts', () => ({
   BATCH_SIZE: 3,
@@ -100,5 +100,71 @@ describe('processAdminsInBatches', () => {
     expect(emitAdminUpdated).not.toHaveBeenCalled();
     expect(upsertAdmins).not.toHaveBeenCalled();
     expect(deleteAdmins).not.toHaveBeenCalled();
+  });
+});
+
+const makeCatalogAdmin = (
+  overrides: Partial<Catalog_Admins_t> = {}
+): Catalog_Admins_t => ({
+  id: '1',
+  admin: '0xadmin',
+  collection: '0xaaa',
+  token_id: '1',
+  chain_id: 8453,
+  auth_scope: 2,
+  updated_at: 2000,
+  ...overrides,
+});
+
+describe('processAdminsInBatches (Catalog_Admins_t)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(mapAdminsToSupabase).mockResolvedValue([
+      { artist_address: '0xadmin' },
+    ] as any);
+    vi.mocked(mapAdminsForDeletion).mockResolvedValue([]);
+    vi.mocked(ensureArtists).mockResolvedValue(undefined);
+    vi.mocked(upsertAdmins).mockResolvedValue([] as any);
+    vi.mocked(deleteAdmins).mockResolvedValue(0);
+  });
+
+  it('upserts when auth_scope is non-zero', async () => {
+    const admins = [makeCatalogAdmin({ auth_scope: 2 })];
+
+    await processAdminsInBatches(admins);
+
+    expect(mapAdminsToSupabase).toHaveBeenCalledWith(admins);
+    expect(upsertAdmins).toHaveBeenCalled();
+    expect(deleteAdmins).not.toHaveBeenCalled();
+  });
+
+  it('deletes when auth_scope is 0', async () => {
+    const admins = [makeCatalogAdmin({ auth_scope: 0 })];
+
+    await processAdminsInBatches(admins);
+
+    expect(mapAdminsForDeletion).toHaveBeenCalledWith(admins);
+    expect(deleteAdmins).toHaveBeenCalled();
+    expect(upsertAdmins).not.toHaveBeenCalled();
+  });
+
+  it('splits delete and upsert within same batch', async () => {
+    const admins = [
+      makeCatalogAdmin({ id: '1', auth_scope: 0 }),
+      makeCatalogAdmin({ id: '2', auth_scope: 2 }),
+    ];
+
+    await processAdminsInBatches(admins);
+
+    expect(mapAdminsForDeletion).toHaveBeenCalledWith([admins[0]]);
+    expect(mapAdminsToSupabase).toHaveBeenCalledWith([admins[1]]);
+  });
+
+  it('calls emitAdminUpdated after processing', async () => {
+    const admins = [makeCatalogAdmin({ auth_scope: 2 })];
+
+    await processAdminsInBatches(admins);
+
+    expect(emitAdminUpdated).toHaveBeenCalledWith(admins);
   });
 });

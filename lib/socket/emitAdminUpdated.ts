@@ -1,7 +1,9 @@
 import { getIO } from '@/lib/socket/server';
-import { InProcess_Admins_t } from '@/types/envio';
+import { Catalog_Admins_t, InProcess_Admins_t } from '@/types/envio';
 
-export function emitAdminUpdated(admins: InProcess_Admins_t[]): void {
+export function emitAdminUpdated(
+  admins: (InProcess_Admins_t | Catalog_Admins_t)[]
+): void {
   const io = getIO();
   if (!io) return;
 
