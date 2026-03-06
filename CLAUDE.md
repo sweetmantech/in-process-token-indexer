@@ -226,6 +226,16 @@ type Catalog_Collections {
   updated_at: Int!
   transaction_hash: String!
 }
+
+type Catalog_Admins {
+  id: ID!
+  admin: String!
+  collection: String!
+  token_id: BigInt!
+  chain_id: Int!
+  auth_scope: Int!
+  updated_at: Int!
+}
 ```
 
 ### Query Pattern (Combined)
