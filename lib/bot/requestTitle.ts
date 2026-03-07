@@ -29,7 +29,11 @@ export async function requestTitle(
       const largestPhoto = photo[photo.length - 1];
       mediaData = { type: 'photo', fileId: largestPhoto.file_id };
     } else if (video) {
-      mediaData = { type: 'video', fileId: video.file_id };
+      const thumbFileId = video.thumb?.file_id || '';
+      mediaData = {
+        type: 'video',
+        fileId: `${video.file_id}:${thumbFileId}`,
+      };
     }
 
     if (!mediaData) {

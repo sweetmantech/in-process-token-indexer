@@ -266,4 +266,51 @@ describe('getPendingMedia', () => {
       duration: 0,
     });
   });
+
+  it('should reconstruct video thumb when thumbFileId is encoded', async () => {
+    const mockThumbFileId = 'ThumbFileId_ABC123';
+    const mediaInfo = `MEDIA:video:${mockFileId}:${mockThumbFileId}`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
+
+    const msg: TelegramBot.Message = {
+      message_id: 2,
+      chat: { id: mockChatId, type: 'private' },
+      date: Date.now(),
+      reply_to_message: {
+        message_id: 1,
+        chat: { id: mockChatId, type: 'private' },
+        date: Date.now(),
+        text: titleRequestText,
+      },
+    };
+
+    const result = await getPendingMedia(msg, mockArtistAddress);
+
+    expect(result?.video?.file_id).toBe(mockFileId);
+    expect(result?.video?.thumb?.file_id).toBe(mockThumbFileId);
+  });
+
+  it('should not set thumb on video when thumbFileId is empty', async () => {
+    const mediaInfo = `MEDIA:video:${mockFileId}:`;
+    const encodedMediaInfo = encodeMediaInfo(mediaInfo);
+    const titleRequestText = `📝 Please send the **title** for your moment:\n${encodedMediaInfo}`;
+
+    const msg: TelegramBot.Message = {
+      message_id: 2,
+      chat: { id: mockChatId, type: 'private' },
+      date: Date.now(),
+      reply_to_message: {
+        message_id: 1,
+        chat: { id: mockChatId, type: 'private' },
+        date: Date.now(),
+        text: titleRequestText,
+      },
+    };
+
+    const result = await getPendingMedia(msg, mockArtistAddress);
+
+    expect(result?.video?.file_id).toBe(mockFileId);
+    expect(result?.video?.thumb).toBeUndefined();
+  });
 });

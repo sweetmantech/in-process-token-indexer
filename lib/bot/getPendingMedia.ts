@@ -3,7 +3,7 @@ import { Address } from 'viem';
 import { PendingMedia, PendingMediaType } from './pendingMediaState';
 import { decodeMediaInfo } from './decodeMediaInfo';
 
-const MEDIA_INFO_REGEX = /MEDIA:(photo|video):([^\s\n]+)/;
+const MEDIA_INFO_REGEX = /MEDIA:(photo|video):([^\s\n:]+)(?::([^\s\n]*))?/;
 
 /**
  * Checks if the incoming message is a reply to a title request and extracts pending media info.
@@ -82,7 +82,7 @@ export async function getPendingMedia(
     return undefined;
   }
 
-  const [, type, fileId] = mediaMatch;
+  const [, type, fileId, thumbFileId] = mediaMatch;
   const pendingType: PendingMediaType = type === 'photo' ? 'photo' : 'video';
 
   const chatId = msg.chat.id;
@@ -99,6 +99,14 @@ export async function getPendingMedia(
       width: 0,
       height: 0,
       duration: 0,
+      ...(thumbFileId && {
+        thumb: {
+          file_id: thumbFileId,
+          file_unique_id: '',
+          width: 0,
+          height: 0,
+        },
+      }),
     };
   }
 
