@@ -27,7 +27,7 @@ const processPhoto = async (
     artistAddress
   );
   const result = await createMomentApi(parameters);
-  processMessageMoment({
+  await processMessageMoment({
     collectionAddress: result.contractAddress.toLowerCase(),
     tokenId: result.tokenId.toString(),
     artistAddress,

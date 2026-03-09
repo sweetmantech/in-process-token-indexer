@@ -10,22 +10,26 @@ const processMessageMoment = async ({
   tokenId: string;
   artistAddress: string;
 }) => {
-  const messageId = await logMessage(
-    [
-      {
-        type: 'text',
-        text: `✅ Moment created! https://inprocess.world/sms/base:${collectionAddress}/${tokenId}`,
-      },
-    ],
-    'assistant',
-    artistAddress
-  );
+  try {
+    const messageId = await logMessage(
+      [
+        {
+          type: 'text',
+          text: `✅ Moment created! https://inprocess.world/sms/base:${collectionAddress}/${tokenId}`,
+        },
+      ],
+      'assistant',
+      artistAddress
+    );
 
-  if (!messageId) return;
+    if (!messageId) return;
 
-  await tasks.trigger('process-message-moment', {
-    messageId,
-  });
+    await tasks.trigger('process-message-moment', {
+      messageId,
+    });
+  } catch (err) {
+    console.error('processMessageMoment failed:', err);
+  }
 };
 
 export default processMessageMoment;
