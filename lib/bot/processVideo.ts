@@ -39,14 +39,16 @@ const processVideo = async (
     artistAddress,
   });
 
-  tasks
-    .trigger('migrate-mux-to-arweave', {
+  try {
+    await tasks.trigger('migrate-mux-to-arweave', {
       collectionAddress: result.contractAddress.toLowerCase(),
       tokenId: result.tokenId.toString(),
       artistAddress,
       chainId: base.id,
-    })
-    .catch(err => console.error('migrate-mux-to-arweave trigger failed:', err));
+    });
+  } catch (err) {
+    console.error('migrate-mux-to-arweave trigger failed:', err);
+  }
 
   return result;
 };
