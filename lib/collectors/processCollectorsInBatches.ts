@@ -1,4 +1,4 @@
-import { InProcess_Collectors_t } from '@/types/envio';
+import { Collectors_t } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapCollectorsToSupabase } from './mapCollectorsToSupabase';
 import { upsertCollectors } from '@/lib/supabase/in_process_collectors/upsertCollectors';
@@ -6,10 +6,10 @@ import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 
 /**
  * Processes collectors in batches and upserts them to Supabase.
- * @param collectors - Array of InProcess_Collectors_t from Envio.
+ * @param collectors - Array of Collectors_t from Envio.
  */
 export async function processCollectorsInBatches(
-  collectors: InProcess_Collectors_t[]
+  collectors: Collectors_t[]
 ): Promise<void> {
   let totalProcessed = 0;
 

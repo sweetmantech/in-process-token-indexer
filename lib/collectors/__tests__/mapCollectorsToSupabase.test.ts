@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mapCollectorsToSupabase } from '../mapCollectorsToSupabase';
-import type { InProcess_Collectors_t } from '@/types/envio';
+import type { Collectors_t } from '@/types/envio';
 
 vi.mock('@/lib/moments/getMomentIdMap', () => ({
   getMomentIdMap: vi.fn(),
@@ -10,9 +10,7 @@ import { getMomentIdMap } from '@/lib/moments/getMomentIdMap';
 
 const mockGetMomentIdMap = vi.mocked(getMomentIdMap);
 
-function makeCollector(
-  overrides: Partial<InProcess_Collectors_t> = {}
-): InProcess_Collectors_t {
+function makeCollector(overrides: Partial<Collectors_t> = {}): Collectors_t {
   return {
     id: 'c1',
     collection: '0xAbCdEf1234567890AbCdEf1234567890AbCdEf12',

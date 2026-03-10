@@ -4,7 +4,7 @@ import {
   Primary_Sales_t,
   InProcess_Payments_t,
   InProcess_Airdrops_t,
-  InProcess_Collectors_t,
+  Collectors_t,
 } from '@/types/envio';
 import { selectMoments } from '@/lib/supabase/in_process_moments/selectMoments';
 
@@ -21,7 +21,7 @@ export async function getMomentIdMap(
     | Primary_Sales_t[]
     | InProcess_Payments_t[]
     | InProcess_Airdrops_t[]
-    | InProcess_Collectors_t[]
+    | Collectors_t[]
 ): Promise<Map<string, string>> {
   try {
     if (entities.length === 0) {
