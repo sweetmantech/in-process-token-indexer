@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { processCollectorsInBatches } from '../processCollectorsInBatches';
-import type { InProcess_Collectors_t } from '@/types/envio';
+import type { Collectors_t } from '@/types/envio';
 
 vi.mock('../mapCollectorsToSupabase', () => ({
   mapCollectorsToSupabase: vi.fn(),
@@ -26,7 +26,7 @@ const mockMapCollectors = vi.mocked(mapCollectorsToSupabase);
 const mockUpsertCollectors = vi.mocked(upsertCollectors);
 const mockEnsureArtists = vi.mocked(ensureArtists);
 
-function makeCollector(id: string): InProcess_Collectors_t {
+function makeCollector(id: string): Collectors_t {
   return {
     id,
     collection: '0xabc',

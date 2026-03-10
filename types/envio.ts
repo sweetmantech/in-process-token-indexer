@@ -121,7 +121,7 @@ export interface AirdropsQueryResult {
   pageInfo: PageInfo;
 }
 
-export type InProcess_Collectors_t = {
+export type Collectors_t = {
   readonly id: string;
   readonly collection: string;
   readonly token_id: string; // BigInt from GraphQL comes as string
@@ -133,7 +133,7 @@ export type InProcess_Collectors_t = {
 };
 
 export interface CollectorsQueryResult {
-  entities: InProcess_Collectors_t[];
+  entities: Collectors_t[];
   pageInfo: PageInfo;
 }
 
