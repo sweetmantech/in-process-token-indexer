@@ -5,8 +5,6 @@ import getCreateParameter from '../getCreateParameter';
 import { createMomentApi } from '../api/createMomentApi';
 import { logMessage } from './logMessage';
 import processMessageMoment from './processMessageMoment';
-import { tasks } from '@trigger.dev/sdk';
-import { base } from 'viem/chains';
 
 const processVideo = async (
   artistAddress: Address,
@@ -38,17 +36,6 @@ const processVideo = async (
     tokenId: result.tokenId.toString(),
     artistAddress,
   });
-
-  try {
-    await tasks.trigger('migrate-mux-to-arweave', {
-      collectionAddress: result.contractAddress.toLowerCase(),
-      tokenId: result.tokenId.toString(),
-      artistAddress,
-      chainId: base.id,
-    });
-  } catch (err) {
-    console.error('migrate-mux-to-arweave trigger failed:', err);
-  }
 
   return result;
 };
