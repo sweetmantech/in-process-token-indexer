@@ -10,7 +10,8 @@ export async function fetchMetadata(uri: string): Promise<Response> {
     const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
     try {
       const response = await fetch(
-        `https://api.inprocess.world/api/metadata?uri=${encodeURIComponent(uri)}`,
+        // `https://api.inprocess.world/api/metadata?uri=${encodeURIComponent(uri)}`,
+        `https://turbo-gateway.com/${uri.replace("ar://", "")}`,
         { signal: controller.signal }
       );
       clearTimeout(timeout);
