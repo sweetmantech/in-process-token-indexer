@@ -19,7 +19,6 @@ export async function mapMetadataToSupabase(
         if (!response.ok) return;
 
         const data = await response.json();
-        console.log('ziad here', uri, '=>', JSON.stringify(data));
         metadataRecords.push({
           moment: id,
           name: data.name ?? null,

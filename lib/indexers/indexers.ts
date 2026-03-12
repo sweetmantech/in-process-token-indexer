@@ -15,8 +15,8 @@ import type { IndexConfig } from '@/types/factory';
 export const indexers: IndexConfig<any>[] = [
   collectionsIndexer,
   catalogCollectionsIndexer,
-  momentsIndexer,
-  // catalogMomentsIndexer,
+  // momentsIndexer,
+  catalogMomentsIndexer,
   // adminsIndexer,
   // catalogAdminsIndexer,
   // commentsIndexer,
