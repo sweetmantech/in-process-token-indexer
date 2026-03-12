@@ -11,15 +11,16 @@ import { supabase } from '@/lib/supabase/client';
  */
 export async function upsertMoments(
   moments: Array<Database['public']['Tables']['in_process_moments']['Insert']>
-): Promise<void> {
+): Promise<Array<{ id: string; uri: string }>> {
   if (!moments.length) {
     console.log('ℹ️  No moments to upsert');
-    return;
+    return [];
   }
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('in_process_moments')
-    .upsert(moments, { onConflict: 'collection, token_id' });
+    .upsert(moments, { onConflict: 'collection, token_id' })
+    .select('id, uri');
 
   if (error) {
     console.error(`❌ upsertMoments error:`, error);
@@ -27,4 +28,5 @@ export async function upsertMoments(
   }
 
   console.log(`✅ upsertMoments: Upserted ${moments.length} moments`);
+  return data ?? [];
 }

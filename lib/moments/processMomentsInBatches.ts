@@ -2,6 +2,8 @@ import { Catalog_Moments_t, InProcess_Moments_t } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapMomentsToSupabase } from '@/lib/moments/mapMomentsToSupabase';
 import { upsertMoments } from '@/lib/supabase/in_process_moments/upsertMoments';
+import { mapMetadataToSupabase } from '@/lib/moments/mapMetadataToSupabase';
+import { upsertMetadata } from '@/lib/supabase/in_process_metadata/upsertMetadata';
 import { emitMomentUpdated } from '@/lib/socket/emitMomentUpdated';
 import { emitMomentsCountUpdated } from '@/lib/socket/emitMomentsCountUpdated';
 
@@ -14,13 +16,16 @@ export async function processMomentsInBatches(
     try {
       const batch = moments.slice(i, i + BATCH_SIZE);
       const mappedMoments = await mapMomentsToSupabase(batch);
+      const upsertedMoments = await upsertMoments(mappedMoments);
 
-      await upsertMoments(mappedMoments);
+      const mappedMetadatas = await mapMetadataToSupabase(upsertedMoments);
+      await upsertMetadata(mappedMetadatas);
+
       emitMomentUpdated(batch);
 
       totalProcessed += mappedMoments.length;
       console.log(
-        `📚 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} moments`
+        `📚 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} moments, ${mappedMetadatas.length} metadata`
       );
     } catch (error) {
       console.error(
