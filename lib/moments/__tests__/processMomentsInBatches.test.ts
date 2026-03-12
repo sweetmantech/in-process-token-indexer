@@ -12,6 +12,12 @@ vi.mock('@/lib/moments/mapMomentsToSupabase', () => ({
 vi.mock('@/lib/supabase/in_process_moments/upsertMoments', () => ({
   upsertMoments: vi.fn(),
 }));
+vi.mock('@/lib/moments/mapMetadataToSupabase', () => ({
+  mapMetadataToSupabase: vi.fn().mockResolvedValue([]),
+}));
+vi.mock('@/lib/supabase/in_process_metadata/upsertMetadata', () => ({
+  upsertMetadata: vi.fn(),
+}));
 vi.mock('@/lib/socket/emitMomentUpdated', () => ({
   emitMomentUpdated: vi.fn(),
 }));
