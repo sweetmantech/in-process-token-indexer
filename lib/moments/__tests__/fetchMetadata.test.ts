@@ -60,6 +60,9 @@ describe('fetchMetadata', () => {
       vi.fn().mockRejectedValue(new Error('network error'))
     );
 
-    await expect(fetchMetadata('ipfs://test-uri')).rejects.toThrow();
+    const promise = fetchMetadata('ipfs://test-uri');
+    const assertion = expect(promise).rejects.toThrow('network error');
+    await vi.advanceTimersByTimeAsync(20_000);
+    await assertion;
   });
 });
