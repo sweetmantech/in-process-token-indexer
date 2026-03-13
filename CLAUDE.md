@@ -143,7 +143,7 @@ type InProcess_Airdrops {
   updated_at: Int!
 }
 
-type InProcess_Payments {
+type Payments {
   id: ID!
   collection: String!
   currency: String!
@@ -270,7 +270,7 @@ Each indexer defines its own `queryFragment` in its config file (e.g., `lib/inde
 **DON'T:**
 
 - Touch or modify files in `legacy/` directory
-- Use old entity names like `ERC20Minter_ERC20RewardsDeposit` (use `InProcess_Payments`)
+- Use old entity names like `ERC20Minter_ERC20RewardsDeposit` (use `Payments`)
 - Reference legacy code patterns
 
 ## Code Style

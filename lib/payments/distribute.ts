@@ -1,4 +1,4 @@
-import { InProcess_Payments_t } from '@/types/envio';
+import { Payments_t } from '@/types/envio';
 import isSplitContract from '@/lib/splits/isSplitContract';
 import { Address } from 'viem';
 import distributeApiCall from './distributeCallApi';
@@ -6,7 +6,7 @@ import { getRetryDelay } from '@/lib/getRetryDelay';
 import { isRateLimitError } from '@/lib/isRateLimitError';
 import { sleep } from '@/lib/sleep';
 
-export async function distribute(deposits: InProcess_Payments_t[]) {
+export async function distribute(deposits: Payments_t[]) {
   const maxRetries = 3;
   const baseRetryDelay = 1000; // 1 second base delay
   let totalCnt = 0;

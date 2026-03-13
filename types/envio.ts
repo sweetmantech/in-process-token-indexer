@@ -88,7 +88,7 @@ export interface PrimarySalesQueryResult {
   pageInfo: PageInfo;
 }
 
-export type InProcess_Payments_t = {
+export type Payments_t = {
   readonly id: string;
   readonly collection: string;
   readonly currency: string;
@@ -102,7 +102,7 @@ export type InProcess_Payments_t = {
 };
 
 export interface PaymentsQueryResult {
-  entities: InProcess_Payments_t[];
+  entities: Payments_t[];
   pageInfo: PageInfo;
 }
 

@@ -2,7 +2,7 @@ import {
   InProcess_Admins_t,
   InProcess_Moment_Comments_t,
   Primary_Sales_t,
-  InProcess_Payments_t,
+  Payments_t,
   InProcess_Airdrops_t,
   Collectors_t,
 } from '@/types/envio';
@@ -11,7 +11,7 @@ import { selectMoments } from '@/lib/supabase/in_process_moments/selectMoments';
 /**
  * Gets moment IDs from Supabase for given entities
  * and returns a Map mapping [collection address, chain_id, token_id] triplets to moment IDs.
- * @param entities - Array of InProcess_Admins_t, InProcess_Moment_Comments_t, Primary_Sales_t, InProcess_Payments_t, or InProcess_Airdrops_t to query moments for.
+ * @param entities - Array of InProcess_Admins_t, InProcess_Moment_Comments_t, Primary_Sales_t, Payments_t, or InProcess_Airdrops_t to query moments for.
  * @returns Map with key as `${collectionAddress}:${chainId}:${tokenId}` and value as moment ID.
  */
 export async function getMomentIdMap(
@@ -19,7 +19,7 @@ export async function getMomentIdMap(
     | InProcess_Admins_t[]
     | InProcess_Moment_Comments_t[]
     | Primary_Sales_t[]
-    | InProcess_Payments_t[]
+    | Payments_t[]
     | InProcess_Airdrops_t[]
     | Collectors_t[]
 ): Promise<Map<string, string>> {
