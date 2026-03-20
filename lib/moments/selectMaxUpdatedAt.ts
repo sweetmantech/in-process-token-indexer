@@ -12,5 +12,5 @@ export async function selectMaxUpdatedAt(): Promise<number | null> {
     return null;
   }
 
-  return new Date(maxUpdatedAt).getTime();
+  return new Date(0).getTime();
 }
