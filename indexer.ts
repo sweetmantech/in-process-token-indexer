@@ -3,7 +3,6 @@ import { runBot } from '@/lib/bot/start';
 import { getBot } from '@/lib/bot/bot';
 import { startSocketServer } from '@/lib/socket/server';
 
-// Handle graceful shutdown
 process.on('SIGTERM', async () => {
   console.log('🛑 SIGTERM received, shutting down gracefully...');
   const bot = getBot();
