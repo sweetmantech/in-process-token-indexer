@@ -171,6 +171,29 @@ export type Catalog_Admins_t = {
   readonly updated_at: number;
 };
 
+export type Sound_Editions_t = {
+  readonly id: string;
+  readonly address: string;
+  readonly name: string;
+  readonly owner: string;
+  readonly uri: string;
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly updated_at: number;
+  readonly transaction_hash: string;
+};
+
+export type Sound_Moments_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly token_id: string; // BigInt from GraphQL comes as string
+  readonly uri: string;
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly updated_at: number;
+  readonly transaction_hash: string;
+};
+
 export type Catalog_Sales_t = {
   readonly id: string;
   readonly collection: string;

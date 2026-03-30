@@ -1,6 +1,6 @@
 # In-Process Token Indexer
 
-A Node.js indexer for the In Process protocol on Base/Base Sepolia networks with integrated Telegram bot for media uploads.
+A Node.js indexer for the InProcess, Catalog, and Sound.xyz protocols on Base/Base Sepolia networks with integrated Telegram bot for media uploads.
 
 ## Tech Stack
 
@@ -41,9 +41,10 @@ pnpm format           # Format code with Prettier
 
 ## Architecture
 
-- **Combined Query Pattern:** Single GraphQL request fetches all 8 entity types per polling cycle. Each indexer is a plain `IndexConfig` object with a `queryFragment`, `dataPath`, `processBatchFn`, and `selectMaxTimestampFn`. The `executeIndexers()` loop builds one combined query, dispatches results in parallel, and drops completed entities from pagination.
+- **Combined Query Pattern:** Single GraphQL request fetches all entity types per polling cycle. Each indexer is a plain `IndexConfig` object with a `queryFragment`, `dataPath`, `processBatchFn`, and `selectMaxTimestampFn`. The `executeIndexers()` loop builds one combined query, dispatches results in parallel, and drops completed entities from pagination.
 - **Data Flow:** Envio GraphQL → executeIndexers → processBatchFn → Supabase
 - **Telegram Bot:** Media uploads → Arweave storage → Moment creation
+- **Protocols:** InProcess, Catalog, Sound.xyz
 - **Networks:** Base (8453), Base Sepolia (84532)
 
 ## Key Files
@@ -112,6 +113,17 @@ type Primary_Sales {
   created_at: Int!
 }
 
+type Secondary_Sales {
+  id: ID!
+  collection: String!
+  token_id: BigInt!
+  royalty_recipient: String!
+  royalty_bps: Int!
+  chain_id: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
+
 type InProcess_Admins {
   id: ID!
   admin: String!
@@ -156,18 +168,6 @@ type Payments {
   transferred_at: Int!
 }
 
-type Catalog_Moments {
-  id: ID!
-  collection: String!
-  token_id: BigInt!
-  artist: String!
-  uri: String!
-  chain_id: Int!
-  created_at: Int!
-  updated_at: Int!
-  transaction_hash: String!
-}
-
 type Catalog_Collections {
   id: ID!
   address: String!
@@ -180,46 +180,11 @@ type Catalog_Collections {
   transaction_hash: String!
 }
 
-type Collectors {
-  id: ID!
-  collection: String!
-  token_id: BigInt!
-  amount: BigInt!
-  chain_id: Int!
-  collector: String!
-  transaction_hash: String!
-  collected_at: Int!
-}
-
-type Catalog_Sales {
-  id: ID!
-  collection: String!
-  token_id: Int!
-  price_per_token: BigInt!
-  funds_recipient: String!
-  currency: String!
-  chain_id: Int!
-  created_at: Int!
-  transaction_hash: String!
-}
-
 type Catalog_Moments {
   id: ID!
   collection: String!
-  token_id: Int!
+  token_id: BigInt!
   artist: String!
-  uri: String!
-  chain_id: Int!
-  created_at: Int!
-  updated_at: Int!
-  transaction_hash: String!
-}
-
-type Catalog_Collections {
-  id: ID!
-  address: String!
-  name: String!
-  creator: String!
   uri: String!
   chain_id: Int!
   created_at: Int!
@@ -235,6 +200,51 @@ type Catalog_Admins {
   chain_id: Int!
   auth_scope: Int!
   updated_at: Int!
+}
+
+type Collectors {
+  id: ID!
+  collection: String!
+  token_id: BigInt!
+  amount: BigInt!
+  chain_id: Int!
+  collector: String!
+  transaction_hash: String!
+  collected_at: Int!
+}
+
+type Sound_Editions {
+  id: ID!
+  address: String!
+  name: String!
+  owner: String!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
+
+type Sound_Tiers {
+  id: ID!
+  collection: String!
+  tier: Int!
+  uri: String!
+  quantity: BigInt!
+  chain_id: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
+
+type Sound_Moments {
+  id: ID!
+  collection: String!
+  token_id: BigInt!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
 }
 ```
 
@@ -263,7 +273,7 @@ Each indexer defines its own `queryFragment` in its config file (e.g., `lib/inde
 **DO:**
 
 - Query Envio GraphQL entities using exact names from schema (snake_case)
-- Use entity names: `InProcess_Collections`, `InProcess_Moments`, `InProcess_Sales`, etc.
+- Use entity names: `InProcess_Collections`, `InProcess_Moments`, `Primary_Sales`, `Secondary_Sales`, `Sound_Editions`, `Sound_Tiers`, `Sound_Moments`, etc.
 - Map Envio entities to Supabase tables appropriately
 - Handle BigInt → string conversions
 
@@ -315,16 +325,20 @@ Benefits:
 
 Envio and Supabase use **different column names** for the same timestamp values. This is intentional — not a bug.
 
-| Entity      | Envio Field      | Supabase Field   | Mapping Function                        |
-| ----------- | ---------------- | ---------------- | --------------------------------------- |
-| Admins      | `updated_at`     | `granted_at`     | `toSupabaseTimestamp(admin.updated_at)` |
-| Airdrops    | `updated_at`     | `updated_at`     | direct                                  |
-| Collections | `updated_at`     | `updated_at`     | direct                                  |
-| Collectors  | `collected_at`   | `collected_at`   | direct                                  |
-| Comments    | `commented_at`   | `commented_at`   | direct                                  |
-| Moments     | `updated_at`     | `updated_at`     | direct                                  |
-| Payments    | `transferred_at` | `transferred_at` | direct                                  |
-| Sales       | `created_at`     | `created_at`     | direct                                  |
+| Entity          | Envio Field      | Supabase Field   | Mapping Function                        |
+| --------------- | ---------------- | ---------------- | --------------------------------------- |
+| Admins          | `updated_at`     | `granted_at`     | `toSupabaseTimestamp(admin.updated_at)` |
+| Airdrops        | `updated_at`     | `updated_at`     | direct                                  |
+| Collections     | `updated_at`     | `updated_at`     | direct                                  |
+| Collectors      | `collected_at`   | `collected_at`   | direct                                  |
+| Comments        | `commented_at`   | `commented_at`   | direct                                  |
+| Moments         | `updated_at`     | `updated_at`     | direct                                  |
+| Payments        | `transferred_at` | `transferred_at` | direct                                  |
+| Primary_Sales   | `created_at`     | `created_at`     | direct                                  |
+| Secondary_Sales | `updated_at`     | `updated_at`     | direct                                  |
+| Sound_Editions  | `updated_at`     | `updated_at`     | direct                                  |
+| Sound_Tiers     | `updated_at`     | `updated_at`     | direct                                  |
+| Sound_Moments   | `updated_at`     | `updated_at`     | direct                                  |
 
 The incremental indexing flow for each entity:
 
