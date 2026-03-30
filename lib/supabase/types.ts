@@ -708,67 +708,26 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      build_moment_json: {
-        Args: {
-          p_address: string;
-          p_chain_id: number;
-          p_collection: string;
-          p_created_at: string;
-          p_creator: string;
-          p_creator_hidden: boolean;
-          p_creator_username: string;
-          p_id: string;
-          p_metadata: Json;
-          p_protocol: string;
-          p_token_id: number;
-          p_uri: string;
-        };
-        Returns: Json;
-      };
-      build_timeline_result: {
-        Args: {
-          p_capped_limit: number;
-          p_clamped_page: number;
-          p_moments: Json;
-          p_total_count: number;
-        };
-        Returns: Json;
-      };
       get_artist_timeline: {
         Args: {
           p_artist: string;
           p_chainid?: number;
-          p_channel?: string;
           p_hidden?: boolean;
           p_limit?: number;
-          p_mime?: string;
           p_page?: number;
-          p_period?: string;
           p_type?: string;
         };
         Returns: Json;
       };
       get_collection_timeline: {
         Args: {
-          p_artist?: string;
           p_chainid?: number;
-          p_channel?: string;
           p_collection: string;
           p_hidden?: boolean;
           p_limit?: number;
-          p_mime?: string;
           p_page?: number;
-          p_period?: string;
         };
         Returns: Json;
-      };
-      get_creator_hidden: {
-        Args: {
-          p_artist_address: string;
-          p_collection: string;
-          p_token_id: number;
-        };
-        Returns: boolean;
       };
       get_in_process_payments: {
         Args: {
@@ -776,7 +735,6 @@ export type Database = {
           p_chainid?: number;
           p_collectors?: string[];
           p_limit?: number;
-          p_mime?: string;
           p_page?: number;
         };
         Returns: Json;
@@ -784,12 +742,9 @@ export type Database = {
       get_in_process_timeline: {
         Args: {
           p_chainid?: number;
-          p_channel?: string;
           p_hidden?: boolean;
           p_limit?: number;
-          p_mime?: string;
           p_page?: number;
-          p_period?: string;
         };
         Returns: Json;
       };
@@ -807,26 +762,10 @@ export type Database = {
         };
         Returns: Json;
       };
-      get_moment_admins_json: {
-        Args: { p_collection: string; p_token_id: number };
-        Returns: Json;
-      };
-      moment_is_visible: {
-        Args: { p_collection: string; p_hidden: boolean; p_token_id: number };
-        Returns: boolean;
-      };
-      moment_matches_channel: {
-        Args: { p_channel: string; p_moment_id: string };
-        Returns: boolean;
-      };
-      moment_matches_period: {
-        Args: { p_created_at: string; p_period: string };
-        Returns: boolean;
-      };
     };
     Enums: {
-      collection_protocol: 'in_process' | 'catalog' | 'sound.xyz';
-      message_client: 'telegram' | 'sms' | 'web' | 'api';
+      collection_protocol: 'in_process' | 'catalog';
+      message_client: 'telegram' | 'sms';
       message_role: 'user' | 'assistant';
     };
     CompositeTypes: {
@@ -961,8 +900,8 @@ export const Constants = {
   },
   public: {
     Enums: {
-      collection_protocol: ['in_process', 'catalog', 'sound.xyz'],
-      message_client: ['telegram', 'sms', 'web', 'api'],
+      collection_protocol: ['in_process', 'catalog'],
+      message_client: ['telegram', 'sms'],
       message_role: ['user', 'assistant'],
     },
   },

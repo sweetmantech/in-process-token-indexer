@@ -1,8 +1,4 @@
-import {
-  Catalog_Moments_t,
-  InProcess_Moments_t,
-  Sound_Moments_t,
-} from '@/types/envio';
+import { Catalog_Moments_t, InProcess_Moments_t } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapMomentsToSupabase } from '@/lib/moments/mapMomentsToSupabase';
 import { upsertMoments } from '@/lib/supabase/in_process_moments/upsertMoments';
@@ -12,7 +8,7 @@ import { emitMomentUpdated } from '@/lib/socket/emitMomentUpdated';
 import { emitMomentsCountUpdated } from '@/lib/socket/emitMomentsCountUpdated';
 
 export async function processMomentsInBatches(
-  moments: InProcess_Moments_t[] | Catalog_Moments_t[] | Sound_Moments_t[]
+  moments: InProcess_Moments_t[] | Catalog_Moments_t[]
 ): Promise<void> {
   let totalProcessed = 0;
 

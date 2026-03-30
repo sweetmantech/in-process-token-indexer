@@ -28,7 +28,6 @@ export async function mapMetadataToSupabase(
           external_url: data.external_url ?? null,
           content: data.content ?? null,
         });
-        console.log('ziad here:', uri, JSON.stringify(data));
       } catch (err) {
         console.error(`❌ Failed to fetch metadata for uri ${uri}:`, err);
       }
