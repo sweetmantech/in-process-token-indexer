@@ -20,7 +20,7 @@ export const indexers: IndexConfig<any>[] = [
   soundCollectionsIndexer,
   // momentsIndexer,
   // catalogMomentsIndexer,
-  soundMomentsIndexer,
+  // soundMomentsIndexer,
   // adminsIndexer,
   // catalogAdminsIndexer,
   // commentsIndexer,
