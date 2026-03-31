@@ -354,3 +354,17 @@ Minimize Supabase egress usage with these practices:
 - **Reduce query frequency** — use caches (e.g., in-memory max timestamp cache) to eliminate redundant reads
 - **Don't return rows on upsert/insert** — configure upsert/insert queries to not return the entire row unless the response is actually used (avoid `.select()` after `.upsert()` when not needed)
 - **Optimize manual backups** — when running backups through Supavisor, exclude unneeded tables and reduce backup frequency
+
+## Sound_Moments → token_id Mapping
+
+`Sound_Moments.tier` is mapped to `in_process_moments.token_id` as **`tier + 1`**.
+
+`token_id = 0` is reserved for the edition level, so tiers are 1-indexed in Supabase:
+
+| Envio `tier` | Supabase `token_id` |
+| ------------ | ------------------- |
+| 0            | 1                   |
+| 1            | 2                   |
+| N            | N + 1               |
+
+This applies in both `mapMomentsToSupabase` and `emitMomentUpdated`.

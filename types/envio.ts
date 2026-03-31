@@ -194,3 +194,14 @@ export type Sound_Editions_t = {
   readonly updated_at: number;
   readonly transaction_hash: string;
 };
+
+export type Sound_Moments_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly tier: number;
+  readonly uri: string;
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly updated_at: number;
+  readonly transaction_hash: string;
+};

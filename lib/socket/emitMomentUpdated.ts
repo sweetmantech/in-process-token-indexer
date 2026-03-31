@@ -1,8 +1,12 @@
 import { getIO } from '@/lib/socket/server';
-import { Catalog_Moments_t, InProcess_Moments_t } from '@/types/envio';
+import {
+  Catalog_Moments_t,
+  InProcess_Moments_t,
+  Sound_Moments_t,
+} from '@/types/envio';
 
 export function emitMomentUpdated(
-  moments: InProcess_Moments_t[] | Catalog_Moments_t[]
+  moments: InProcess_Moments_t[] | Catalog_Moments_t[] | Sound_Moments_t[]
 ): void {
   const io = getIO();
   if (!io) return;
@@ -10,7 +14,7 @@ export function emitMomentUpdated(
   for (const moment of moments) {
     io.emit('moment:updated', {
       collectionAddress: moment.collection,
-      tokenId: Number(moment.token_id),
+      tokenId: 'tier' in moment ? moment.tier + 1 : Number(moment.token_id),
       chainId: moment.chain_id,
     });
   }
