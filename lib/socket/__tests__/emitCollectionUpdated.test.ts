@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { emitCollectionUpdated } from '@/lib/socket/emitCollectionUpdated';
-import { InProcess_Collections_t } from '@/types/envio';
+import { InProcess_Collections_t, Sound_Editions_t } from '@/types/envio';
 
 const mockEmit = vi.fn();
 
@@ -65,5 +65,31 @@ describe('emitCollectionUpdated', () => {
     emitCollectionUpdated([]);
 
     expect(mockEmit).not.toHaveBeenCalled();
+  });
+
+  it('emits collection:updated for Sound_Editions_t collections', () => {
+    vi.mocked(getIO).mockReturnValue({ emit: mockEmit } as any);
+
+    const soundEditions: Sound_Editions_t[] = [
+      {
+        id: '1',
+        address: '0xsound',
+        name: 'Sound Edition',
+        uri: 'ar://sound',
+        owner: '0xowner',
+        chain_id: 8453,
+        created_at: 1000,
+        updated_at: 2000,
+        transaction_hash: '0xhash',
+      },
+    ];
+
+    emitCollectionUpdated(soundEditions);
+
+    expect(mockEmit).toHaveBeenCalledOnce();
+    expect(mockEmit).toHaveBeenCalledWith('collection:updated', {
+      collectionAddress: '0xsound',
+      chainId: 8453,
+    });
   });
 });
