@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { InProcess_Collections_t } from '@/types/envio';
+import { InProcess_Collections_t, Sound_Editions_t } from '@/types/envio';
 
 vi.mock('@/lib/consts', () => ({
   BATCH_SIZE: 3,
@@ -93,5 +93,25 @@ describe('processCollectionsInBatches', () => {
 
     expect(emitCollectionUpdated).not.toHaveBeenCalled();
     expect(upsertCollections).not.toHaveBeenCalled();
+  });
+
+  it('processes Sound_Editions_t collections', async () => {
+    const soundEdition: Sound_Editions_t = {
+      id: '1',
+      address: '0xsound',
+      name: 'Sound Edition',
+      uri: 'ar://sound',
+      owner: '0xowner',
+      chain_id: 8453,
+      created_at: 1000,
+      updated_at: 2000,
+      transaction_hash: '0xhash',
+    };
+    vi.mocked(upsertCollections).mockResolvedValue([{ id: '1' }] as any);
+
+    await processCollectionsInBatches([soundEdition]);
+
+    expect(upsertCollections).toHaveBeenCalledOnce();
+    expect(emitCollectionUpdated).toHaveBeenCalledWith([soundEdition]);
   });
 });

@@ -182,3 +182,15 @@ export type Catalog_Sales_t = {
   readonly created_at: number;
   readonly transaction_hash: string;
 };
+
+export type Sound_Editions_t = {
+  readonly id: string;
+  readonly address: string;
+  readonly name: string;
+  readonly owner: string;
+  readonly uri: string;
+  readonly chain_id: number;
+  readonly created_at: number;
+  readonly updated_at: number;
+  readonly transaction_hash: string;
+};

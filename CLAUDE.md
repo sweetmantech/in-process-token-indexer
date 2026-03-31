@@ -112,6 +112,17 @@ type Primary_Sales {
   created_at: Int!
 }
 
+type Secondary_Sales {
+  id: ID!
+  collection: String!
+  token_id: BigInt!
+  royalty_recipient: String!
+  royalty_bps: Int!
+  chain_id: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
+
 type InProcess_Admins {
   id: ID!
   admin: String!
@@ -191,42 +202,6 @@ type Collectors {
   collected_at: Int!
 }
 
-type Catalog_Sales {
-  id: ID!
-  collection: String!
-  token_id: Int!
-  price_per_token: BigInt!
-  funds_recipient: String!
-  currency: String!
-  chain_id: Int!
-  created_at: Int!
-  transaction_hash: String!
-}
-
-type Catalog_Moments {
-  id: ID!
-  collection: String!
-  token_id: Int!
-  artist: String!
-  uri: String!
-  chain_id: Int!
-  created_at: Int!
-  updated_at: Int!
-  transaction_hash: String!
-}
-
-type Catalog_Collections {
-  id: ID!
-  address: String!
-  name: String!
-  creator: String!
-  uri: String!
-  chain_id: Int!
-  created_at: Int!
-  updated_at: Int!
-  transaction_hash: String!
-}
-
 type Catalog_Admins {
   id: ID!
   admin: String!
@@ -234,6 +209,39 @@ type Catalog_Admins {
   token_id: BigInt!
   chain_id: Int!
   auth_scope: Int!
+  updated_at: Int!
+}
+
+type Sound_Editions {
+  id: ID!
+  address: String!
+  name: String!
+  owner: String!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
+
+type Sound_Moments {
+  id: ID!
+  collection: String!
+  tier: Int!
+  uri: String!
+  chain_id: Int!
+  created_at: Int!
+  updated_at: Int!
+  transaction_hash: String!
+}
+
+type Sound_Admins {
+  id: ID!
+  collection: String!
+  token_id: BigInt!
+  admin: String!
+  roles: Int!
+  chain_id: Int!
   updated_at: Int!
 }
 ```
@@ -315,16 +323,20 @@ Benefits:
 
 Envio and Supabase use **different column names** for the same timestamp values. This is intentional — not a bug.
 
-| Entity      | Envio Field      | Supabase Field   | Mapping Function                        |
-| ----------- | ---------------- | ---------------- | --------------------------------------- |
-| Admins      | `updated_at`     | `granted_at`     | `toSupabaseTimestamp(admin.updated_at)` |
-| Airdrops    | `updated_at`     | `updated_at`     | direct                                  |
-| Collections | `updated_at`     | `updated_at`     | direct                                  |
-| Collectors  | `collected_at`   | `collected_at`   | direct                                  |
-| Comments    | `commented_at`   | `commented_at`   | direct                                  |
-| Moments     | `updated_at`     | `updated_at`     | direct                                  |
-| Payments    | `transferred_at` | `transferred_at` | direct                                  |
-| Sales       | `created_at`     | `created_at`     | direct                                  |
+| Entity          | Envio Field      | Supabase Field   | Mapping Function                        |
+| --------------- | ---------------- | ---------------- | --------------------------------------- |
+| Admins          | `updated_at`     | `granted_at`     | `toSupabaseTimestamp(admin.updated_at)` |
+| Airdrops        | `updated_at`     | `updated_at`     | direct                                  |
+| Collections     | `updated_at`     | `updated_at`     | direct                                  |
+| Collectors      | `collected_at`   | `collected_at`   | direct                                  |
+| Comments        | `commented_at`   | `commented_at`   | direct                                  |
+| Moments         | `updated_at`     | `updated_at`     | direct                                  |
+| Payments        | `transferred_at` | `transferred_at` | direct                                  |
+| Primary Sales   | `created_at`     | `created_at`     | direct                                  |
+| Secondary Sales | `updated_at`     | `updated_at`     | direct                                  |
+| Sound Editions  | `updated_at`     | `updated_at`     | direct                                  |
+| Sound Moments   | `updated_at`     | `updated_at`     | direct                                  |
+| Sound Admins    | `updated_at`     | `updated_at`     | direct                                  |
 
 The incremental indexing flow for each entity:
 
