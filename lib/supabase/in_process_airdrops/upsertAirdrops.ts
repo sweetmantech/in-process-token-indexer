@@ -19,7 +19,6 @@ export async function upsertAirdrops(
       .from('in_process_airdrops')
       .upsert(airdrops, {
         onConflict: 'moment,recipient',
-        ignoreDuplicates: false,
       });
 
     if (error) {

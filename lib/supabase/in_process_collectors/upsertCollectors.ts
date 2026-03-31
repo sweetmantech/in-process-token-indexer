@@ -21,7 +21,6 @@ export async function upsertCollectors(
       .from('in_process_collectors')
       .upsert(collectors, {
         onConflict: 'id',
-        ignoreDuplicates: false,
       });
 
     if (error) {

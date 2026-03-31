@@ -17,7 +17,6 @@ export async function upsertAdmins(
   try {
     const { error } = await supabase.from('in_process_admins').upsert(admins, {
       onConflict: 'collection,artist_address,token_id',
-      ignoreDuplicates: false,
     });
 
     if (error) {

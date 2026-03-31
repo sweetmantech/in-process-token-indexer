@@ -21,7 +21,6 @@ export async function upsertComments(
       .from('in_process_moment_comments')
       .upsert(comments, {
         onConflict: 'id',
-        ignoreDuplicates: false,
       });
 
     if (error) {

@@ -21,7 +21,6 @@ export async function upsertFeeRecipients(
       .from('in_process_moment_fee_recipients')
       .upsert(feeRecipients, {
         onConflict: 'moment,artist_address',
-        ignoreDuplicates: false,
       });
 
     if (error) {
