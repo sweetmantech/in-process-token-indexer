@@ -26,10 +26,24 @@ export async function mapSalesToSupabase(sales: Primary_Sales_t[]): Promise<{
   const mappedFeeRecipients: Array<
     Database['public']['Tables']['in_process_moment_fee_recipients']['Insert']
   > = [];
-  const momentIdMap = await getMomentIdMap(sales);
+  // Sound.xyz stores token_id as tier (0-indexed) in Envio, but in_process_moments
+  // stores token_id as tier+1. Adjust before the moment lookup.
+  const adjustedSales = sales.map(sale =>
+    sale.schedule_num !== null
+      ? ({
+          ...sale,
+          token_id: String(Number(sale.token_id) + 1),
+        } as Primary_Sales_t)
+      : sale
+  );
+  const momentIdMap = await getMomentIdMap(adjustedSales);
 
   for (const sale of sales) {
-    const tripletKey = `${sale.collection.toLowerCase()}:${sale.chain_id}:${sale.token_id}`;
+    const lookupTokenId =
+      sale.schedule_num !== null
+        ? String(Number(sale.token_id) + 1)
+        : sale.token_id;
+    const tripletKey = `${sale.collection.toLowerCase()}:${sale.chain_id}:${lookupTokenId}`;
     const momentId = momentIdMap.get(tripletKey);
     if (momentId) {
       mappedSales.push({
@@ -40,6 +54,7 @@ export async function mapSalesToSupabase(sales: Primary_Sales_t[]): Promise<{
         price_per_token: Number(sale.price_per_token),
         sale_end: Number(sale.sale_end ?? 0),
         sale_start: Number(sale.sale_start ?? 0),
+        schedule_num: sale.schedule_num ?? null,
         created_at: toSupabaseTimestamp(sale.created_at),
       });
       const feeRecipients = await getFeeRecipientsForSale(sale, momentId);
