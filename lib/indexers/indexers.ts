@@ -10,6 +10,7 @@ import { paymentsIndexer } from '@/lib/indexers/paymentsIndexer';
 import { airdropsIndexer } from '@/lib/indexers/airdropsIndexer';
 import { collectorsIndexer } from '@/lib/indexers/collectorsIndexer';
 import { soundEditionsIndexer } from '@/lib/indexers/soundEditionsIndexer';
+import { soundMomentsIndexer } from '@/lib/indexers/soundMomentsIndexer';
 import type { IndexConfig } from '@/types/factory';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,6 +18,7 @@ export const indexers: IndexConfig<any>[] = [
   collectionsIndexer,
   catalogCollectionsIndexer,
   soundEditionsIndexer,
+  soundMomentsIndexer,
   momentsIndexer,
   catalogMomentsIndexer,
   adminsIndexer,

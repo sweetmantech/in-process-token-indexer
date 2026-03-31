@@ -1,10 +1,14 @@
 import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
-import { Catalog_Moments_t, InProcess_Moments_t } from '@/types/envio';
+import {
+  Catalog_Moments_t,
+  InProcess_Moments_t,
+  Sound_Moments_t,
+} from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getCollectionIdMap } from '@/lib/collections/getCollectionIdMap';
 
 export async function mapMomentsToSupabase(
-  moments: InProcess_Moments_t[] | Catalog_Moments_t[]
+  moments: InProcess_Moments_t[] | Catalog_Moments_t[] | Sound_Moments_t[]
 ): Promise<
   Array<Database['public']['Tables']['in_process_moments']['Insert']>
 > {
@@ -23,7 +27,7 @@ export async function mapMomentsToSupabase(
       }
       return {
         collection: collectionId,
-        token_id: Number(moment.token_id),
+        token_id: 'tier' in moment ? moment.tier + 1 : Number(moment.token_id),
         uri: moment.uri,
         max_supply: 'max_supply' in moment ? Number(moment.max_supply) : 0,
         created_at: toSupabaseTimestamp(moment.created_at)!,
