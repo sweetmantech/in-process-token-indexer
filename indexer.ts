@@ -30,8 +30,8 @@ process.on('SIGINT', async () => {
 });
 
 async function index(): Promise<void> {
-  // startSocketServer();
-  // await runBot();
+  startSocketServer();
+  await runBot();
   executeIndexers();
 }
 
