@@ -205,3 +205,13 @@ export type Sound_Moments_t = {
   readonly updated_at: number;
   readonly transaction_hash: string;
 };
+
+export type Sound_Admins_t = {
+  readonly id: string;
+  readonly collection: string;
+  readonly token_id: string; // BigInt from GraphQL comes as string
+  readonly admin: string;
+  readonly roles: number;
+  readonly chain_id: number;
+  readonly updated_at: number;
+};

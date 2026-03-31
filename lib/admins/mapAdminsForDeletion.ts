@@ -1,9 +1,13 @@
-import { Catalog_Admins_t, InProcess_Admins_t } from '@/types/envio';
+import {
+  Catalog_Admins_t,
+  InProcess_Admins_t,
+  Sound_Admins_t,
+} from '@/types/envio';
 import { getCollectionIdMap } from '@/lib/collections/getCollectionIdMap';
 import { DeleteAdminCriteria } from '@/types/supabase';
 
 export async function mapAdminsForDeletion(
-  admins: (InProcess_Admins_t | Catalog_Admins_t)[]
+  admins: (InProcess_Admins_t | Catalog_Admins_t | Sound_Admins_t)[]
 ): Promise<DeleteAdminCriteria[]> {
   const collectionPairs: Array<[string, number]> = admins.map(
     admin => [admin.collection, admin.chain_id] as [string, number]
