@@ -1,8 +1,12 @@
 import { getIO } from '@/lib/socket/server';
-import { Catalog_Admins_t, InProcess_Admins_t } from '@/types/envio';
+import {
+  Catalog_Admins_t,
+  InProcess_Admins_t,
+  Sound_Admins_t,
+} from '@/types/envio';
 
 export function emitAdminUpdated(
-  admins: (InProcess_Admins_t | Catalog_Admins_t)[]
+  admins: (InProcess_Admins_t | Catalog_Admins_t | Sound_Admins_t)[]
 ): void {
   const io = getIO();
   if (!io) return;
