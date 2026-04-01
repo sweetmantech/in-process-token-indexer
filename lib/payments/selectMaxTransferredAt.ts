@@ -6,11 +6,11 @@ import { selectMax } from '@/lib/supabase/in_process_payments/selectMax';
  * @returns Maximum transferred_at timestamp in milliseconds (epoch), or null if no records exist.
  */
 export async function selectMaxTransferredAt(): Promise<number | null> {
-  // const maxTransferredAt = await selectMax('transferred_at');
+  const maxTransferredAt = await selectMax('transferred_at');
 
-  // if (!maxTransferredAt) {
-  //   return null;
-  // }
+  if (!maxTransferredAt) {
+    return null;
+  }
 
-  return new Date(0).getTime();
+  return new Date(maxTransferredAt).getTime();
 }
