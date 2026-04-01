@@ -32,7 +32,7 @@ export async function executeIndexers(): Promise<void> {
       for (const indexer of indexers) {
         const name = indexer.indexName;
         timestamps[name] = toEnvioTimestamp(cachedTimestamps[name]);
-        offsets[name] = indexer.startOffset ?? 0;
+        offsets[name] = 0;
       }
 
       // 2. Paginate with combined queries, excluding completed entities

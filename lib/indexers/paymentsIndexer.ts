@@ -11,5 +11,4 @@ export const paymentsIndexer: IndexConfig<Payments_t> = {
   queryFragment: `Payments(limit: $limit, offset: $offset_payments, order_by: {transferred_at: asc}, where: {transferred_at: {_gt: $minTimestamp_payments}}) {
     id collection currency token_id recipient spender amount chain_id transaction_hash transferred_at
   }`,
-  startOffset: 920000,
 };
