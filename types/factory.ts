@@ -24,4 +24,6 @@ export interface IndexConfig<T> {
   dataPath: string;
   /** GraphQL query body fragment for this entity (uses $limit, $offset_<name>, $minTimestamp_<name>) */
   queryFragment: string;
+  /** Initial offset to skip on the first indexing cycle (useful for resuming from a known position) */
+  startOffset?: number;
 }
