@@ -34,7 +34,7 @@ export async function processPaymentsInBatches(
         `🔄 Processing batch ${batchNumber}/${totalBatches} (${batch.length} payment(s))`
       );
 
-      await distribute(batch);
+      // await distribute(batch);
       const mappedPayments = await mapPaymentsToSupabase(batch);
 
       if (mappedPayments.length > 0) {
