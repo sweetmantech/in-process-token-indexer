@@ -16,7 +16,7 @@ export async function upsertSales(
 
   try {
     const { error } = await supabase.from('in_process_sales').upsert(sales, {
-      onConflict: 'moment',
+      onConflict: 'moment,schedule_num',
     });
 
     if (error) {
