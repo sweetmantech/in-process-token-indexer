@@ -12,5 +12,5 @@ export async function selectMaxTransferredAt(): Promise<number | null> {
     return null;
   }
 
-  return new Date(0).getTime();
+  return new Date(maxTransferredAt).getTime();
 }
