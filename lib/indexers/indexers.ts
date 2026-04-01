@@ -27,7 +27,7 @@ export const indexers: IndexConfig<any>[] = [
   // catalogAdminsIndexer,
   // commentsIndexer,
   // salesIndexer,
-  // paymentsIndexer,
+  paymentsIndexer,
   // airdropsIndexer,
-  collectorsIndexer,
+  // collectorsIndexer,
 ];
