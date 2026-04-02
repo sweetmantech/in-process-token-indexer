@@ -20,7 +20,7 @@ export async function upsertCollectors(
     const { error } = await supabase
       .from('in_process_collectors')
       .upsert(collectors, {
-        onConflict: 'id',
+        onConflict: 'collector,moment,transaction_hash',
       });
 
     if (error) {
