@@ -1,37 +1,18 @@
 import { executeIndexers } from '@/lib/indexers/executeIndexers';
-import { runBot } from '@/lib/bot/start';
-import { getBot } from '@/lib/bot/bot';
 import { startSocketServer } from '@/lib/socket/server';
 
-process.on('SIGTERM', async () => {
+process.on('SIGTERM', () => {
   console.log('🛑 SIGTERM received, shutting down gracefully...');
-  const bot = getBot();
-  if (bot) {
-    try {
-      await bot.stopPolling();
-    } catch (error) {
-      console.log('⚠️ Error stopping bot polling:', error);
-    }
-  }
   process.exit(0);
 });
 
-process.on('SIGINT', async () => {
+process.on('SIGINT', () => {
   console.log('🛑 SIGINT received, shutting down gracefully...');
-  const bot = getBot();
-  if (bot) {
-    try {
-      await bot.stopPolling();
-    } catch (error) {
-      console.log('⚠️ Error stopping bot polling:', error);
-    }
-  }
   process.exit(0);
 });
 
 async function index(): Promise<void> {
   startSocketServer();
-  await runBot();
   executeIndexers();
 }
 
