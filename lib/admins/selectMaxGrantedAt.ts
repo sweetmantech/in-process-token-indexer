@@ -12,5 +12,5 @@ export async function selectMaxGrantedAt(): Promise<number | null> {
     return null;
   }
 
-  return new Date('2026-03-31').getTime();
+  return new Date(maxGrantedAt).getTime();
 }
