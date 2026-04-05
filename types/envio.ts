@@ -78,7 +78,6 @@ export type Primary_Sales_t = {
   readonly price_per_token: string; // BigInt from GraphQL comes as string
   readonly funds_recipient: string;
   readonly currency: string;
-  readonly schedule_num: number | null; // Sound.xyz only; null for InProcess/Catalog
   readonly chain_id: number;
   readonly transaction_hash: string;
   readonly created_at: number;
