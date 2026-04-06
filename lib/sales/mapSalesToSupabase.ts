@@ -42,8 +42,8 @@ export async function mapSalesToSupabase(sales: Primary_Sales_t[]): Promise<{
         sale_start: Number(sale.sale_start ?? 0),
         created_at: toSupabaseTimestamp(sale.created_at),
       });
-      const feeRecipients = await getFeeRecipientsForSale(sale, momentId);
-      mappedFeeRecipients.push(...feeRecipients);
+      // const feeRecipients = await getFeeRecipientsForSale(sale, momentId);
+      // mappedFeeRecipients.push(...feeRecipients);
     }
   }
 
