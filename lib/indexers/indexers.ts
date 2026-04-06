@@ -16,22 +16,22 @@ import type { IndexConfig } from '@/types/factory';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const indexers: IndexConfig<any>[] = [
-  // collections
-  collectionsIndexer,
-  catalogCollectionsIndexer,
-  soundEditionsIndexer,
-  // moments
-  soundMomentsIndexer,
-  momentsIndexer,
-  catalogMomentsIndexer,
-  // admins
-  adminsIndexer,
-  catalogAdminsIndexer,
-  soundAdminsIndexer,
+  // // collections
+  // collectionsIndexer,
+  // catalogCollectionsIndexer,
+  // soundEditionsIndexer,
+  // // moments
+  // soundMomentsIndexer,
+  // momentsIndexer,
+  // catalogMomentsIndexer,
+  // // admins
+  // adminsIndexer,
+  // catalogAdminsIndexer,
+  // soundAdminsIndexer,
 
-  commentsIndexer,
+  // commentsIndexer,
   salesIndexer,
-  paymentsIndexer,
-  airdropsIndexer,
-  collectorsIndexer,
+  // paymentsIndexer,
+  // airdropsIndexer,
+  // collectorsIndexer,
 ];
