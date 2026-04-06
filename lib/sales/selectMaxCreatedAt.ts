@@ -6,11 +6,11 @@ import { selectMax } from '@/lib/supabase/in_process_sales/selectMax';
  * @returns Maximum created_at timestamp in milliseconds (epoch), or null if no records exist.
  */
 export async function selectMaxCreatedAt(): Promise<number | null> {
-  // const maxCreatedAt = await selectMax('created_at');
+  const maxCreatedAt = await selectMax('created_at');
 
-  // if (!maxCreatedAt) {
-  //   return null;
-  // }
+  if (!maxCreatedAt) {
+    return null;
+  }
 
-  return new Date(0).getTime();
+  return new Date(maxCreatedAt).getTime();
 }
