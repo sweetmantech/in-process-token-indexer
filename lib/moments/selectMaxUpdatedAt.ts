@@ -6,11 +6,11 @@ import { selectMax } from '@/lib/supabase/in_process_moments/selectMax';
  * @returns Maximum updated_at timestamp in milliseconds (epoch), or null if no records exist.
  */
 export async function selectMaxUpdatedAt(): Promise<number | null> {
-  const maxUpdatedAt = await selectMax('updated_at');
+  // const maxUpdatedAt = await selectMax('updated_at');
 
-  if (!maxUpdatedAt) {
-    return null;
-  }
+  // if (!maxUpdatedAt) {
+  //   return null;
+  // }
 
-  return new Date(maxUpdatedAt).getTime();
+  return new Date(0).getTime();
 }
