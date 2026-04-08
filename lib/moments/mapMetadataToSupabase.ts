@@ -1,25 +1,33 @@
 import { Database } from '@/lib/supabase/types';
 import { fetchMetadata } from '@/lib/moments/fetchMetadata';
 
-export async function mapMetadataToSupabase(
-  moments: Array<{ id: string; uri: string }>
-): Promise<
-  Array<Database['public']['Tables']['in_process_metadata']['Insert']>
-> {
-  if (!moments.length) return [];
+export type MapMetadataResult = {
+  records: Array<Database['public']['Tables']['in_process_metadata']['Insert']>;
+  artistNamesByAddresses: Map<string, string>;
+};
 
-  const metadataRecords: Array<
+export async function mapMetadataToSupabase(
+  moments: Array<{ id: string; uri: string; collection: { creator: string } }>
+): Promise<MapMetadataResult> {
+  if (!moments.length)
+    return { records: [], artistNamesByAddresses: new Map() };
+
+  const records: Array<
     Database['public']['Tables']['in_process_metadata']['Insert']
   > = [];
+  const artistNamesByAddresses = new Map<string, string>();
 
   await Promise.all(
-    moments.map(async ({ id, uri }) => {
+    moments.map(async ({ id, uri, collection }) => {
       try {
         const response = await fetchMetadata(uri);
         if (!response.ok) return;
 
         const data = await response.json();
-        metadataRecords.push({
+        const creatorAddress = collection.creator;
+        if (data?.artist)
+          artistNamesByAddresses.set(creatorAddress, data.artist);
+        records.push({
           moment: id,
           name: data.name ?? null,
           description: data.description ?? null,
@@ -34,5 +42,5 @@ export async function mapMetadataToSupabase(
     })
   );
 
-  return metadataRecords;
+  return { records, artistNamesByAddresses };
 }

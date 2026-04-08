@@ -1,0 +1,22 @@
+import { supabase } from '@/lib/supabase/client';
+
+export async function upsertArtistNames(
+  artistNamesByAddresses: Map<string, string>
+): Promise<void> {
+  if (!artistNamesByAddresses.size) return;
+
+  const artists = [...artistNamesByAddresses.entries()].map(
+    ([address, username]) => ({ address, username })
+  );
+
+  const { error } = await supabase.rpc('upsert_artist_names', {
+    artists: JSON.stringify(artists),
+  });
+
+  if (error) {
+    console.error('❌ upsertArtistNames: RPC error:', error);
+    throw error;
+  }
+
+  console.log(`💾 upsertArtistNames: Upserted ${artists.length} artist names`);
+}
