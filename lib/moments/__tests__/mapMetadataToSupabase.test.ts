@@ -11,30 +11,37 @@ const mockMetadata = {
   animation_url: 'ipfs://animation-hash',
   external_url: 'https://example.com',
   content: { mime: 'video/mp4', uri: 'ipfs://content-hash' },
+  artist: 'Test Artist',
 };
 
-const okResponse = () =>
-  new Response(JSON.stringify(mockMetadata), { status: 200 });
+const makeMoment = (id: string, creator = '0xabc') => ({
+  id,
+  uri: `ipfs://${id}`,
+  collection: { creator },
+});
+
+const okResponse = (data = mockMetadata) =>
+  new Response(JSON.stringify(data), { status: 200 });
 
 describe('mapMetadataToSupabase', () => {
   beforeEach(() => {
     vi.resetAllMocks();
   });
 
-  it('returns empty array when given no moments', async () => {
+  it('returns empty results when given no moments', async () => {
     const result = await mapMetadataToSupabase([]);
-    expect(result).toEqual([]);
+    expect(result).toEqual({ records: [], artistNamesByAddresses: new Map() });
   });
 
   it('maps fetched metadata to supabase insert format', async () => {
     vi.mocked(fetchMetadata).mockResolvedValue(okResponse());
 
-    const result = await mapMetadataToSupabase([
-      { id: 'moment-uuid', uri: 'ipfs://test' },
+    const { records } = await mapMetadataToSupabase([
+      makeMoment('moment-uuid'),
     ]);
 
-    expect(result).toHaveLength(1);
-    expect(result[0]).toEqual({
+    expect(records).toHaveLength(1);
+    expect(records[0]).toEqual({
       moment: 'moment-uuid',
       name: mockMetadata.name,
       description: mockMetadata.description,
@@ -47,14 +54,14 @@ describe('mapMetadataToSupabase', () => {
 
   it('sets missing optional fields to null', async () => {
     vi.mocked(fetchMetadata).mockResolvedValue(
-      new Response(JSON.stringify({ name: 'Minimal' }), { status: 200 })
+      okResponse({ name: 'Minimal' } as any)
     );
 
-    const result = await mapMetadataToSupabase([
-      { id: 'moment-uuid', uri: 'ipfs://test' },
+    const { records } = await mapMetadataToSupabase([
+      makeMoment('moment-uuid'),
     ]);
 
-    expect(result[0]).toMatchObject({
+    expect(records[0]).toMatchObject({
       moment: 'moment-uuid',
       name: 'Minimal',
       description: null,
@@ -65,26 +72,48 @@ describe('mapMetadataToSupabase', () => {
     });
   });
 
+  it('populates artistNamesByAddresses from metadata.artist', async () => {
+    vi.mocked(fetchMetadata).mockResolvedValue(okResponse());
+
+    const { artistNamesByAddresses } = await mapMetadataToSupabase([
+      makeMoment('moment-uuid', '0xcreator'),
+    ]);
+
+    expect(artistNamesByAddresses.get('0xcreator')).toBe('Test Artist');
+  });
+
+  it('does not set artist entry when metadata has no artist field', async () => {
+    vi.mocked(fetchMetadata).mockResolvedValue(
+      okResponse({ name: 'No Artist' } as any)
+    );
+
+    const { artistNamesByAddresses } = await mapMetadataToSupabase([
+      makeMoment('moment-uuid', '0xcreator'),
+    ]);
+
+    expect(artistNamesByAddresses.size).toBe(0);
+  });
+
   it('skips moment when fetch response is not ok', async () => {
     vi.mocked(fetchMetadata).mockResolvedValue(
       new Response('error', { status: 500 })
     );
 
-    const result = await mapMetadataToSupabase([
-      { id: 'moment-uuid', uri: 'ipfs://test' },
+    const { records } = await mapMetadataToSupabase([
+      makeMoment('moment-uuid'),
     ]);
 
-    expect(result).toHaveLength(0);
+    expect(records).toHaveLength(0);
   });
 
   it('skips moment when fetch throws', async () => {
     vi.mocked(fetchMetadata).mockRejectedValue(new Error('network error'));
 
-    const result = await mapMetadataToSupabase([
-      { id: 'moment-uuid', uri: 'ipfs://test' },
+    const { records } = await mapMetadataToSupabase([
+      makeMoment('moment-uuid'),
     ]);
 
-    expect(result).toHaveLength(0);
+    expect(records).toHaveLength(0);
   });
 
   it('processes multiple moments in parallel', async () => {
@@ -93,14 +122,16 @@ describe('mapMetadataToSupabase', () => {
     );
 
     const moments = [
-      { id: 'uuid-1', uri: 'ipfs://test-1' },
-      { id: 'uuid-2', uri: 'ipfs://test-2' },
-      { id: 'uuid-3', uri: 'ipfs://test-3' },
+      makeMoment('uuid-1', '0x1'),
+      makeMoment('uuid-2', '0x2'),
+      makeMoment('uuid-3', '0x3'),
     ];
 
-    const result = await mapMetadataToSupabase(moments);
+    const { records, artistNamesByAddresses } =
+      await mapMetadataToSupabase(moments);
 
-    expect(result).toHaveLength(3);
+    expect(records).toHaveLength(3);
     expect(fetchMetadata).toHaveBeenCalledTimes(3);
+    expect(artistNamesByAddresses.size).toBe(3);
   });
 });

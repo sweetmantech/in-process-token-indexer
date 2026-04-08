@@ -10,6 +10,7 @@ import { mapMetadataToSupabase } from '@/lib/moments/mapMetadataToSupabase';
 import { upsertMetadata } from '@/lib/supabase/in_process_metadata/upsertMetadata';
 import { emitMomentUpdated } from '@/lib/socket/emitMomentUpdated';
 import { emitMomentsCountUpdated } from '@/lib/socket/emitMomentsCountUpdated';
+import { upsertArtistNames } from '@/lib/supabase/in_process_artists/upsertArtistNames';
 
 export async function processMomentsInBatches(
   moments: InProcess_Moments_t[] | Catalog_Moments_t[] | Sound_Moments_t[]
@@ -22,14 +23,16 @@ export async function processMomentsInBatches(
       const mappedMoments = await mapMomentsToSupabase(batch);
       const upsertedMoments = await upsertMoments(mappedMoments);
 
-      const mappedMetadatas = await mapMetadataToSupabase(upsertedMoments);
-      await upsertMetadata(mappedMetadatas);
+      const { records: metadataRecords, artistNamesByAddresses } =
+        await mapMetadataToSupabase(upsertedMoments);
+      await upsertMetadata(metadataRecords);
+      await upsertArtistNames(artistNamesByAddresses);
 
       emitMomentUpdated(batch);
 
       totalProcessed += mappedMoments.length;
       console.log(
-        `📚 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} moments, ${mappedMetadatas.length} metadata`
+        `📚 Batch ${Math.floor(i / BATCH_SIZE) + 1}: Processing ${batch.length} moments, ${metadataRecords.length} metadata`
       );
     } catch (error) {
       console.error(
