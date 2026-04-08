@@ -10,7 +10,7 @@ export async function upsertArtistNames(
   );
 
   const { error } = await supabase.rpc('upsert_artist_names', {
-    artists: JSON.stringify(artists),
+    artists,
   });
 
   if (error) {
