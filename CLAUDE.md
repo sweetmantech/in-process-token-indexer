@@ -41,7 +41,7 @@ pnpm format           # Format code with Prettier
 
 ## Architecture
 
-- **Combined Query Pattern:** Single GraphQL request fetches all 8 entity types per polling cycle. Each indexer is a plain `IndexConfig` object with a `queryFragment`, `dataPath`, `processBatchFn`, and `selectMaxTimestampFn`. The `executeIndexers()` loop builds one combined query, dispatches results in parallel, and drops completed entities from pagination.
+- **Combined Query Pattern:** Single GraphQL request fetches every registered indexer entity per polling cycle. Each indexer is a plain `IndexConfig` object with a `queryFragment`, `dataPath`, `processBatchFn`, and `selectMaxTimestampFn`. The `executeIndexers()` loop builds one combined query, dispatches results in parallel, and drops completed entities from pagination. Mint/airdrop/collector flows are unified under Envio `Transfers` → Supabase `in_process_transfers` (legacy `in_process_payments`, `in_process_airdrops`, `in_process_collectors` tables are left in place for the live app; this service no longer writes them).
 - **Data Flow:** Envio GraphQL → executeIndexers → processBatchFn → Supabase
 - **Telegram Bot:** Media uploads → Arweave storage → Moment creation
 - **Networks:** Base (8453), Base Sepolia (84532)
@@ -144,26 +144,19 @@ type InProcess_Moment_Comments {
   transaction_hash: String!
 }
 
-type InProcess_Airdrops {
-  id: ID!
-  recipient: String!
-  collection: String!
-  token_id: BigInt!
-  amount: BigInt!
-  chain_id: Int!
-  updated_at: Int!
-}
-
-type Payments {
+type Transfers {
   id: ID!
   collection: String!
-  currency: String!
   token_id: BigInt!
-  recipient: String!
-  spender: String!
-  amount: String!
   chain_id: Int!
+  recipient: String!
+  quantity: BigInt!
+  payer: String
+  value: BigInt
+  currency: String
+  funds_recipient: String
   transaction_hash: String!
+  block_number: BigInt!
   transferred_at: Int!
 }
 
@@ -189,17 +182,6 @@ type Catalog_Collections {
   created_at: Int!
   updated_at: Int!
   transaction_hash: String!
-}
-
-type Collectors {
-  id: ID!
-  collection: String!
-  token_id: BigInt!
-  amount: BigInt!
-  chain_id: Int!
-  collector: String!
-  transaction_hash: String!
-  collected_at: Int!
 }
 
 type Catalog_Admins {
@@ -278,7 +260,7 @@ Each indexer defines its own `queryFragment` in its config file (e.g., `lib/inde
 **DON'T:**
 
 - Touch or modify files in `legacy/` directory
-- Use old entity names like `ERC20Minter_ERC20RewardsDeposit` (use `Payments`)
+- Use old entity names like `ERC20Minter_ERC20RewardsDeposit` (use unified `Transfers`)
 - Reference legacy code patterns
 
 ## Code Style
@@ -315,8 +297,7 @@ Benefits:
 
 ### Mapping Notes
 
-- `InProcess_Airdrops.recipient` → Supabase `recipient` (NOT `artist_address`)
-- `collection` + `chain_id` + `token_id` → `moment` UUID in Supabase
+- `collection` + `chain_id` + `token_id` → `moment` UUID in Supabase when the moment exists
 - Chain timestamps → ISO timestamps
 
 ### Timestamp Field Mapping (Envio → Supabase)
@@ -327,11 +308,11 @@ Envio and Supabase use **different column names** for the same timestamp values.
 | --------------- | ---------------- | ---------------- | --------------------------------------- |
 | Admins          | `updated_at`     | `granted_at`     | `toSupabaseTimestamp(admin.updated_at)` |
 | Airdrops        | `updated_at`     | `updated_at`     | direct                                  |
+| Airdrops        | `updated_at`     | `updated_at`     | direct                                  |
 | Collections     | `updated_at`     | `updated_at`     | direct                                  |
-| Collectors      | `collected_at`   | `collected_at`   | direct                                  |
 | Comments        | `commented_at`   | `commented_at`   | direct                                  |
 | Moments         | `updated_at`     | `updated_at`     | direct                                  |
-| Payments        | `transferred_at` | `transferred_at` | direct                                  |
+| Transfers       | `transferred_at` | `transferred_at` | direct → `in_process_transfers`         |
 | Primary Sales   | `created_at`     | `created_at`     | direct                                  |
 | Secondary Sales | `updated_at`     | `updated_at`     | direct                                  |
 | Sound Editions  | `updated_at`     | `updated_at`     | direct                                  |

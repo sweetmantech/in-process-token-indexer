@@ -88,52 +88,22 @@ export interface PrimarySalesQueryResult {
   pageInfo: PageInfo;
 }
 
-export type Payments_t = {
+/** Unified Envio `Transfers` entity (InProcess, Catalog, Sound). */
+export type Transfers_t = {
   readonly id: string;
   readonly collection: string;
-  readonly currency: string;
-  readonly token_id: string; // BigInt from GraphQL comes as string
-  readonly recipient: string;
-  readonly spender: string;
-  readonly amount: string;
+  readonly token_id: string;
   readonly chain_id: number;
+  readonly recipient: string;
+  readonly quantity: string;
+  readonly value: string | undefined;
+  readonly currency: string | undefined;
   readonly transaction_hash: string;
   readonly transferred_at: number;
 };
 
-export interface PaymentsQueryResult {
-  entities: Payments_t[];
-  pageInfo: PageInfo;
-}
-
-export type InProcess_Airdrops_t = {
-  readonly id: string;
-  readonly recipient: string;
-  readonly collection: string;
-  readonly token_id: string; // BigInt from GraphQL comes as string
-  readonly amount: string; // BigInt from GraphQL comes as string
-  readonly chain_id: number;
-  readonly updated_at: number;
-};
-
-export interface AirdropsQueryResult {
-  entities: InProcess_Airdrops_t[];
-  pageInfo: PageInfo;
-}
-
-export type Collectors_t = {
-  readonly id: string;
-  readonly collection: string;
-  readonly token_id: string; // BigInt from GraphQL comes as string
-  readonly amount: string; // BigInt from GraphQL comes as string
-  readonly chain_id: number;
-  readonly collector: string;
-  readonly transaction_hash: string;
-  readonly collected_at: number;
-};
-
-export interface CollectorsQueryResult {
-  entities: Collectors_t[];
+export interface TransfersQueryResult {
+  entities: Transfers_t[];
   pageInfo: PageInfo;
 }
 

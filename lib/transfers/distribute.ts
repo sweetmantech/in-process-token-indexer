@@ -1,50 +1,48 @@
-import { Payments_t } from '@/types/envio';
+import { Transfers_t } from '@/types/envio';
 import isSplitContract from '@/lib/splits/isSplitContract';
-import { Address } from 'viem';
+import { Address, zeroAddress } from 'viem';
 import distributeApiCall from './distributeCallApi';
 import { getRetryDelay } from '@/lib/getRetryDelay';
 import { isRateLimitError } from '@/lib/isRateLimitError';
 import { sleep } from '@/lib/sleep';
 
-export async function distribute(deposits: Payments_t[]) {
+export async function distribute(transfers: Transfers_t[]) {
   const maxRetries = 3;
-  const baseRetryDelay = 1000; // 1 second base delay
+  const baseRetryDelay = 1000;
   let totalCnt = 0;
-  for (const deposit of deposits) {
-    const recipient = deposit.recipient;
+  for (const transfer of transfers) {
+    if (!transfer.value || BigInt(transfer.value) <= 0n) continue;
+
+    const recipient = transfer.recipient;
     const isSplit = await isSplitContract(
       recipient as Address,
-      deposit.chain_id
+      transfer.chain_id
     );
     if (isSplit) {
       let lastError: unknown;
-      let success = false;
       for (let attempt = 0; attempt <= maxRetries; attempt++) {
         try {
           const hash = await distributeApiCall({
-            splitAddress: deposit.recipient as Address,
-            tokenAddress: deposit.currency as Address,
-            chainId: deposit.chain_id,
+            splitAddress: recipient as Address,
+            tokenAddress: (transfer.currency ?? zeroAddress) as Address,
+            chainId: transfer.chain_id,
           });
-          // Transaction sent successfully - distribution completed for this deposit
           console.log(
-            `✅ Distribution completed: ${deposit.amount} ${deposit.currency} to ${recipient} (tx: ${hash})`
+            `✅ Distribution completed: ${transfer.value} ${transfer.currency} to ${recipient} (tx: ${hash})`
           );
           totalCnt++;
-          success = true;
           break;
         } catch (error) {
           lastError = error;
           const isRateLimit = isRateLimitError(error);
 
-          // If this is not the last attempt, wait and retry
           if (attempt < maxRetries) {
             const delay = getRetryDelay(error, attempt, baseRetryDelay);
             const errorType = isRateLimit ? 'rate limit (429)' : 'error';
             const errorMessage =
               error instanceof Error ? error.message : String(error);
             console.warn(
-              `⚠️ ${errorType} distributing ${deposit.amount} ${deposit.currency} to ${recipient} (attempt ${
+              `⚠️ ${errorType} distributing ${transfer.value} ${transfer.currency} to ${recipient} (attempt ${
                 attempt + 1
               }/${maxRetries + 1}), retrying in ${delay}ms...`,
               errorMessage
@@ -53,10 +51,9 @@ export async function distribute(deposits: Payments_t[]) {
             continue;
           }
 
-          // Last attempt failed, log error
           const errorType = isRateLimit ? 'rate limit (429)' : 'error';
           console.error(
-            `❌ ${errorType} distributing ${deposit.amount} ${deposit.currency} to ${recipient} after ${
+            `❌ ${errorType} distributing ${transfer.value} ${transfer.currency} to ${recipient} after ${
               maxRetries + 1
             } attempts:`,
             lastError
