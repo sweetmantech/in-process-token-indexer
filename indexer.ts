@@ -12,7 +12,6 @@ process.on('SIGINT', () => {
 });
 
 async function index(): Promise<void> {
-  startSocketServer();
   executeIndexers();
 }
 
