@@ -11,35 +11,46 @@ export async function mapTransfersToSupabase(
   Array<Database['public']['Tables']['in_process_transfers']['Insert']>
 > {
   const momentIdMap = await getMomentIdMap(transfers);
-  const mapped: Array<
-    Database['public']['Tables']['in_process_transfers']['Insert']
-  > = [];
+
+  const transferMap = new Map<string, any>();
 
   for (const transfer of transfers) {
     const tripletKey = `${transfer.collection.toLowerCase()}:${transfer.chain_id}:${transfer.token_id}`;
     const momentId = momentIdMap.get(tripletKey);
 
     if (momentId) {
-      mapped.push({
-        id: transfer.id,
-        recipient: transfer.recipient.toLowerCase(),
-        quantity: Number(transfer.quantity),
-        value:
-          transfer.value && transfer.currency
-            ? Number(
-                formatUnits(
-                  BigInt(transfer.value),
-                  transfer.currency === zeroAddress ? 18 : 6
-                )
+      const uniqueKey = `${transfer.recipient.toLowerCase()}-${transfer.transaction_hash}-${momentId}`;
+      const quantityNum = Number(transfer.quantity);
+      const valueNum =
+        transfer.value && transfer.currency
+          ? Number(
+              formatUnits(
+                BigInt(transfer.value),
+                transfer.currency === zeroAddress ? 18 : 6
               )
-            : null,
-        currency: transfer.currency?.toLowerCase() ?? null,
-        transaction_hash: transfer.transaction_hash,
-        transferred_at: toSupabaseTimestamp(transfer.transferred_at),
-        moment: momentId,
-      });
+            )
+          : null;
+
+      if (transferMap.has(uniqueKey)) {
+        const existing = transferMap.get(uniqueKey);
+        existing.quantity += quantityNum;
+        if (valueNum !== null) {
+          existing.value = (existing.value || 0) + valueNum;
+        }
+      } else {
+        transferMap.set(uniqueKey, {
+          id: transfer.id,
+          recipient: transfer.recipient.toLowerCase(),
+          quantity: quantityNum,
+          value: valueNum,
+          currency: transfer.currency?.toLowerCase() ?? null,
+          transaction_hash: transfer.transaction_hash,
+          transferred_at: toSupabaseTimestamp(transfer.transferred_at),
+          moment: momentId,
+        });
+      }
     }
   }
 
-  return mapped;
+  return Array.from(transferMap.values());
 }
