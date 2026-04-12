@@ -2,6 +2,7 @@ import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
 import { Transfers_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getMomentIdMap } from '../moments/getMomentIdMap';
+import { formatUnits, zeroAddress } from 'viem';
 
 /** Maps Envio `Transfers` rows to `in_process_transfers` (optional `moment` when known in Supabase). */
 export async function mapTransfersToSupabase(
@@ -22,8 +23,16 @@ export async function mapTransfersToSupabase(
       mapped.push({
         id: transfer.id,
         recipient: transfer.recipient.toLowerCase(),
-        quantity: String(transfer.quantity),
-        value: transfer.value ?? null,
+        quantity: Number(transfer.quantity),
+        value:
+          transfer.value && transfer.currency
+            ? Number(
+                formatUnits(
+                  BigInt(transfer.value),
+                  transfer.currency === zeroAddress ? 18 : 6
+                )
+              )
+            : null,
         currency: transfer.currency?.toLowerCase() ?? null,
         transaction_hash: transfer.transaction_hash,
         transferred_at: toSupabaseTimestamp(transfer.transferred_at),
