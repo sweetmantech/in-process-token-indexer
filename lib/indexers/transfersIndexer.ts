@@ -9,6 +9,6 @@ export const transfersIndexer: IndexConfig<Transfers_t> = {
   indexName: 'transfers',
   dataPath: 'Transfers',
   queryFragment: `Transfers(limit: $limit, offset: $offset_transfers, order_by: {transferred_at: asc}, where: {transferred_at: {_gt: $minTimestamp_transfers}}) {
-    id collection token_id chain_id recipient quantity payer value currency funds_recipient transaction_hash transferred_at
+    id collection token_id chain_id recipient quantity value currency transaction_hash transferred_at
   }`,
 };
