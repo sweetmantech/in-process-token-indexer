@@ -52,7 +52,7 @@ export interface AdminsQueryResult {
   pageInfo: PageInfo;
 }
 
-export type InProcess_Moment_Comments_t = {
+export type InProcess_Comments_t = {
   readonly id: string;
   readonly collection: string;
   readonly sender: string;
@@ -64,7 +64,7 @@ export type InProcess_Moment_Comments_t = {
 };
 
 export interface MomentCommentsQueryResult {
-  entities: InProcess_Moment_Comments_t[];
+  entities: InProcess_Comments_t[];
   pageInfo: PageInfo;
 }
 

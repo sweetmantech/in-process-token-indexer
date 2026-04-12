@@ -1,20 +1,20 @@
 import toSupabaseTimestamp from '@/lib/toSupabaseTimestamp';
-import { InProcess_Moment_Comments_t } from '@/types/envio';
+import { InProcess_Comments_t } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getMomentIdMap } from '@/lib/moments/getMomentIdMap';
 
 /**
- * Maps Envio InProcess_Moment_Comments_t entities from GraphQL
+ * Maps Envio InProcess_Comments_t entities from GraphQL
  * to the Supabase schema for upserting.
  * - Skips comments whose (collection, chain_id, token_id) cannot be resolved to a moment ID.
  * - Maps sender address to artist_address.
  * - Converts commented_at from chain timestamp to ISO timestamp.
  *
- * @param momentComments - Array of InProcess_Moment_Comments_t from Envio.
+ * @param momentComments - Array of InProcess_Comments_t from Envio.
  * @returns Promise of objects formatted for Supabase upsert.
  */
 export async function mapCommentsToSupabase(
-  momentComments: InProcess_Moment_Comments_t[]
+  momentComments: InProcess_Comments_t[]
 ): Promise<
   Database['public']['Tables']['in_process_moment_comments']['Insert'][]
 > {

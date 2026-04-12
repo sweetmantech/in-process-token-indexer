@@ -133,7 +133,7 @@ type InProcess_Admins {
   updated_at: Int!
 }
 
-type InProcess_Moment_Comments {
+type InProcess_Comments {
   id: ID!
   collection: String!
   sender: String!
