@@ -34,6 +34,7 @@ export async function mapTransfersToSupabase(
       if (transferMap.has(uniqueKey)) {
         const existing = transferMap.get(uniqueKey);
         existing.quantity += quantityNum;
+        console.log('Duplicated transaction hash', transfer.transaction_hash);
         if (valueNum !== null) {
           existing.value = (existing.value || 0) + valueNum;
         }
