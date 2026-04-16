@@ -6,11 +6,11 @@ import { selectMax } from '@/lib/supabase/in_process_admins/selectMax';
  * @returns Maximum granted_at timestamp in milliseconds (epoch), or null if no records exist.
  */
 export async function selectMaxGrantedAt(): Promise<number | null> {
-  const maxGrantedAt = await selectMax('granted_at');
+  // const maxGrantedAt = await selectMax('granted_at');
 
-  if (!maxGrantedAt) {
-    return null;
-  }
+  // if (!maxGrantedAt) {
+  //   return null;
+  // }
 
-  return new Date(maxGrantedAt).getTime();
+  return new Date(0).getTime();
 }
