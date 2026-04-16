@@ -17,8 +17,7 @@ export async function processMomentsInBatches(
     | InProcess_Moments_t[]
     | Catalog_Moments_t[]
     | Sound_Moments_t[]
-    | ZoraMedia_Moments_t[],
-  metadataTokenIds?: Set<string>
+    | ZoraMedia_Moments_t[]
 ): Promise<void> {
   let totalProcessed = 0;
 
@@ -35,14 +34,8 @@ export async function processMomentsInBatches(
         ...momentUris.get(`${m.collection.address}:${m.token_id}`),
       }));
 
-      const momentsForMetadata = metadataTokenIds
-        ? momentsWithContentUri.filter(m =>
-            metadataTokenIds.has(String(m.token_id))
-          )
-        : momentsWithContentUri;
-
       const { records: metadataRecords, artistNamesByAddresses } =
-        await mapMetadataToSupabase(momentsForMetadata);
+        await mapMetadataToSupabase(momentsWithContentUri);
       await upsertMetadata(metadataRecords);
       await upsertArtistNames(artistNamesByAddresses);
 
