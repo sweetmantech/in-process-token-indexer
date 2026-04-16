@@ -31,7 +31,7 @@ export async function processMomentsInBatches(
 
       const momentsWithContentUri = upsertedMoments.map(m => ({
         ...m,
-        ...momentUris.get(m.uri),
+        ...momentUris.get(`${m.collection.address}:${m.token_id}`),
       }));
 
       const { records: metadataRecords, artistNamesByAddresses } =

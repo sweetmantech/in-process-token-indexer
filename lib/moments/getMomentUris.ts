@@ -26,16 +26,17 @@ export function getMomentUris(
 ): Map<string, MomentUriEntry> {
   const momentUris = new Map<string, MomentUriEntry>();
   for (const moment of moments) {
+    const tokenId =
+      'token_id' in moment ? String(moment.token_id) : String(moment.tier + 1);
+    const momentKey = `${moment.collection}:${tokenId}`;
     if ('metadata_uri' in moment && moment.metadata_uri) {
-      momentUris.set(moment.metadata_uri, {
-        tokenId: String(moment.token_id),
+      momentUris.set(momentKey, {
+        tokenId,
         contentUri: moment.uri ?? undefined,
         owner: moment.owner,
       });
     } else if (moment.uri) {
-      const tokenId =
-        'token_id' in moment ? String(moment.token_id) : String(moment.tier);
-      momentUris.set(moment.uri, { tokenId });
+      momentUris.set(momentKey, { tokenId });
     }
   }
   return momentUris;
