@@ -2,33 +2,42 @@ import {
   Catalog_Moments_t,
   InProcess_Moments_t,
   Sound_Moments_t,
+  ZoraMedia_Moments_t,
 } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapMomentsToSupabase } from '@/lib/moments/mapMomentsToSupabase';
 import { upsertMoments } from '@/lib/supabase/in_process_moments/upsertMoments';
 import { mapMetadataToSupabase } from '@/lib/moments/mapMetadataToSupabase';
 import { upsertMetadata } from '@/lib/supabase/in_process_metadata/upsertMetadata';
-import { emitMomentUpdated } from '@/lib/socket/emitMomentUpdated';
-import { emitMomentsCountUpdated } from '@/lib/socket/emitMomentsCountUpdated';
 import { upsertArtistNames } from '@/lib/supabase/in_process_artists/upsertArtistNames';
+import { getMomentUris } from '@/lib/moments/getMomentUris';
 
 export async function processMomentsInBatches(
-  moments: InProcess_Moments_t[] | Catalog_Moments_t[] | Sound_Moments_t[]
+  moments:
+    | InProcess_Moments_t[]
+    | Catalog_Moments_t[]
+    | Sound_Moments_t[]
+    | ZoraMedia_Moments_t[]
 ): Promise<void> {
   let totalProcessed = 0;
 
   for (let i = 0; i < moments.length; i += BATCH_SIZE) {
     try {
       const batch = moments.slice(i, i + BATCH_SIZE);
+
+      const momentUris = getMomentUris(batch);
       const mappedMoments = await mapMomentsToSupabase(batch);
       const upsertedMoments = await upsertMoments(mappedMoments);
 
+      const momentsWithContentUri = upsertedMoments.map(m => ({
+        ...m,
+        ...momentUris.get(m.uri),
+      }));
+
       const { records: metadataRecords, artistNamesByAddresses } =
-        await mapMetadataToSupabase(upsertedMoments);
+        await mapMetadataToSupabase(momentsWithContentUri);
       await upsertMetadata(metadataRecords);
       await upsertArtistNames(artistNamesByAddresses);
-
-      emitMomentUpdated(batch);
 
       totalProcessed += mappedMoments.length;
       console.log(
@@ -42,8 +51,7 @@ export async function processMomentsInBatches(
     }
   }
 
-  if (totalProcessed > 0) {
-    emitMomentsCountUpdated();
+  if (totalProcessed > 0)
     console.log(`✅  Completed processing: ${totalProcessed} moments`);
-  } else console.log(`ℹ️  No moments to process`);
+  else console.log(`ℹ️  No moments to process`);
 }

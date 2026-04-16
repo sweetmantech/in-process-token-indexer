@@ -3,12 +3,18 @@ import {
   Catalog_Admins_t,
   InProcess_Admins_t,
   Sound_Admins_t,
+  ZoraMedia_Admins_t,
 } from '@/types/envio';
 import { Database } from '@/lib/supabase/types';
 import { getCollectionIdMap } from '@/lib/collections/getCollectionIdMap';
 
 export async function mapAdminsToSupabase(
-  admins: (InProcess_Admins_t | Catalog_Admins_t | Sound_Admins_t)[]
+  admins: (
+    | InProcess_Admins_t
+    | Catalog_Admins_t
+    | Sound_Admins_t
+    | ZoraMedia_Admins_t
+  )[]
 ): Promise<Database['public']['Tables']['in_process_admins']['Insert'][]> {
   const collectionPairs: Array<[string, number]> = admins.map(
     admin => [admin.collection, admin.chain_id] as [string, number]

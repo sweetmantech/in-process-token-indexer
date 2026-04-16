@@ -2,6 +2,7 @@ import {
   Catalog_Admins_t,
   InProcess_Admins_t,
   Sound_Admins_t,
+  ZoraMedia_Admins_t,
 } from '@/types/envio';
 import { BATCH_SIZE } from '@/lib/consts';
 import { mapAdminsToSupabase } from './mapAdminsToSupabase';
@@ -9,7 +10,6 @@ import { mapAdminsForDeletion } from './mapAdminsForDeletion';
 import { upsertAdmins } from '@/lib/supabase/in_process_admins/upsertAdmins';
 import { deleteAdmins } from '@/lib/supabase/in_process_admins/deleteAdmins';
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
-import { emitAdminUpdated } from '@/lib/socket/emitAdminUpdated';
 import { getScope } from './getScope';
 
 /**
@@ -18,7 +18,12 @@ import { getScope } from './getScope';
  * - scope != 0: Upsert to Supabase
  */
 export async function processAdminsInBatches(
-  admins: (InProcess_Admins_t | Catalog_Admins_t | Sound_Admins_t)[]
+  admins: (
+    | InProcess_Admins_t
+    | Catalog_Admins_t
+    | Sound_Admins_t
+    | ZoraMedia_Admins_t
+  )[]
 ): Promise<void> {
   let totalDeleted = 0;
   let totalUpserted = 0;
@@ -44,8 +49,6 @@ export async function processAdminsInBatches(
         await upsertAdmins(mappedAdmins);
         totalUpserted += mappedAdmins.length;
       }
-
-      emitAdminUpdated(batch);
 
       const batchNum = Math.floor(i / BATCH_SIZE) + 1;
       console.log(

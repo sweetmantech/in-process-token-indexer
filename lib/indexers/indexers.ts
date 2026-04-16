@@ -10,24 +10,29 @@ import { transfersIndexer } from '@/lib/indexers/transfersIndexer';
 import { soundEditionsIndexer } from '@/lib/indexers/soundEditionsIndexer';
 import { soundMomentsIndexer } from '@/lib/indexers/soundMomentsIndexer';
 import { soundAdminsIndexer } from '@/lib/indexers/soundAdminsIndexer';
+import { zoraMomentsIndexer } from '@/lib/indexers/zoraMomentsIndexer';
+import { zoraAdminsIndexer } from '@/lib/indexers/zoraAdminsIndexer';
 import type { IndexConfig } from '@/types/factory';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const indexers: IndexConfig<any>[] = [
-  // collections
-  collectionsIndexer,
-  catalogCollectionsIndexer,
-  soundEditionsIndexer,
-  // moments
-  soundMomentsIndexer,
-  momentsIndexer,
-  catalogMomentsIndexer,
-  // admins
-  adminsIndexer,
-  catalogAdminsIndexer,
-  soundAdminsIndexer,
+  // // collections
+  // collectionsIndexer,
+  // catalogCollectionsIndexer,
+  // soundEditionsIndexer,
+  // // moments
+  // soundMomentsIndexer,
+  // momentsIndexer,
+  // catalogMomentsIndexer,
+  // // admins
+  // adminsIndexer,
+  // catalogAdminsIndexer,
+  // soundAdminsIndexer,
 
-  commentsIndexer,
-  salesIndexer,
-  transfersIndexer,
+  // commentsIndexer,
+  // salesIndexer,
+  // transfersIndexer,
+
+  zoraMomentsIndexer,
+  zoraAdminsIndexer,
 ];

@@ -1,5 +1,4 @@
 import { executeIndexers } from '@/lib/indexers/executeIndexers';
-import { startSocketServer } from '@/lib/socket/server';
 
 process.on('SIGTERM', () => {
   console.log('🛑 SIGTERM received, shutting down gracefully...');

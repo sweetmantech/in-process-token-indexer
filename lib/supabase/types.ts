@@ -76,45 +76,6 @@ export type Database = {
           },
         ];
       };
-      in_process_airdrops: {
-        Row: {
-          amount: number;
-          id: string;
-          moment: string;
-          recipient: string;
-          updated_at: string;
-        };
-        Insert: {
-          amount: number;
-          id?: string;
-          moment: string;
-          recipient: string;
-          updated_at: string;
-        };
-        Update: {
-          amount?: number;
-          id?: string;
-          moment?: string;
-          recipient?: string;
-          updated_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'in_process_airdrops_moment_fkey';
-            columns: ['moment'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_moments';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'in_process_airdrops_recipient_fkey';
-            columns: ['recipient'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_artists';
-            referencedColumns: ['address'];
-          },
-        ];
-      };
       in_process_api_keys: {
         Row: {
           artist_address: string | null;
@@ -282,48 +243,6 @@ export type Database = {
             isOneToOne: false;
             referencedRelation: 'in_process_artists';
             referencedColumns: ['address'];
-          },
-        ];
-      };
-      in_process_collectors: {
-        Row: {
-          amount: number;
-          collected_at: string;
-          collector: string;
-          id: string;
-          moment: string;
-          transaction_hash: string;
-        };
-        Insert: {
-          amount: number;
-          collected_at?: string;
-          collector: string;
-          id?: string;
-          moment: string;
-          transaction_hash: string;
-        };
-        Update: {
-          amount?: number;
-          collected_at?: string;
-          collector?: string;
-          id?: string;
-          moment?: string;
-          transaction_hash?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'in_process_collectors_collector_fkey';
-            columns: ['collector'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_artists';
-            referencedColumns: ['address'];
-          },
-          {
-            foreignKeyName: 'in_process_collectors_moment_fkey';
-            columns: ['moment'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_moments';
-            referencedColumns: ['id'];
           },
         ];
       };
@@ -583,21 +502,21 @@ export type Database = {
           artist: string;
           created_at: string | null;
           id: string;
-          payment: string;
+          transfer: string;
           viewed: boolean;
         };
         Insert: {
           artist: string;
           created_at?: string | null;
           id?: string;
-          payment: string;
+          transfer: string;
           viewed?: boolean;
         };
         Update: {
           artist?: string;
           created_at?: string | null;
           id?: string;
-          payment?: string;
+          transfer?: string;
           viewed?: boolean;
         };
         Relationships: [
@@ -609,52 +528,10 @@ export type Database = {
             referencedColumns: ['address'];
           },
           {
-            foreignKeyName: 'in_process_notifications_payment_fkey';
-            columns: ['payment'];
+            foreignKeyName: 'in_process_notifications_transfer_fkey';
+            columns: ['transfer'];
             isOneToOne: false;
-            referencedRelation: 'in_process_payments';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      in_process_payments: {
-        Row: {
-          amount: number;
-          buyer: string;
-          id: string;
-          moment: string;
-          transaction_hash: string;
-          transferred_at: string;
-        };
-        Insert: {
-          amount: number;
-          buyer: string;
-          id?: string;
-          moment: string;
-          transaction_hash: string;
-          transferred_at: string;
-        };
-        Update: {
-          amount?: number;
-          buyer?: string;
-          id?: string;
-          moment?: string;
-          transaction_hash?: string;
-          transferred_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'in_process_payments_buyer_fkey';
-            columns: ['buyer'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_artists';
-            referencedColumns: ['address'];
-          },
-          {
-            foreignKeyName: 'in_process_payments_moment_fkey';
-            columns: ['moment'];
-            isOneToOne: false;
-            referencedRelation: 'in_process_moments';
+            referencedRelation: 'in_process_transfers';
             referencedColumns: ['id'];
           },
         ];
@@ -716,7 +593,7 @@ export type Database = {
         };
         Insert: {
           currency?: string | null;
-          id: string;
+          id?: string;
           moment: string;
           quantity: number;
           recipient: string;
@@ -782,6 +659,20 @@ export type Database = {
         };
         Returns: Json;
       };
+      get_airdrop_transfers: {
+        Args: {
+          p_artist?: string;
+          p_chain_id?: number;
+          p_collector?: string;
+          p_content_type?: string;
+          p_limit?: number;
+          p_offset?: number;
+        };
+        Returns: {
+          total_count: number;
+          transfers: Json;
+        }[];
+      };
       get_artist_timeline: {
         Args: {
           p_artist: string;
@@ -819,17 +710,6 @@ export type Database = {
           p_token_id: number;
         };
         Returns: boolean;
-      };
-      get_in_process_payments: {
-        Args: {
-          p_artists?: string[];
-          p_chainid?: number;
-          p_collectors?: string[];
-          p_limit?: number;
-          p_mime?: string;
-          p_page?: number;
-        };
-        Returns: Json;
       };
       get_in_process_timeline: {
         Args: {
@@ -874,10 +754,16 @@ export type Database = {
         Args: { p_created_at: string; p_period: string };
         Returns: boolean;
       };
+      show_limit: { Args: never; Returns: number };
+      show_trgm: { Args: { '': string }; Returns: string[] };
       upsert_artist_names: { Args: { artists: Json }; Returns: undefined };
     };
     Enums: {
-      collection_protocol: 'in_process' | 'catalog' | 'sound.xyz';
+      collection_protocol:
+        | 'in_process'
+        | 'catalog'
+        | 'sound.xyz'
+        | 'zora_media';
       message_client: 'telegram' | 'sms' | 'web' | 'api';
       message_role: 'user' | 'assistant';
     };
@@ -1013,7 +899,7 @@ export const Constants = {
   },
   public: {
     Enums: {
-      collection_protocol: ['in_process', 'catalog', 'sound.xyz'],
+      collection_protocol: ['in_process', 'catalog', 'sound.xyz', 'zora_media'],
       message_client: ['telegram', 'sms', 'web', 'api'],
       message_role: ['user', 'assistant'],
     },

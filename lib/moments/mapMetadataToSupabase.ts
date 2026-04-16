@@ -7,7 +7,13 @@ export type MapMetadataResult = {
 };
 
 export async function mapMetadataToSupabase(
-  moments: Array<{ id: string; uri: string; collection: { creator: string } }>
+  moments: Array<{
+    id: string;
+    uri: string;
+    contentUri?: string;
+    owner?: string;
+    collection: { creator: string };
+  }>
 ): Promise<MapMetadataResult> {
   if (!moments.length)
     return { records: [], artistNamesByAddresses: new Map() };
@@ -18,13 +24,13 @@ export async function mapMetadataToSupabase(
   const artistNamesByAddresses = new Map<string, string>();
 
   await Promise.all(
-    moments.map(async ({ id, uri, collection }) => {
+    moments.map(async ({ id, uri, contentUri, owner, collection }) => {
       try {
-        const response = await fetchMetadata(uri);
+        const response = await fetchMetadata(uri, contentUri);
         if (!response.ok) return;
 
         const data = await response.json();
-        const creatorAddress = collection.creator;
+        const creatorAddress = owner ?? collection.creator;
         if (data?.artist)
           artistNamesByAddresses.set(creatorAddress, data.artist);
         records.push({

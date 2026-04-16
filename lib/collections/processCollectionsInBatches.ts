@@ -7,7 +7,6 @@ import { BATCH_SIZE } from '@/lib/consts';
 import { mapCollectionsToSupabase } from './mapCollectionsToSupabase';
 import { ensureArtists } from '@/lib/supabase/in_process_artists/ensureArtists';
 import { upsertCollections } from '@/lib/supabase/in_process_collections/upsertCollections';
-import { emitCollectionUpdated } from '@/lib/socket/emitCollectionUpdated';
 
 export async function processCollectionsInBatches(
   collections:
@@ -28,7 +27,6 @@ export async function processCollectionsInBatches(
       await ensureArtists(artistAddresses);
 
       await upsertCollections(mappedCollections);
-      emitCollectionUpdated(batch);
 
       totalProcessed += mappedCollections.length;
       console.log(
