@@ -27,7 +27,9 @@ export async function upsertMoments(
   const { data, error } = await supabase
     .from('in_process_moments')
     .upsert(moments, { onConflict: 'collection, token_id' })
-    .select('id, uri, token_id, collection:in_process_collections(address,creator)');
+    .select(
+      'id, uri, token_id, collection:in_process_collections(address,creator)'
+    );
 
   if (error) {
     console.error(`❌ upsertMoments error:`, error);
