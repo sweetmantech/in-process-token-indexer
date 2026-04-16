@@ -22,7 +22,7 @@ export async function deleteAdmins(
     const orConditions = admins
       .map(
         admin =>
-          `and(collection.eq.${admin.collection},artist_address.eq.${admin.artist_address},token_id.eq.${admin.token_id})`
+          `and(collection.eq."${admin.collection}",artist_address.eq."${admin.artist_address}",token_id.eq.${admin.token_id})`
       )
       .join(',');
 
