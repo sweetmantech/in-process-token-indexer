@@ -3,7 +3,7 @@ import { base, baseSepolia } from 'viem/chains';
 
 dotenv.config();
 
-export const INDEXER_ID = '74e50c3';
+export const INDEXER_ID = 'dc42c8c';
 export const GRPC_ENDPOINT = `https://indexer.hyperindex.xyz/${INDEXER_ID}/v1/graphql`;
 
 export const SUPABASE_URL: string | undefined = process.env.SUPABASE_URL;
