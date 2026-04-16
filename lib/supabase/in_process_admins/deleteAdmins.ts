@@ -14,30 +14,24 @@ export async function deleteAdmins(
     return 0;
   }
 
-  console.log('🗑️  Deleting admins:', admins);
-
   try {
-    // Build OR conditions for all admins to delete
-    // Format: and(collection.eq.X,artist_address.eq.Y,token_id.eq.Z),and(...)
-    const orConditions = admins
-      .map(
-        admin =>
-          `and(collection.eq."${admin.collection}",artist_address.eq."${admin.artist_address}",token_id.eq.${admin.token_id})`
-      )
-      .join(',');
+    let deletedCount = 0;
 
-    console.log('🗑️  Or conditions:', orConditions);
-    const { data, error } = await supabase
-      .from('in_process_admins')
-      .delete()
-      .or(orConditions)
-      .select('id');
+    for (const admin of admins) {
+      const { error } = await supabase
+        .from('in_process_admins')
+        .delete()
+        .eq('collection', admin.collection)
+        .eq('artist_address', admin.artist_address)
+        .eq('token_id', admin.token_id);
 
-    if (error) {
-      throw error;
+      if (error) {
+        console.log('ziad here', admin)
+        throw error;
+      }
+      deletedCount++;
     }
 
-    const deletedCount = data?.length || 0;
     console.log(`🗑️  Deleted ${deletedCount} admin(s)`);
     return deletedCount;
   } catch (error) {
