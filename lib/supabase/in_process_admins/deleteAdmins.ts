@@ -26,6 +26,7 @@ export async function deleteAdmins(
       )
       .join(',');
 
+    console.log('🗑️  Or conditions:', orConditions);
     const { data, error } = await supabase
       .from('in_process_admins')
       .delete()
