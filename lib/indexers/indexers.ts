@@ -34,5 +34,5 @@ export const indexers: IndexConfig<any>[] = [
   // transfersIndexer,
 
   zoraMomentsIndexer,
-  zoraAdminsIndexer,
+  // zoraAdminsIndexer,
 ];
