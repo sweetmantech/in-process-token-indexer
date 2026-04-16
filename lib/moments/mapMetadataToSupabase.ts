@@ -1,5 +1,9 @@
+import fs from 'fs';
+import path from 'path';
 import { Database } from '@/lib/supabase/types';
 import { fetchMetadata } from '@/lib/moments/fetchMetadata';
+
+const FAILED_METADATA_LOG = path.resolve('failed_metadata.txt');
 
 export type MapMetadataResult = {
   records: Array<Database['public']['Tables']['in_process_metadata']['Insert']>;
@@ -10,6 +14,7 @@ export async function mapMetadataToSupabase(
   moments: Array<{
     id: string;
     uri: string;
+    tokenId?: string;
     contentUri?: string;
     owner?: string;
     collection: { creator: string };
@@ -24,7 +29,7 @@ export async function mapMetadataToSupabase(
   const artistNamesByAddresses = new Map<string, string>();
 
   await Promise.all(
-    moments.map(async ({ id, uri, contentUri, owner, collection }) => {
+    moments.map(async ({ id, uri, tokenId, contentUri, owner, collection }) => {
       try {
         const response = await fetchMetadata(uri, contentUri);
         if (!response.ok) return;
@@ -43,7 +48,11 @@ export async function mapMetadataToSupabase(
           content: data.content ?? null,
         });
       } catch (err) {
-        console.error(`❌ Failed to fetch metadata for uri ${uri}:`, err);
+        console.error(
+          `❌ fetchMetadata failed — tokenId: ${tokenId}, uri: ${uri}, content_uri: ${contentUri}`
+        );
+        const line = `${tokenId ?? ''}\t${uri}\t${contentUri ?? ''}\n`;
+        fs.appendFileSync(FAILED_METADATA_LOG, line);
       }
     })
   );

@@ -12,13 +12,14 @@ type AnyMoment =
   | ZoraMedia_Moments_t;
 
 export type MomentUriEntry = {
+  tokenId?: string;
   contentUri?: string;
   owner?: string;
 };
 
 /**
  * Builds a map keyed by the stored uri (= metadata_uri for ZoraMedia, uri otherwise).
- * Each entry carries the optional contentUri and owner for use in metadata fetching.
+ * Each entry carries the optional tokenId, contentUri and owner for use in metadata fetching.
  */
 export function getMomentUris(
   moments: AnyMoment[]
@@ -27,9 +28,14 @@ export function getMomentUris(
   for (const moment of moments) {
     if ('metadata_uri' in moment && moment.metadata_uri) {
       momentUris.set(moment.metadata_uri, {
+        tokenId: String(moment.token_id),
         contentUri: moment.uri ?? undefined,
         owner: moment.owner,
       });
+    } else if (moment.uri) {
+      const tokenId =
+        'token_id' in moment ? String(moment.token_id) : String(moment.tier);
+      momentUris.set(moment.uri, { tokenId });
     }
   }
   return momentUris;
