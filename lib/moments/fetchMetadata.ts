@@ -12,8 +12,8 @@ export async function fetchMetadata(
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
     try {
-      const body: { uri: string; contentUri?: string } = { uri };
-      if (contentUri) body.contentUri = contentUri;
+      const body: { uri: string; content_uri?: string } = { uri };
+      if (contentUri) body.content_uri = contentUri;
       const response = await fetch('https://api.inprocess.world/api/metadata', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

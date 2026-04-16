@@ -32,7 +32,14 @@ export async function mapMetadataToSupabase(
     moments.map(async ({ id, uri, tokenId, contentUri, owner, collection }) => {
       try {
         const response = await fetchMetadata(uri, contentUri);
-        if (!response.ok) return;
+        if (!response.ok) {
+          console.error(
+            `❌ fetchMetadata failed — tokenId: ${tokenId}, uri: ${uri}, content_uri: ${contentUri}, status: ${response.status}`
+          );
+          const line = `${tokenId ?? ''}\t${uri}\t${contentUri ?? ''}\t${response.status}\n`;
+          fs.appendFileSync(FAILED_METADATA_LOG, line);
+          return;
+        }
 
         const data = await response.json();
         const creatorAddress = owner ?? collection.creator;
