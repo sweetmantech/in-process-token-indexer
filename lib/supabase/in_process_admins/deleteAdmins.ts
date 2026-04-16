@@ -14,6 +14,8 @@ export async function deleteAdmins(
     return 0;
   }
 
+  console.log('🗑️  Deleting admins:', admins);
+
   try {
     // Build OR conditions for all admins to delete
     // Format: and(collection.eq.X,artist_address.eq.Y,token_id.eq.Z),and(...)
