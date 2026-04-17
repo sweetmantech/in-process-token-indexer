@@ -26,7 +26,7 @@ export async function deleteAdmins(
         .eq('token_id', admin.token_id);
 
       if (error) {
-        console.log('ziad here', admin)
+        console.log('ziad here', admin);
         throw error;
       }
       deletedCount++;
