@@ -40,7 +40,6 @@ export async function mapTransfersToSupabase(
         }
       } else {
         transferMap.set(uniqueKey, {
-          id: transfer.id,
           recipient: transfer.recipient.toLowerCase(),
           quantity: quantityNum,
           value: valueNum,
