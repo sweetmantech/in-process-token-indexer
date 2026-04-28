@@ -4,5 +4,5 @@ import { selectMax } from '@/lib/supabase/in_process_transfers/selectMax';
 export async function selectMaxTransferredAt(): Promise<number | null> {
   // const maxTransferredAt = await selectMax('transferred_at');
   // if (!maxTransferredAt) return null;
-  return new Date(0).getTime();
+  return new Date('2025-05-17T00:00:00Z').getTime();
 }
